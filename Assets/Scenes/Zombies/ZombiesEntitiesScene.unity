@@ -170,9 +170,10 @@ MonoBehaviour:
   CementeryDimesions:
     x: 50
     y: 50
-  NumberOfTombstoneToSpawn: 5
+  NumberOfTombstoneToSpawn: 100
   TumbaPrefab: {fileID: 8834013075865606041, guid: c26a1b1b4705f984cb476eda5014b88e,
     type: 3}
+  RandomSeed: 0
 --- !u!1 &1126685765
 GameObject:
   m_ObjectHideFlags: 0
@@ -273,7 +274,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1126685765}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.35, z: 0}
+  m_LocalPosition: {x: 1.29, y: 1.25, z: 3.06}
   m_LocalScale: {x: 2.0341, y: 2.0341, z: 2.0341}
   m_ConstrainProportionsScale: 0
   m_Children: []

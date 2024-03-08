@@ -1,9 +1,15 @@
 using Unity.Entities;
 using Unity.Mathematics;
 
-public struct CementerioRandom : IComponentData
+
+namespace Zombies
 {
-    // Numero random con Unity.Mathematics
-    public Random randomValue;
-    
+    public struct CementerioRandom : IComponentData
+    {
+        // Numero random con Unity.Mathematics
+        public Random randomValue;
+
+    }
+
 }
+

@@ -22,40 +22,34 @@ namespace Zombies
         //private readonly RefRW<ZombieSpawnPoints> _zombieSpawnPoints;
         //private readonly RefRW<ZombieSpawnTimer> _zombieSpawnTimer;
 
-        private const float areaGeneradorRadio = 40f;
+        private const float areaGeneradorRadio = 100f;
 
 
         // Conseguir valor del tumbas a spawnear
         public int NumberOfTombstoneToSpawn => _cementerioData.ValueRO.NumberOfTombstoneToSpawn;
         public Entity tumbaPrefab => _cementerioData.ValueRO.TumbaPrefab;
 
-
-        // Para crear la posicion de las tumbas de forma aleatoria, hace falta crear posicion min y max
         private float3 GetRandomPosition()
         {
             float3 randomPosition;
 
-            // Para que no salgan tumbas dentro del generador
+            // Calcula los límites del área de generación
+            float3 minPos = new float3(-_cementerioData.ValueRO.CementeryDimesions.x * 0.25f,
+                                       0f,
+                                       -_cementerioData.ValueRO.CementeryDimesions.y * 0.25f);
+
+            float3 maxPos = new float3(_cementerioData.ValueRO.CementeryDimesions.x * 0.25f,
+                                       0f,
+                                       _cementerioData.ValueRO.CementeryDimesions.y * 0.25f);
+
+            // Genera una posición aleatoria dentro del área de generación
             do
             {
                 randomPosition = _cementerioRandom.ValueRW.randomValue.NextFloat3(minPos, maxPos);
-            } while (math.distancesq(Transform.Position, randomPosition) <= areaGeneradorRadio);
-
+            } while (math.distancesq(float3.zero, randomPosition) <= areaGeneradorRadio);
 
             return randomPosition;
         }
-
-        // Min -> 25% del total y el maximo un 75% de las dimensiones
-        private float3 minPos => Transform.Position - new float3(
-            _cementerioData.ValueRO.CementeryDimesions.x * 0.25f,
-            0f,
-            _cementerioData.ValueRO.CementeryDimesions.y * 0.25f
-            );
-        private float3 maxPos => Transform.Position - new float3(
-            _cementerioData.ValueRO.CementeryDimesions.x * 1.5f,
-            0f,
-            _cementerioData.ValueRO.CementeryDimesions.y * 1.5f
-            );
 
         // Posicion de rotation random para las tumbas
         private quaternion GetRandomRotation() => 

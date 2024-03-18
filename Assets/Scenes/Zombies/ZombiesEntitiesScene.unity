@@ -168,12 +168,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CementeryDimesions:
-    x: 50
-    y: 50
-  NumberOfTombstoneToSpawn: 100
+    x: 300
+    y: 300
+  NumberOfTombstoneToSpawn: 200
   TumbaPrefab: {fileID: 8834013075865606041, guid: c26a1b1b4705f984cb476eda5014b88e,
     type: 3}
+  areaGeneradorRadio: 400
   RandomSeed: 0
+  ZombiePrefab: {fileID: 4493914613880827488, guid: 6dc4cf4496348884d8ee27743ae38562,
+    type: 3}
+  cooldownSpawneoZombies: 2
 --- !u!1 &1126685765
 GameObject:
   m_ObjectHideFlags: 0
@@ -185,7 +189,7 @@ GameObject:
   - component: {fileID: 1126685769}
   - component: {fileID: 1126685768}
   - component: {fileID: 1126685767}
-  - component: {fileID: 1126685766}
+  - component: {fileID: 1126685770}
   m_Layer: 0
   m_Name: Generador Energia
   m_TagString: Untagged
@@ -193,29 +197,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!136 &1126685766
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1126685765}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!23 &1126685767
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -281,3 +262,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &1126685770
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1126685765}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}

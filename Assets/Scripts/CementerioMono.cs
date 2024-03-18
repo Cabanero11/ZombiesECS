@@ -10,9 +10,14 @@ namespace Zombies
         public float2 CementeryDimesions;
         public int NumberOfTombstoneToSpawn;
         public GameObject TumbaPrefab;
+        public float areaGeneradorRadio;
 
         // Seed random, valor como 100
         public uint RandomSeed;
+
+        public GameObject ZombiePrefab;
+        public float cooldownSpawneoZombies;
+
     }
 
 
@@ -29,8 +34,9 @@ namespace Zombies
                 CementeryDimesions = authoring.CementeryDimesions,
                 NumberOfTombstoneToSpawn = authoring.NumberOfTombstoneToSpawn,
                 TumbaPrefab = GetEntity(authoring.TumbaPrefab, TransformUsageFlags.Dynamic),
-                //ZombiePrefab = GetEntity(authoring.ZombiePrefab, TransformUsageFlags.Dynamic),
-                //ZombieSpawnRate = authoring.ZombieSpawnRate
+                areaGeneradorRadio = authoring.areaGeneradorRadio,
+                ZombiePrefab = GetEntity(authoring.ZombiePrefab, TransformUsageFlags.Dynamic),
+                cooldownSpawneoZombies = authoring.cooldownSpawneoZombies
             });
 
 
@@ -40,8 +46,8 @@ namespace Zombies
                 randomValue = Unity.Mathematics.Random.CreateFromIndex(authoring.RandomSeed)
             });
 
-            //AddComponent<ZombieSpawnPoints>(graveyardEntity);
-            //AddComponent<ZombieSpawnTimer>(graveyardEntity);
+            AddComponent<ZombiesSpawn>(cementerioEntity);
+            AddComponent<ZombiesSpawnerTiempo>(cementerioEntity);
         }
     }
 

@@ -1,6 +1,7 @@
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Transforms;
 
 namespace Zombies
@@ -32,6 +33,7 @@ namespace Zombies
 
             var cementerioEntity = SystemAPI.GetSingletonEntity<CementerioData>();
             var cementerio = SystemAPI.GetAspect<CementerioAspect>(cementerioEntity);
+            var tumbasOffset = new float3(0f, -2f, 1f); // Para que los zombies no salgan encima justo xd
 
             // Spawnear Entidades, Usamos ECB en vez del EntityManager (tras realizar varias)
             // instacias se realientiza un poco, asi que usamos un EntityCommandBuffer
@@ -39,6 +41,11 @@ namespace Zombies
             // Allocator.Temp, temporal 
             var entityCommandBuffer = new EntityCommandBuffer(Allocator.Temp);
 
+
+            // Blob, hay que crear un builder y asignarle la memoria de los objetos
+            var builder = new BlobBuilder(Allocator.Temp);
+            ref var zombiesSpawn = ref builder.ConstructRoot<ZombiesSpawnBlob>();
+            var arrayBuilder = builder.Allocate(ref zombiesSpawn.positionValueBlob, cementerio.NumberOfTombstoneToSpawn);
 
 
             for (var i = 0; i < cementerio.NumberOfTombstoneToSpawn; i++)
@@ -50,12 +57,20 @@ namespace Zombies
 
                 // Pasamos al ECB la nuevaTumba creada y su posicion aleatoria
                 entityCommandBuffer.SetComponent(nuevaTumba, nuevaTumbaTransform);
-                
+
+
+                // Creamos puntos de Spawn de los Zombies, y lo asignamos al arrayBuilder esas posiciones
+                var puntoSpawnZombies = nuevaTumbaTransform.Position + tumbasOffset;
+                arrayBuilder[i] = puntoSpawnZombies;
 
             }
 
 
             entityCommandBuffer.Playback(state.EntityManager);
+
+            // Referencia al asset del Blob que usamos
+            var assetBlob = builder.CreateBlobAssetReference<ZombiesSpawnBlob>(Allocator.Persistent);
+            builder.Dispose();  // liberar memoria que usa
         }
 
 

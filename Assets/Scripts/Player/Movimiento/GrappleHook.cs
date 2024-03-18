@@ -126,12 +126,6 @@ public class GrappleHook : MonoBehaviour
             rope.endColor = ropecolor;
 
 
-            if (hit.collider.CompareTag("Turret"))
-            {
-                LaserTurret.isStunned = true;
-                //Debug.Log("Stuneada grapple");
-            }
-
 
             //Visualize(pos, -hit.normal);
             hitNormal = hit.normal;

@@ -17,16 +17,28 @@ namespace Zombies
         // Acceso ReadOnly y ReadWrite
         private readonly RefRO<CementerioData> _cementerioData;
         private readonly RefRW<CementerioRandom> _cementerioRandom;
-        
-        
+
+        // Zombies
+        private readonly RefRW<ZombiesSpawn> _zombiesSpawn;
+        private readonly RefRW<ZombiesSpawnerTiempo> _zombiesSpawnTiempo;
+        private int numeroZombiesSpawneados => _zombiesSpawn.ValueRO.positionValue.Value.positionValueBlob.Length;
+
+        // Checkear que han spawneadoZombies
+        public bool hanSpawneadoZombies() 
+        {
+            return _zombiesSpawn.ValueRO.positionValue.IsCreated && numeroZombiesSpawneados > 0;
+        }
+
+
         //private readonly RefRW<ZombieSpawnPoints> _zombieSpawnPoints;
         //private readonly RefRW<ZombieSpawnTimer> _zombieSpawnTimer;
 
-        private const float areaGeneradorRadio = 100f;
+        //private const float areaGeneradorRadio = 100f;
 
 
         // Conseguir valor del tumbas a spawnear
         public int NumberOfTombstoneToSpawn => _cementerioData.ValueRO.NumberOfTombstoneToSpawn;
+        public float areaGeneradorRadio => _cementerioData.ValueRO.areaGeneradorRadio;
         public Entity tumbaPrefab => _cementerioData.ValueRO.TumbaPrefab;
 
         private float3 GetRandomPosition()
@@ -53,7 +65,7 @@ namespace Zombies
 
         // Posicion de rotation random para las tumbas
         private quaternion GetRandomRotation() => 
-            quaternion.RotateY(_cementerioRandom.ValueRW.randomValue.NextFloat(-0.25f, 0.25f)
+            quaternion.RotateY(_cementerioRandom.ValueRW.randomValue.NextFloat(-0.5f, 0.5f)
         );
 
         private float GetRandomScale() =>
@@ -71,6 +83,19 @@ namespace Zombies
                 Scale = GetRandomScale()
             };
         }
+
+        public float ZombiesSpawnTiempo 
+        {
+            get => _zombiesSpawnTiempo.ValueRO.tiempoSpawn;
+            set => _zombiesSpawnTiempo.ValueRW.tiempoSpawn = value;
+        
+        }
+
+        public bool tiempoParaSpawnearZombie => (ZombiesSpawnTiempo <= 0f);
+
+        public float cooldownSpawneoZombies => _cementerioData.ValueRO.cooldownSpawneoZombies;
+
+        public Entity ZombiePrefab => _cementerioData.ValueRO.ZombiePrefab;
     }
 }
   

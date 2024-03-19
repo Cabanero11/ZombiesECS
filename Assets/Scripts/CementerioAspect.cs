@@ -12,7 +12,8 @@ namespace Zombies
 
         // Acceso solo ReadOnly para leer en paralelo
         private readonly RefRO<LocalTransform> _transform;
-        private LocalTransform Transform => _transform.ValueRO;
+        private LocalTransform Transform 
+            => _transform.ValueRO;
 
         // Acceso ReadOnly y ReadWrite
         private readonly RefRO<CementerioData> _cementerioData;
@@ -21,7 +22,8 @@ namespace Zombies
         // Zombies
         private readonly RefRW<ZombiesSpawn> _zombiesSpawn;
         private readonly RefRW<ZombiesSpawnerTiempo> _zombiesSpawnTiempo;
-        private int numeroZombiesSpawneados => _zombiesSpawn.ValueRO.positionValue.Value.positionValueBlob.Length;
+        private int numeroZombiesSpawneados 
+            => _zombiesSpawn.ValueRO.positionValue.Value.positionValueBlob.Length;
 
         // Checkear que han spawneadoZombies
         public bool hanSpawneadoZombies() 
@@ -37,9 +39,12 @@ namespace Zombies
 
 
         // Conseguir valor del tumbas a spawnear
-        public int NumberOfTombstoneToSpawn => _cementerioData.ValueRO.NumberOfTombstoneToSpawn;
-        public float areaGeneradorRadio => _cementerioData.ValueRO.areaGeneradorRadio;
-        public Entity tumbaPrefab => _cementerioData.ValueRO.TumbaPrefab;
+        public int NumberOfTombstoneToSpawn 
+            => _cementerioData.ValueRO.NumberOfTombstoneToSpawn;
+        public float areaGeneradorRadio 
+            => _cementerioData.ValueRO.areaGeneradorRadio;
+        public Entity tumbaPrefab 
+            => _cementerioData.ValueRO.TumbaPrefab;
 
         private float3 GetRandomPosition()
         {
@@ -84,6 +89,14 @@ namespace Zombies
             };
         }
 
+        public float3 Position
+            => Transform.Position;
+        
+        /// 
+        /// ZOMBIES
+        /// 
+
+
         public float ZombiesSpawnTiempo 
         {
             get => _zombiesSpawnTiempo.ValueRO.tiempoSpawn;
@@ -91,11 +104,42 @@ namespace Zombies
         
         }
 
-        public bool tiempoParaSpawnearZombie => (ZombiesSpawnTiempo <= 0f);
+        public bool tiempoParaSpawnearZombie 
+            => (ZombiesSpawnTiempo <= 0f);
 
-        public float cooldownSpawneoZombies => _cementerioData.ValueRO.cooldownSpawneoZombies;
+        public float cooldownSpawneoZombies 
+            => _cementerioData.ValueRO.cooldownSpawneoZombies;
 
-        public Entity ZombiePrefab => _cementerioData.ValueRO.ZombiePrefab;
+        public Entity ZombiePrefab 
+            => _cementerioData.ValueRO.ZombiePrefab;
+
+        // Obtener el zombie "i"
+        private float3 getZombiesSpawn(int i)
+            => _zombiesSpawn.ValueRO.positionValue.Value.positionValueBlob[i];
+
+        // Obtener una posicion random para el zombie "i" anterior
+        private float3 GetZombiesSpawnRandom()
+        {
+            return getZombiesSpawn(_cementerioRandom.ValueRW.randomValue.NextInt(numeroZombiesSpawneados));
+        }
+
+        public static float 
+
+
+        // Obtener el punto de spawn de los zombies (Osea las tumbas)
+        public LocalTransform getZombiesSpawn()
+        {
+            var position = GetZombiesSpawnRandom();
+            return new LocalTransform
+            {
+                Position = position,
+                Rotation = quaternion.identity,
+                Scale = GetRandomScale()
+            };
+        }
+    
+        
+
     }
 }
   

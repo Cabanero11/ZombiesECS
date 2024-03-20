@@ -33,7 +33,7 @@ namespace Zombies
 
             var cementerioEntity = SystemAPI.GetSingletonEntity<CementerioData>();
             var cementerio = SystemAPI.GetAspect<CementerioAspect>(cementerioEntity);
-            var tumbasOffset = new float3(0f, -2f, 1f); // Para que los zombies no salgan encima justo xd
+            var tumbasOffset = new float3(0f, 2f, 1f); // Para que los zombies salgan encima de la tumba
 
             // Spawnear Entidades, Usamos ECB en vez del EntityManager (tras realizar varias)
             // instacias se realientiza un poco, asi que usamos un EntityCommandBuffer
@@ -65,12 +65,12 @@ namespace Zombies
 
             }
 
-
-            entityCommandBuffer.Playback(state.EntityManager);
-
             // Referencia al asset del Blob que usamos
             var assetBlob = builder.CreateBlobAssetReference<ZombiesSpawnBlob>(Allocator.Persistent);
-            builder.Dispose();  // liberar memoria que usa
+            entityCommandBuffer.SetComponent(cementerioEntity, new ZombiesSpawn { positionValue = assetBlob });
+            builder.Dispose();
+
+            entityCommandBuffer.Playback(state.EntityManager);
         }
 
 

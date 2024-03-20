@@ -22,18 +22,16 @@ namespace Zombies
         // Zombies
         private readonly RefRW<ZombiesSpawn> _zombiesSpawn;
         private readonly RefRW<ZombiesSpawnerTiempo> _zombiesSpawnTiempo;
+
         private int numeroZombiesSpawneados 
             => _zombiesSpawn.ValueRO.positionValue.Value.positionValueBlob.Length;
 
         // Checkear que han spawneadoZombies
-        public bool hanSpawneadoZombies() 
+        public bool hanSpawneadoZombies()
         {
-            return _zombiesSpawn.ValueRO.positionValue.IsCreated && numeroZombiesSpawneados > 0;
+            return (_zombiesSpawn.ValueRO.positionValue.IsCreated && numeroZombiesSpawneados > 0);
         }
 
-
-        //private readonly RefRW<ZombieSpawnPoints> _zombieSpawnPoints;
-        //private readonly RefRW<ZombieSpawnTimer> _zombieSpawnTimer;
 
         //private const float areaGeneradorRadio = 100f;
 
@@ -107,7 +105,7 @@ namespace Zombies
         public bool tiempoParaSpawnearZombie 
             => (ZombiesSpawnTiempo <= 0f);
 
-        public float cooldownSpawneoZombies 
+        public float cooldownSpawneoZombies
             => _cementerioData.ValueRO.cooldownSpawneoZombies;
 
         public Entity ZombiePrefab 
@@ -123,18 +121,26 @@ namespace Zombies
             return getZombiesSpawn(_cementerioRandom.ValueRW.randomValue.NextInt(numeroZombiesSpawneados));
         }
 
-        public static float 
+        // Obtener la rotacion para el Zombie que apunte al generador del centro
+        public static float GetRotationZombies(float3 zombiePosition, float3 targetGameObject) 
+        { 
+            var x = zombiePosition.x - targetGameObject.x;
+            var y = zombiePosition.z - targetGameObject.z;
+
+            return math.atan2(x, y) + math.PI;
+        
+        }
 
 
         // Obtener el punto de spawn de los zombies (Osea las tumbas)
         public LocalTransform getZombiesSpawn()
         {
-            var position = GetZombiesSpawnRandom();
+            var zombiePosition = GetZombiesSpawnRandom();
             return new LocalTransform
             {
-                Position = position,
-                Rotation = quaternion.identity,
-                Scale = GetRandomScale()
+                Position = zombiePosition,
+                Rotation = quaternion.RotateY(GetRotationZombies(zombiePosition, Transform.Position)),
+                Scale = 2f
             };
         }
     

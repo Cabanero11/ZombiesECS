@@ -1,8 +1,11 @@
+using System.Diagnostics;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+
+
 
 namespace Zombies
 {
@@ -58,8 +61,22 @@ namespace Zombies
                 return;
             }
 
+            if (!cementerioAspect.hanSpawneadoZombies())
+            {
+                return;
+            }
+
+
+
             cementerioAspect.ZombiesSpawnTiempo = cementerioAspect.cooldownSpawneoZombies;
             var nuevoZombie = entityCommandBuffer.Instantiate(cementerioAspect.ZombiePrefab);
+
+
+            var nuevaPosicionZombie = cementerioAspect.getZombiesSpawn();
+
+            // Le añado al nuevo zombie su nuevaPosicion con el entityCommandBuffer
+            entityCommandBuffer.SetComponent(nuevoZombie, nuevaPosicionZombie); 
+
 
         }
     }

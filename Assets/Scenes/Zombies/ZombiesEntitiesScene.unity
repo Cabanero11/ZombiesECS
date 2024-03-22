@@ -175,7 +175,7 @@ MonoBehaviour:
     type: 3}
   areaGeneradorRadio: 400
   RandomSeed: 0
-  ZombiePrefab: {fileID: 4493914613880827488, guid: 02f27aeb89dfff24fb02b4a52e00e2fa,
+  ZombiePrefab: {fileID: 7866586269468863138, guid: d09ebcb8c25e0924f921581698c62b60,
     type: 3}
   cooldownSpawneoZombies: 1
 --- !u!1 &1126685765

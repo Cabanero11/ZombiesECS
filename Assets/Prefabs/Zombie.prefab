@@ -81,7 +81,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 66cfc2b48fd2c6e4c8b5ee7e8b8a626d,
         type: 3}
       propertyPath: m_Name
-      value: Amogus Variant
+      value: Zombie
       objectReference: {fileID: 0}
     - target: {fileID: 8416272007918961125, guid: 66cfc2b48fd2c6e4c8b5ee7e8b8a626d,
         type: 3}
@@ -91,5 +91,31 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 66cfc2b48fd2c6e4c8b5ee7e8b8a626d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -1515575663153049213}
   m_SourcePrefab: {fileID: 100100000, guid: 66cfc2b48fd2c6e4c8b5ee7e8b8a626d, type: 3}
+--- !u!1 &7866586269468863138 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 66cfc2b48fd2c6e4c8b5ee7e8b8a626d,
+    type: 3}
+  m_PrefabInstance: {fileID: 7055684148096473075}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-1515575663153049213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7866586269468863138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1167f5cd8794d6d4da290c9d1cdc3067, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocidadSpawneo: 10
+  velocidadAndando: 5
+  "da\xF1oAlGenerador": 10
+  vidaZombies: 100

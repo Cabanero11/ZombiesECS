@@ -7,16 +7,8 @@ namespace Zombies
 {
     public class GeneradorMono : MonoBehaviour
     {
-        public float2 CementeryDimesions;
-        public int NumberOfTombstoneToSpawn;
-        public GameObject TumbaPrefab;
-        public float areaGeneradorRadio;
-
-        // Seed random, valor como 100
-        public uint RandomSeed;
-
-        public GameObject ZombiePrefab;
-        public float cooldownSpawneoZombies;
+        // 200 Ta bien creo ??
+        public float vidaGenerador;
 
     }
 
@@ -25,29 +17,12 @@ namespace Zombies
     {
         public override void Bake(GeneradorMono authoring)
         {
-            var cementerioEntity = GetEntity(TransformUsageFlags.Dynamic);
+            var generadorEntidad = GetEntity(TransformUsageFlags.Dynamic);
 
-            // Añadir a la entidad del Cementerio los datos de CementerioData
-            // para asi verlos en el editor
-            AddComponent(cementerioEntity, new CementerioData
-            {
-                CementeryDimesions = authoring.CementeryDimesions,
-                NumberOfTombstoneToSpawn = authoring.NumberOfTombstoneToSpawn,
-                TumbaPrefab = GetEntity(authoring.TumbaPrefab, TransformUsageFlags.Dynamic),
-                areaGeneradorRadio = authoring.areaGeneradorRadio,
-                ZombiePrefab = GetEntity(authoring.ZombiePrefab, TransformUsageFlags.Dynamic),
-                cooldownSpawneoZombies = authoring.cooldownSpawneoZombies
-            });
+            //AddComponent<GeneradorTag>(generadorEntidad);
+            AddComponent(generadorEntidad, new GeneradorVida { generadorVida = authoring.vidaGenerador, generadorVidaMaxima = authoring.vidaGenerador });
 
-
-            // Generar nº random de Tumbas para spawnear zombies
-            AddComponent(cementerioEntity, new CementerioRandom
-            {
-                randomValue = Unity.Mathematics.Random.CreateFromIndex(authoring.RandomSeed)
-            });
-
-            AddComponent<ZombiesSpawn>(cementerioEntity);
-            AddComponent<ZombiesSpawnerTiempo>(cementerioEntity);
+            //AddBuffer<GeneradorDañoBufferElemento>(generadorEntidad);
         }
     }
 

@@ -33,7 +33,7 @@ namespace Zombies
 
             var cementerioEntity = SystemAPI.GetSingletonEntity<CementerioData>();
             var cementerio = SystemAPI.GetAspect<CementerioAspect>(cementerioEntity);
-            var tumbasOffset = new float3(0f, 2f, 1f); // Para que los zombies salgan encima de la tumba
+            var tumbasOffset = new float3(0f, -2f, 0f); // Para que los zombies salgan debajo de la tumba
 
             // Spawnear Entidades, Usamos ECB en vez del EntityManager (tras realizar varias)
             // instacias se realientiza un poco, asi que usamos un EntityCommandBuffer

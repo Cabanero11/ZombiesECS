@@ -1,7 +1,9 @@
 
+using Unity.Entities;
 using UnityEngine;
 
-public class ZombiesOleadas : MonoBehaviour
+public struct ZombiesOleadas : IComponentData
 {
-    
+    // Velocidad en que salen zombies
+    public float valorVelocidadOleadas;
 }

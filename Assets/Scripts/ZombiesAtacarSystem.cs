@@ -13,7 +13,7 @@ namespace Zombies
   
    [BurstCompile]
    [UpdateAfter(typeof(ZombiesSpawnerSystem))]
-   public partial struct ZombiesOleadasSystem : ISystem
+   public partial struct ZombiesAtacarSystem : ISystem
    {
        [BurstCompile]
        public void OnCreate(ref SystemState state)
@@ -29,23 +29,13 @@ namespace Zombies
        [BurstCompile]
        public void OnUpdate(ref SystemState state)
        {
-            var deltaTime = SystemAPI.Time.DeltaTime;
-
-            // Se crearan en diferentes hilos de forma paralela
-            // Al tener en ZombiesSpawnerSystem en el OnUpdate  }.Run();
-            // No tenemos orden para saber cual de estos 2 Sistemas se ejecutara antes
-            // La Solucion => [UpdateAfter(typeof(ZombiesSpawnerSystem))]
-            // Asi se ejecutara despues del ZombiesSpawnerSystem
-            new ZombiesOleadasJob
-            {
-                DeltaTime = deltaTime
-            }.ScheduleParallel();
+            
        }
    }
 
    // IJob Entity (Para gestionar los Jobs)
 
-   public partial struct ZombiesOleadasJob : IJobEntity
+   public partial struct ZombiesAtacarJob : IJobEntity
    {
         public float DeltaTime;
 

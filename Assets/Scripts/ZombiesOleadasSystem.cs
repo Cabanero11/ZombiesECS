@@ -18,6 +18,7 @@ namespace Zombies
        [BurstCompile]
        public void OnCreate(ref SystemState state)
        {
+
        }
 
        [BurstCompile]
@@ -31,6 +32,9 @@ namespace Zombies
        {
             var deltaTime = SystemAPI.Time.DeltaTime;
 
+            // Al final de la fase de Simulacion
+            var endSimulationEntityCommandBuffer = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
+
             // Se crearan en diferentes hilos de forma paralela
             // Al tener en ZombiesSpawnerSystem en el OnUpdate  }.Run();
             // No tenemos orden para saber cual de estos 2 Sistemas se ejecutara antes
@@ -38,7 +42,8 @@ namespace Zombies
             // Asi se ejecutara despues del ZombiesSpawnerSystem
             new ZombiesOleadasJob
             {
-                DeltaTime = deltaTime
+                DeltaTime = deltaTime,
+                parallelWriter = endSimulationEntityCommandBuffer.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter(),
             }.ScheduleParallel();
        }
    }
@@ -49,6 +54,7 @@ namespace Zombies
    {
         public float DeltaTime;
 
+        // Un
         public EntityCommandBuffer.ParallelWriter parallelWriter;
 
         [BurstCompile]

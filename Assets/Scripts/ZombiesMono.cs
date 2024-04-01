@@ -8,6 +8,11 @@ namespace Zombies
     public class ZombiesMono : MonoBehaviour
     {
         public float velocidadSpawneo; // De salir de la tumba
+
+        // Velocidad de los zombies andando de ZombiesOleadasData
+        public float velocidadAndando;
+        public float velocidadGiroAnimacion;
+        public float frecuenciaAnimacion;
     }
 
 
@@ -25,14 +30,20 @@ namespace Zombies
             });
 
 
-            // Generar nº random de Tumbas para spawnear zombies
-            AddComponent(zombiesEntity, new CementerioRandom
+            // Asignar los valores del ZombiesOleadasData
+            AddComponent(zombiesEntity, new ZombiesOleadasData
             {
-
+                velocidadAndando = authoring.velocidadAndando,
+                velocidadGiroAnimacion = authoring.velocidadGiroAnimacion,
+                frecuenciaAnimacion = authoring.frecuenciaAnimacion
             });
 
             AddComponent<ZombiesSpawn>(zombiesEntity);
+            
+            // Esta en CementerioData
             AddComponent<ZombiesSpawnerTiempo>(zombiesEntity);
+            // Esta en ZombiesOleadasData
+            AddComponent<ZombiesDireccion>(zombiesEntity);
         }
     }
 

@@ -12,12 +12,13 @@ namespace Zombies
    
   
    [BurstCompile]
-   [UpdateAfter(typeof(ZombiesSpawnerSystem))]
+   [UpdateAfter(typeof(ZombiesOleadasSystem))]
    public partial struct ZombiesMoverseSystem : ISystem
    {
        [BurstCompile]
        public void OnCreate(ref SystemState state)
        {
+            //state.RequireForUpdate<GeneradorTag>();
        }
 
        [BurstCompile]
@@ -29,35 +30,28 @@ namespace Zombies
        [BurstCompile]
        public void OnUpdate(ref SystemState state)
        {
-            
+            var deltaTime = SystemAPI.Time.DeltaTime;
+
+            new ZombiesMoverseJob
+            {
+                DeltaTime = deltaTime
+            }.ScheduleParallel();
        }
    }
 
    // IJob Entity (Para gestionar los Jobs)
 
+   [BurstCompile]
    public partial struct ZombiesMoverseJob : IJobEntity
    {
         public float DeltaTime;
 
-        public EntityCommandBuffer.ParallelWriter parallelWriter;
+        //public EntityCommandBuffer.ParallelWriter parallelWriter;
 
         [BurstCompile]
-        private void Execute(ZombiesOleadasAspect zombiesOleadasAspect, [ChunkIndexInQuery] int sortingKey)
+        private void Execute(ZombiesMoverseAspect zombiesMoverseAspect)
         {
-            zombiesOleadasAspect.SpawnearZombies(DeltaTime);
-
-            // Sino esta en el suelo
-            if(!zombiesOleadasAspect.isGrounded)
-            {
-                return;
-            } 
-
-            zombiesOleadasAspect.SubirZombiesAlSuelo();
-
-            // Una vez conseguido elevar el zombie y sacarlo,
-            // le quitamos esta Componente para añadirle otra de moverse y atacar
-            parallelWriter.RemoveComponent<ZombiesOleadas>(sortingKey, zombiesOleadasAspect.Entity);
-            //parallelWriter.SetComponentEnabled<ZombiesOleadasData>(sortingKey, zombiesOleadasAspect.Entity, true);
+            zombiesMoverseAspect.Moverse(DeltaTime);
         }
 
        

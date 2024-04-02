@@ -44,6 +44,7 @@ namespace Zombies
             AddComponent<ZombiesSpawnerTiempo>(zombiesEntity);
             // Esta en ZombiesOleadasData
             AddComponent<ZombiesDireccion>(zombiesEntity);
+            AddComponent<ZombiesTag>(zombiesEntity);
         }
     }
 

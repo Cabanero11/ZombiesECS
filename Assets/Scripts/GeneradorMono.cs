@@ -19,7 +19,7 @@ namespace Zombies
         {
             var generadorEntidad = GetEntity(TransformUsageFlags.Dynamic);
 
-            //AddComponent<GeneradorTag>(generadorEntidad);
+            AddComponent<GeneradorTag>(generadorEntidad);
             AddComponent(generadorEntidad, new GeneradorVida { generadorVida = authoring.vidaGenerador, generadorVidaMaxima = authoring.vidaGenerador });
 
             //AddBuffer<GeneradorDañoBufferElemento>(generadorEntidad);

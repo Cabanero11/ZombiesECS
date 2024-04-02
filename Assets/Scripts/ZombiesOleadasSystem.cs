@@ -69,11 +69,12 @@ namespace Zombies
             } 
 
             zombiesOleadasAspect.SubirZombiesAlSuelo();
+            
 
             // Una vez conseguido elevar el zombie y sacarlo,
             // le quitamos esta Componente para añadirle otra de moverse y atacar
             parallelWriter.RemoveComponent<ZombiesOleadas>(sortingKey, zombiesOleadasAspect.Entity);
-            //parallelWriter.SetComponentEnabled<ZombiesOleadasData>(sortingKey, zombiesOleadasAspect.Entity, true);
+            parallelWriter.SetComponentEnabled<ZombiesOleadasData>(sortingKey, zombiesOleadasAspect.Entity, true);
         }
 
        

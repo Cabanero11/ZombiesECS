@@ -13,12 +13,12 @@ namespace Zombies
     // Para inicializar antes del System de Grupo inicial
     
     [BurstCompile]
-    [UpdateInGroup(typeof(InitializationSystemGroup))]
     public partial struct ZombiesSpawnerSystem : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<ZombiesSpawnerTiempo>();
         }
 
         [BurstCompile]
@@ -75,11 +75,17 @@ namespace Zombies
             var nuevaPosicionZombie = cementerioAspect.getZombiesSpawn();
 
             // Le añado al nuevo zombie su nuevaPosicion con el entityCommandBuffer
-            entityCommandBuffer.SetComponent(nuevoZombie, nuevaPosicionZombie); 
+            entityCommandBuffer.SetComponent(nuevoZombie, nuevaPosicionZombie);
+
+            var direccionZombies = CalculosMatematicos.ObtenerDireccion(nuevaPosicionZombie.Position, cementerioAspect.Position);
+
+            entityCommandBuffer.SetComponent(nuevoZombie, new ZombiesDireccion 
+            { 
+                direccion = direccionZombies 
+            });
 
 
         }
     }
-
 }
 

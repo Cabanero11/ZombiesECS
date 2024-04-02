@@ -18,4 +18,5 @@ namespace Zombies
         // Array (x, y , z) para almacenar los puntos de spawn de los Zombies
         public BlobArray<float3> positionValueBlob;
     }
+
 }

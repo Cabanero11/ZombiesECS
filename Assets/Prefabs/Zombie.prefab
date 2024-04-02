@@ -116,6 +116,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocidadSpawneo: 10
-  velocidadAndando: 10
+  velocidadAndando: 5
   velocidadGiroAnimacion: 0.25
   frecuenciaAnimacion: 1

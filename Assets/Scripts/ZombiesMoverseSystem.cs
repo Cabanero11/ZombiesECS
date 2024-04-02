@@ -4,6 +4,8 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
+using Unity.VisualScripting;
 
 
 
@@ -32,9 +34,20 @@ namespace Zombies
        {
             var deltaTime = SystemAPI.Time.DeltaTime;
 
+            // Al final de la fase de Simulacion
+            var endSimulationEntityCommandBuffer = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
+
+            var generadorEntidad = SystemAPI.GetSingletonEntity<GeneradorTag>();
+
+            var generadorEscala = SystemAPI.GetComponent<LocalTransform>(generadorEntidad).Scale;
+
+            var generadorRadio = generadorEscala * 1.1f;
+
             new ZombiesMoverseJob
             {
-                DeltaTime = deltaTime
+                DeltaTime = deltaTime,
+                radioGenerador = generadorRadio * generadorRadio,
+                parallelWriter = endSimulationEntityCommandBuffer.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter()
             }.ScheduleParallel();
        }
    }
@@ -46,12 +59,19 @@ namespace Zombies
    {
         public float DeltaTime;
 
-        //public EntityCommandBuffer.ParallelWriter parallelWriter;
+        public float radioGenerador;
+
+        public EntityCommandBuffer.ParallelWriter parallelWriter;
 
         [BurstCompile]
-        private void Execute(ZombiesMoverseAspect zombiesMoverseAspect)
+        private void Execute(ZombiesMoverseAspect zombiesMoverseAspect, [ChunkIndexInQuery] int sortingKey)
         {
             zombiesMoverseAspect.Moverse(DeltaTime);
+
+            if(zombiesMoverseAspect.detectarSiZombiesEstaEnRadioGenerador(float3.zero, radioGenerador))
+            {
+                parallelWriter.SetComponentEnabled<ZombiesOleadasData>(sortingKey, zombiesMoverseAspect.Entity, false);
+            }
         }
 
        

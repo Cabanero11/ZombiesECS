@@ -177,7 +177,7 @@ MonoBehaviour:
   RandomSeed: 0
   ZombiePrefab: {fileID: 7866586269468863138, guid: d09ebcb8c25e0924f921581698c62b60,
     type: 3}
-  cooldownSpawneoZombies: 1
+  cooldownSpawneoZombies: 2
 --- !u!1 &1126685765
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,6 +190,7 @@ GameObject:
   - component: {fileID: 1126685768}
   - component: {fileID: 1126685767}
   - component: {fileID: 1126685770}
+  - component: {fileID: 1126685771}
   m_Layer: 0
   m_Name: Generador Energia
   m_TagString: Untagged
@@ -284,3 +285,16 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1126685771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1126685765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c0e0ed3e35f1bb44bf26842a373bae4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vidaGenerador: 200

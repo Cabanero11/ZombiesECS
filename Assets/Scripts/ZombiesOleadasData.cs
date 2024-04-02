@@ -2,7 +2,7 @@
 using Unity.Entities;
 using UnityEngine;
 
-public struct ZombiesOleadasData : IComponentData
+public struct ZombiesOleadasData : IComponentData, IEnableableComponent
 {
     // Velocidad de los zombies andando
     public float velocidadAndando;
@@ -27,3 +27,8 @@ public struct  ZombiesDireccion : IComponentData
     public float direccion;
 }
 
+
+public struct ZombiesTag : IComponentData
+{
+
+}

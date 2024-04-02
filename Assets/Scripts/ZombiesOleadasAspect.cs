@@ -23,7 +23,7 @@ namespace Zombies
             var localTransform = _localTransform.ValueRO.Position;
             // TODO: hacer esto smooth
             // Recordar que en TumbasSpawnerSystem esta el offsetTumba :p
-            localTransform.y = 0f;
+            localTransform.y = 1f;  // Altura a la que sale de la tumba
             _localTransform.ValueRW.Position = localTransform;
         }
 
@@ -31,6 +31,8 @@ namespace Zombies
         {
             _localTransform.ValueRW.Position += math.up() * _zombiesOleadas.ValueRO.valorVelocidadOleadas * tiempo * 0.2f;
         }
+
+        
 
 
     }

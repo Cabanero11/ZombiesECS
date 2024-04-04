@@ -40,6 +40,9 @@ namespace Zombies
                 
                 // Asi desabilitamos la propiedad
                 entityCommandBuffer.SetComponentEnabled<ZombiesOleadasData>(zombiesMoverse.Entity, false);
+
+                entityCommandBuffer.SetComponentEnabled<ZombiesAtacar>(zombiesMoverse.Entity, false);
+
             }
 
             entityCommandBuffer.Playback(state.EntityManager);

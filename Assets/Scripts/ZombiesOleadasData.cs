@@ -9,11 +9,6 @@ public struct ZombiesOleadasData : IComponentData, IEnableableComponent
 
     public float velocidadGiroAnimacion;
     public float frecuenciaAnimacion;
-
-    // Daño que le hacen al generador
-    public float dañoAlGenerador;
-    // El numero de vida del zombie
-    public float vidaZombies; 
 }
 
 
@@ -31,4 +26,12 @@ public struct  ZombiesDireccion : IComponentData
 public struct ZombiesTag : IComponentData
 {
 
+}
+
+
+public struct ZombiesAtacar : IComponentData, IEnableableComponent
+{
+    public float dañoAlGenerador;
+    public float animacionAmplitud;
+    public float frecuenciaDeAtaque;
 }

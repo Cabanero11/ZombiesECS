@@ -48,8 +48,9 @@ namespace Zombies
        }
    }
 
-   // IJob Entity (Para gestionar los Jobs)
+    // IJob Entity (Para gestionar los Jobs)
 
+   [BurstCompile]
    public partial struct ZombiesOleadasJob : IJobEntity
    {
         public float DeltaTime;

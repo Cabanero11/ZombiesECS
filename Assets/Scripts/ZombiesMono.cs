@@ -7,12 +7,17 @@ namespace Zombies
 {
     public class ZombiesMono : MonoBehaviour
     {
-        public float velocidadSpawneo; // De salir de la tumba
+        public float VelocidadSpawneo; // De salir de la tumba
 
         // Velocidad de los zombies andando de ZombiesOleadasData
-        public float velocidadAndando;
-        public float velocidadGiroAnimacion;
-        public float frecuenciaAnimacion;
+        public float VelocidadAndando;
+        public float VelocidadGiroAnimacion;
+        public float FrecuenciaAnimacion;
+
+        // ZombiesAtacar de ZombiesOleadasData
+        public float DañoAlGenerador;
+        public float AnimacionAmplitud;
+        public float FrecuenciaDeAtaque;
     }
 
 
@@ -26,17 +31,28 @@ namespace Zombies
             // para asi verlos en el editor
             AddComponent(zombiesEntity, new ZombiesOleadas
             {
-                valorVelocidadOleadas = authoring.velocidadSpawneo
+                valorVelocidadOleadas = authoring.VelocidadSpawneo
             });
 
 
             // Asignar los valores del ZombiesOleadasData
             AddComponent(zombiesEntity, new ZombiesOleadasData
             {
-                velocidadAndando = authoring.velocidadAndando,
-                velocidadGiroAnimacion = authoring.velocidadGiroAnimacion,
-                frecuenciaAnimacion = authoring.frecuenciaAnimacion
+                velocidadAndando = authoring.VelocidadAndando,
+                velocidadGiroAnimacion = authoring.VelocidadGiroAnimacion,
+                frecuenciaAnimacion = authoring.FrecuenciaAnimacion
             });
+
+            AddComponent(zombiesEntity, new ZombiesAtacar
+            {
+                dañoAlGenerador = authoring.DañoAlGenerador,
+                animacionAmplitud = authoring.AnimacionAmplitud,
+                frecuenciaDeAtaque = authoring.FrecuenciaDeAtaque
+            });
+
+
+
+
 
             AddComponent<ZombiesSpawn>(zombiesEntity);
             

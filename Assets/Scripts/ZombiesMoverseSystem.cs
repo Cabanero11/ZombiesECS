@@ -70,7 +70,9 @@ namespace Zombies
 
             if(zombiesMoverseAspect.detectarSiZombiesEstaEnRadioGenerador(float3.zero, radioGenerador))
             {
+                // Para si llega al radio del Generador, y emepezar  a atacar si esta en el
                 parallelWriter.SetComponentEnabled<ZombiesOleadasData>(sortingKey, zombiesMoverseAspect.Entity, false);
+                parallelWriter.SetComponentEnabled<ZombiesAtacar>(sortingKey, zombiesMoverseAspect.Entity, true);
             }
         }
 

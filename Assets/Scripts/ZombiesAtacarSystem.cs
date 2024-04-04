@@ -9,27 +9,27 @@ using Unity.Transforms;
 
 namespace Zombies
 {
-   
-  
-   [BurstCompile]
-   [UpdateAfter(typeof(ZombiesMoverseSystem))]
-   public partial struct ZombiesAtacarSystem : ISystem
-   {
-       [BurstCompile]
-       public void OnCreate(ref SystemState state)
-       {
 
-       }
 
-       [BurstCompile]
-       public void OnDestroy(ref SystemState state)
-       {
+    [BurstCompile]
+    [UpdateAfter(typeof(ZombiesMoverseSystem))]
+    public partial struct ZombiesAtacarSystem : ISystem
+    {
+        [BurstCompile]
+        public void OnCreate(ref SystemState state)
+        {
 
-       }
+        }
 
-       [BurstCompile]
-       public void OnUpdate(ref SystemState state)
-       {
+        [BurstCompile]
+        public void OnDestroy(ref SystemState state)
+        {
+
+        }
+
+        [BurstCompile]
+        public void OnUpdate(ref SystemState state)
+        {
             var deltaTime = SystemAPI.Time.DeltaTime;
 
             // Obtener la variable Singleton asociada con la entidad de inicializacion "Begin"
@@ -71,7 +71,7 @@ namespace Zombies
             if (zombiesAtacarAspect.detectarSiZombiesEstaEnRadioParaAtacar(float3.zero, RadioGenerador))
             {
                 zombiesAtacarAspect.AtacarAlGenerador(DeltaTime, parallelWriter, sortingKey, GeneradorEntidad);
-            } 
+            }
             else
             {
                 // Sino esta en rango, NO acatar, SI moverse
@@ -88,5 +88,3 @@ namespace Zombies
 
 
 }
-
-

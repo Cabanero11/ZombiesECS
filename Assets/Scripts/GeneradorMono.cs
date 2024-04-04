@@ -22,7 +22,8 @@ namespace Zombies
             AddComponent<GeneradorTag>(generadorEntidad);
             AddComponent(generadorEntidad, new GeneradorVida { generadorVida = authoring.vidaGenerador, generadorVidaMaxima = authoring.vidaGenerador });
 
-            //AddBuffer<GeneradorDañoBufferElemento>(generadorEntidad);
+            // PARA dañar al jugador usamos un Buffer Dinamico
+            AddBuffer<GeneradorDañoBuffer>(generadorEntidad);
         }
     }
 

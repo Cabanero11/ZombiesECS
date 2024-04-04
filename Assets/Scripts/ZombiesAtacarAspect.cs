@@ -59,8 +59,8 @@ namespace Zombies
             _localTransform.ValueRW.Rotation = quaternion.Euler(anguloDeComer, Direccion, 0);
 
             var dañoAtaque = DañoAlGenerador * deltaTime;
-            var vidaGeneradorActual = new GeneradorVida { generadorVida = dañoAtaque };
-            //parallelWriter.AppendToBuffer(sortingKey, generadorEntidad, vidaGeneradorActual);
+            var vidaGeneradorActual = new GeneradorDañoBuffer { generadorDañoBuffer = dañoAtaque };
+            parallelWriter.AppendToBuffer(sortingKey, generadorEntidad, vidaGeneradorActual);
         }
 
 

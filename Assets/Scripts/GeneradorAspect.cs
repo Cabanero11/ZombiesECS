@@ -16,22 +16,25 @@ namespace Zombies
             => _localTransform.ValueRO;
 
         private readonly RefRW<GeneradorVida> _generadorVida;
-        //private readonly DynamicBuffer<GeneradorDañoBufferElemento> _generadorDañoBufferElemento;
+        
+        private readonly DynamicBuffer<GeneradorDañoBuffer> _generadorDañoBufferElemento;
     
-        private void GeneradorRecibirDaño()
+        public void GeneradorRecibirDaño()
         {
-            /**
+            
             foreach (var generadorDañoBufferElemento in _generadorDañoBufferElemento)
             {
-                _generadorVida.ValueRW.generadorVida -= generadorDañoBufferElemento.Value;
+                _generadorVida.ValueRW.generadorVida -= generadorDañoBufferElemento.generadorDañoBuffer;
             }
+
+
 
             _generadorDañoBufferElemento.Clear();
 
             // Escale la escala del Generador con la vida actual que tenga :O
             _localTransform.ValueRW.Scale = _generadorVida.ValueRO.generadorVida / _generadorVida.ValueRO.generadorVidaMaxima;
 
-            */
+            
         }
 
     }

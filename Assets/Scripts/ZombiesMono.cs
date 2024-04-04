@@ -43,6 +43,7 @@ namespace Zombies
                 frecuenciaAnimacion = authoring.FrecuenciaAnimacion
             });
 
+            // Los valores del sistema de ataque de los zombies
             AddComponent(zombiesEntity, new ZombiesAtacar
             {
                 dañoAlGenerador = authoring.DañoAlGenerador,
@@ -53,11 +54,12 @@ namespace Zombies
 
 
 
-
-            AddComponent<ZombiesSpawn>(zombiesEntity);
+            // SOBRABA CREO
+            //AddComponent<ZombiesSpawn>(zombiesEntity);
             
             // Esta en CementerioData
             AddComponent<ZombiesSpawnerTiempo>(zombiesEntity);
+
             // Esta en ZombiesOleadasData
             AddComponent<ZombiesDireccion>(zombiesEntity);
             AddComponent<ZombiesTag>(zombiesEntity);

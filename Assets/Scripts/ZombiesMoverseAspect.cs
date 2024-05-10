@@ -50,19 +50,12 @@ namespace Zombies
         {
             // Temporizador del juego, y mover hacia adelante al Zombie
             Temporizador += deltaTime;
-            var localTransform = _localTransform.ValueRO;
+            _localTransform.ValueRW.Position += _localTransform.ValueRO.Forward() * VelocidadAndando * deltaTime;
 
-            var newPosition = localTransform.Position + localTransform.Forward() * VelocidadAndando * deltaTime;
-            var newRotation = quaternion.Euler(0, Direccion, VelocidadGiroAnimacion * math.sin(FrecuenciaAnimacion * Temporizador));
+            var anguloAndar = VelocidadGiroAnimacion * math.sin(FrecuenciaAnimacion * Temporizador);
+            _localTransform.ValueRW.Rotation = quaternion.Euler(0, Direccion, anguloAndar);
 
-            var newLocalTransform = new LocalTransform
-            {
-                Position = newPosition,
-                Rotation = newRotation,
-                Scale = localTransform.Scale
-            };
-
-            _localTransform.ValueRW = newLocalTransform;
+            //el eppe
         }
 
     }

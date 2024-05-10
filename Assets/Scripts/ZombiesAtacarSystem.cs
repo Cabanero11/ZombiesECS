@@ -18,7 +18,7 @@ namespace Zombies
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-
+            state.RequireForUpdate<GeneradorTag>();
         }
 
         [BurstCompile]
@@ -39,7 +39,7 @@ namespace Zombies
 
             var generadorEscala = SystemAPI.GetComponent<LocalTransform>(generadorEntidad).Scale;
 
-            var generadorRadio = generadorEscala * 1.1f;
+            var generadorRadio = generadorEscala * 5f + 1f;
 
             // Preparar el Job para spawnear Zombies, en el hilo Main()
             new ZombiesAtacarJob
@@ -76,7 +76,7 @@ namespace Zombies
             {
                 // Sino esta en rango, NO acatar, SI moverse
                 parallelWriter.SetComponentEnabled<ZombiesAtacar>(sortingKey, zombiesAtacarAspect.Entity, false);
-                parallelWriter.SetComponentEnabled<ZombiesAtacar>(sortingKey, zombiesAtacarAspect.Entity, true);
+                parallelWriter.SetComponentEnabled<ZombiesOleadasData>(sortingKey, zombiesAtacarAspect.Entity, true);
             }
         }
 

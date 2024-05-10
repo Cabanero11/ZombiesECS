@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.GraphicsBuffer;
+using Zombies;
 
 public class CanvasBehaviour : MonoBehaviour
 {

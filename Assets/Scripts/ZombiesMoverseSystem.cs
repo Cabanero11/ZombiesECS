@@ -20,7 +20,7 @@ namespace Zombies
        [BurstCompile]
        public void OnCreate(ref SystemState state)
        {
-            //state.RequireForUpdate<GeneradorTag>();
+            state.RequireForUpdate<GeneradorTag>();
        }
 
        [BurstCompile]
@@ -41,14 +41,18 @@ namespace Zombies
 
             var generadorEscala = SystemAPI.GetComponent<LocalTransform>(generadorEntidad).Scale;
 
-            var generadorRadio = generadorEscala * 1.1f;
+            var generadorRadio = generadorEscala * 5f + 0.5f;
+
+            //UnityEngine.Debug.Log("DeltaTime: " + deltaTime);
+            //UnityEngine.Debug.Log("Moverse System activo");
 
             new ZombiesMoverseJob
             {
                 DeltaTime = deltaTime,
-                radioGenerador = generadorRadio * generadorRadio,
+                RadioGenerador = generadorRadio * generadorRadio,
                 parallelWriter = endSimulationEntityCommandBuffer.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter()
             }.ScheduleParallel();
+
        }
    }
 
@@ -59,7 +63,7 @@ namespace Zombies
    {
         public float DeltaTime;
 
-        public float radioGenerador;
+        public float RadioGenerador;
 
         public EntityCommandBuffer.ParallelWriter parallelWriter;
 
@@ -68,7 +72,7 @@ namespace Zombies
         {
             zombiesMoverseAspect.Moverse(DeltaTime);
 
-            if(zombiesMoverseAspect.detectarSiZombiesEstaEnRadioGenerador(float3.zero, radioGenerador))
+            if(zombiesMoverseAspect.detectarSiZombiesEstaEnRadioGenerador(float3.zero, RadioGenerador))
             {
                 // Para si llega al radio del Generador, y emepezar  a atacar si esta en el
                 parallelWriter.SetComponentEnabled<ZombiesOleadasData>(sortingKey, zombiesMoverseAspect.Entity, false);

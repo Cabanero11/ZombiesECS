@@ -55,10 +55,11 @@ namespace Zombies
 
 
             // SOBRABA CREO
-            //AddComponent<ZombiesSpawn>(zombiesEntity);
+            AddComponent<ZombiesSpawn>(zombiesEntity);
             
             // Esta en CementerioData
             AddComponent<ZombiesSpawnerTiempo>(zombiesEntity);
+
 
             // Esta en ZombiesOleadasData
             AddComponent<ZombiesDireccion>(zombiesEntity);

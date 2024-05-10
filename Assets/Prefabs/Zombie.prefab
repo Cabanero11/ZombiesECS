@@ -115,7 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1167f5cd8794d6d4da290c9d1cdc3067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VelocidadSpawneo: 5
+  VelocidadSpawneo: 10
   VelocidadAndando: 4
   VelocidadGiroAnimacion: 4
   FrecuenciaAnimacion: 1

@@ -63,18 +63,20 @@ namespace Zombies
         {
             zombiesOleadasAspect.SpawnearZombies(DeltaTime);
 
-            // Sino esta en el suelo
+            // Mientras que no este arriba
             if(!zombiesOleadasAspect.isGrounded)
             {
                 return;
             } 
 
             zombiesOleadasAspect.SubirZombiesAlSuelo();
-            
 
             // Una vez conseguido elevar el zombie y sacarlo,
             // le quitamos esta Componente para añadirle otra de moverse y atacar
             parallelWriter.RemoveComponent<ZombiesOleadas>(sortingKey, zombiesOleadasAspect.Entity);
+
+            // POR ESTA LINEA FALLABA 100%%%% espero
+            // PUES NO ERA :((((
             parallelWriter.SetComponentEnabled<ZombiesOleadasData>(sortingKey, zombiesOleadasAspect.Entity, true);
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using DG.Tweening;
+using Zombies;
 
 public class PlayerCamera : MonoBehaviour
 {
@@ -67,7 +68,9 @@ public class PlayerCamera : MonoBehaviour
         if (orientation != null)
             orientation.rotation = Quaternion.Euler(0, yRotation, 0);
         else if (Player.instance != null)
-            orientation = Player.instance.GetComponent<PlayerMovement>().orientation;
+        {
+            //orientation = Player.instance.GetComponent<PlayerMovement>();
+        }
     }
 
     public void DoFov(float endValue)

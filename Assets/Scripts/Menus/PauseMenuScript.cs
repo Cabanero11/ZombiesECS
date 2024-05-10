@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine.UI;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine.SceneManagement;
-using static GameManager;
+using Zombies;
 
 public class PauseMenuScript : MonoBehaviour
 {
@@ -60,7 +60,7 @@ public class PauseMenuScript : MonoBehaviour
 
         Time.timeScale = 1f;
 
-        GameManager.Instance.gameState = GameState.menu;
+        //GameManager.Instance.gameState = GameState.menu;
         SceneManager.LoadScene(0);
     }
 
@@ -119,7 +119,7 @@ public class PauseMenuScript : MonoBehaviour
 
         Time.timeScale = 1f;
 
-        GameManager.Instance.gameState = GameState.level;
+        //GameManager.Instance.gameState = GameState.level;
 
         PlayerCamera.instance.cameraRespawn = false;
     }

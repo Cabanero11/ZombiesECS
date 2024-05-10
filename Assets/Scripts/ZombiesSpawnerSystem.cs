@@ -51,6 +51,8 @@ namespace Zombies
     {
         public float deltaTimeJob; // el Time.deltaTime; de Unity
         public EntityCommandBuffer entityCommandBuffer;
+
+        [BurstCompile]
         private void Execute(CementerioAspect cementerioAspect)
         {
             cementerioAspect.ZombiesSpawnTiempo -= deltaTimeJob;

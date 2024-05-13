@@ -103,13 +103,17 @@ public partial struct DisparoSystem : ISystem
                 // Obtener la posición y dirección del punto de disparo del jugador
                 LocalTransform puntoDisparoTransform = _entityManager.GetComponentData<LocalTransform>(_playerEntity);
 
+                float offsetY = 1.2f;
 
                 // Colocar la bala en la posición del punto de disparo y dirigirla hacia adelante
-                balasTransform.Position = playerTransform.Position;
+                balasTransform.Position.x = playerTransform.Position.x;
+                balasTransform.Position.y = playerTransform.Position.y + offsetY;
+                balasTransform.Position.z = playerTransform.Position.z;
+
                 balasTransform.Rotation = playerTransform.Rotation;
 
                 // Agregar un desplazamiento aleatorio en el plano XY
-                float2 randomOffset = UnityEngine.Random.insideUnitCircle * _playerComponent.balasSpread * 0.5f;
+                float2 randomOffset = UnityEngine.Random.insideUnitCircle * _playerComponent.balasSpread;
                 float3 offset = new(randomOffset.x, randomOffset.y, 0);
 
                 // Sumar el desplazamiento al punto de disparo para dispersar las balas

@@ -588,7 +588,7 @@ MonoBehaviour:
   balaPrefab: {fileID: 8186829890419529834, guid: 8e264d2ff04f44849bc11aaba8590ae7,
     type: 3}
   numeroBalasPorDisparo: 1
-  balasSpread: 3
+  balasSpread: 0.5
   puntoDisparo: {fileID: 333746445}
 --- !u!1 &2102552731
 GameObject:

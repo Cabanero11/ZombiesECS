@@ -11,7 +11,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 66cfc2b48fd2c6e4c8b5ee7e8b8a626d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 66cfc2b48fd2c6e4c8b5ee7e8b8a626d,
         type: 3}
@@ -68,25 +68,50 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cuerpo
       objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: 66cfc2b48fd2c6e4c8b5ee7e8b8a626d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: -5568371526223589888, guid: 66cfc2b48fd2c6e4c8b5ee7e8b8a626d,
         type: 3}
       propertyPath: m_Name
       value: Patitas
+      objectReference: {fileID: 0}
+    - target: {fileID: -5568371526223589888, guid: 66cfc2b48fd2c6e4c8b5ee7e8b8a626d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: -516098083770646512, guid: 66cfc2b48fd2c6e4c8b5ee7e8b8a626d,
         type: 3}
       propertyPath: m_Name
       value: Visera
       objectReference: {fileID: 0}
+    - target: {fileID: -516098083770646512, guid: 66cfc2b48fd2c6e4c8b5ee7e8b8a626d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 66cfc2b48fd2c6e4c8b5ee7e8b8a626d,
         type: 3}
       propertyPath: m_Name
       value: Zombie
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 66cfc2b48fd2c6e4c8b5ee7e8b8a626d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 8416272007918961125, guid: 66cfc2b48fd2c6e4c8b5ee7e8b8a626d,
         type: 3}
       propertyPath: m_Name
       value: Mochila
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416272007918961125, guid: 66cfc2b48fd2c6e4c8b5ee7e8b8a626d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -96,6 +121,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: -1515575663153049213}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 66cfc2b48fd2c6e4c8b5ee7e8b8a626d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 139916388823510851}
   m_SourcePrefab: {fileID: 100100000, guid: 66cfc2b48fd2c6e4c8b5ee7e8b8a626d, type: 3}
 --- !u!1 &7866586269468863138 stripped
 GameObject:
@@ -122,3 +151,24 @@ MonoBehaviour:
   "Da\xF1oAlGenerador": 10
   AnimacionAmplitud: 0.2
   FrecuenciaDeAtaque: 5
+--- !u!65 &139916388823510851
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7866586269468863138}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.3335803, y: 2.0405438, z: 1}
+  m_Center: {x: 0.049617648, y: 0.18669617, z: 0}

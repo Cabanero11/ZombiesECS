@@ -62,7 +62,7 @@ public partial struct BalasSystem : ISystem
 
                 physicsWorldSingleton.CapsuleCastAll(punto1, punto2, radio, direccion, distanciaMaxima, ref colliderCastHits, new CollisionFilter {
                     BelongsTo = (uint)CapaColisiones.Default,
-                    CollidesWith = (uint)CapaColisiones.Wall,
+                    CollidesWith = (uint)CapaColisiones.Enemigo,
                 });
 
                 // SI ha colisionado mas de 1 vez, destruimos la bala

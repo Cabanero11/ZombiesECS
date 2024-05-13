@@ -9,6 +9,8 @@ namespace Zombies
     public struct BalasData : IComponentData
     {
         public float velocidadBala;
+        public float tamañoBala;
+        public float dañoBala;
     }
 }
 

@@ -7,15 +7,8 @@ namespace Zombies
 {
     public struct DisparoData : IComponentData
     {
-        public float2 CementeryDimesions;
-        public int NumberOfTombstoneToSpawn;
-        public Entity TumbaPrefab;
-        public float areaGeneradorRadio;
-
-        public Entity ZombiePrefab;
-        public float cooldownSpawneoZombies;
+        public Entity balaPrefab;
+        public int numeroBalasPorDisparo;
+        public float balasSpread;
     }
-
-
-
 }

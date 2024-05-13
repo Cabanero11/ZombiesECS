@@ -1,14 +1,15 @@
 using Unity.Entities;
 using Unity.Mathematics;
+using UnityEngine;
 
 
 
 namespace Zombies
 {
-    public struct inputMono : IComponentData
+    public struct InputMono : IComponentData
     {
-        public float3 CementeryDimesions;
-        
+        //public Vector3 movimientoWASD;
+        public bool disparoIniciar;
     }
 
 

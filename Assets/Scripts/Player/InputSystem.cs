@@ -14,6 +14,7 @@ namespace Zombies
 
         protected override void OnCreate()
         {
+            // Entidad 79:1 lo pilla, no PlayerEntity
             // Si no hay InputMono, crear una entidad de este
             if (!SystemAPI.TryGetSingleton(out InputMono input))
             {
@@ -26,12 +27,14 @@ namespace Zombies
 
         protected override void OnUpdate()
         {
-            bool disparo = inputPlayerECS.Player.Disparar.ReadValue<bool>();
+            bool disparo = inputPlayerECS.Player.Disparar.IsPressed();
 
             SystemAPI.SetSingleton(new InputMono
             {
                 disparoIniciar = disparo
             });
+
+
         }
     }
 

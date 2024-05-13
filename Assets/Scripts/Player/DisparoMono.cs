@@ -1,5 +1,6 @@
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Physics;
 using UnityEngine;
 
 
@@ -10,6 +11,7 @@ namespace Zombies
         public GameObject balaPrefab;
         public int numeroBalasPorDisparo;
         public float balasSpread;
+        public GameObject puntoDisparo;
     }
 
 
@@ -23,7 +25,8 @@ namespace Zombies
             {
                 balaPrefab = GetEntity(authoring.balaPrefab, TransformUsageFlags.Dynamic),
                 numeroBalasPorDisparo = authoring.numeroBalasPorDisparo,
-                balasSpread = authoring.balasSpread
+                balasSpread = authoring.balasSpread,
+                puntoDisparo = GetEntity(authoring.puntoDisparo, TransformUsageFlags.Dynamic),
             });
 
         }

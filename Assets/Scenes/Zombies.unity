@@ -682,7 +682,7 @@ MonoBehaviour:
   wallRunSound: {fileID: 8300000, guid: b8f6b97e33c026b419d76fd6f9f195e3, type: 3}
   deathSound: {fileID: 8300000, guid: 2297d22b28d77e1459b95485d13b5c4b, type: 3}
   hookSound: {fileID: 8300000, guid: 2297d22b28d77e1459b95485d13b5c4b, type: 3}
-  dashSound: {fileID: 8300000, guid: b6da11052a963ec459e96667e0cab5de, type: 3}
+  dashSound: {fileID: 8300000, guid: b8f6b97e33c026b419d76fd6f9f195e3, type: 3}
   muelleSound: {fileID: 8300000, guid: 2297d22b28d77e1459b95485d13b5c4b, type: 3}
   winLevelSound: {fileID: 8300000, guid: 2297d22b28d77e1459b95485d13b5c4b, type: 3}
   level1Music: {fileID: 8300000, guid: b6da11052a963ec459e96667e0cab5de, type: 3}
@@ -5431,7 +5431,7 @@ PrefabInstance:
     - target: {fileID: 3062441090331311058, guid: 033941d0877eb474d90290dd16b6c34f,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5389726166711828096, guid: 033941d0877eb474d90290dd16b6c34f,
         type: 3}
@@ -5457,6 +5457,16 @@ PrefabInstance:
         type: 3}
       propertyPath: enganchables.m_Bits
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6554018655669153458, guid: 033941d0877eb474d90290dd16b6c34f,
+        type: 3}
+      propertyPath: field of view
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6554018655669153458, guid: 033941d0877eb474d90290dd16b6c34f,
+        type: 3}
+      propertyPath: m_FocalLength
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8488255762158684310, guid: 033941d0877eb474d90290dd16b6c34f,
         type: 3}

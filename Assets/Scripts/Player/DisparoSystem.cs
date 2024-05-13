@@ -7,11 +7,11 @@ using UnityEngine;
 using Unity.Burst;
 using Zombies;
 using Unity.Collections;
+using UnityEngine.EventSystems;
 
 
 [BurstCompile]
-[UpdateInGroup(typeof(InitializationSystemGroup))]
-public partial struct PlayerSystem : ISystem
+public partial struct DisparoSystem : ISystem
 {
     private EntityManager _entityManager;
     private Entity _playerEntity;
@@ -19,6 +19,7 @@ public partial struct PlayerSystem : ISystem
 
     private DisparoData _playerComponent;
     private InputMono _inputComponent;
+
 
     public void OnUpdate(ref SystemState state)
     {
@@ -31,6 +32,10 @@ public partial struct PlayerSystem : ISystem
         _playerComponent = _entityManager.GetComponentData<DisparoData>(_playerEntity);
         _inputComponent = _entityManager.GetComponentData<InputMono>(_inputEntity);
 
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
+        float verticalInput = Input.GetAxisRaw("Vertical");
+
+
         Move(ref state);
         Disparar(ref state);
     }
@@ -39,43 +44,80 @@ public partial struct PlayerSystem : ISystem
     {
         // Mover al jugador
         LocalTransform playerTransform = _entityManager.GetComponentData<LocalTransform>(_playerEntity);
-       
 
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
+        float verticalInput = Input.GetAxisRaw("Vertical");
+
+        // Calcular la dirección de movimiento utilizando los ejes Right y Forward del transform del jugador
+        float3 moveDirection = playerTransform.Right() * horizontalInput + playerTransform.Forward() * verticalInput;
+
+        // Verificar si la dirección de movimiento es un vector válido
+        if (math.lengthsq(moveDirection) > 0f)
+        {
+            // Normalizar la dirección de movimiento para mantener una velocidad constante en todas las direcciones
+            moveDirection = math.normalize(moveDirection);
+        }
+        else
+        {
+            // Si la dirección de movimiento es cero, no hacemos ningún movimiento
+            return;
+        }
+
+        // Calcular el desplazamiento basado en la dirección de movimiento y la velocidad
+        float3 movimiento = moveDirection * 5f * Time.deltaTime;
+
+        // Actualizar la posición del jugador sumando el desplazamiento
+        playerTransform.Position += movimiento;
+
+        // Actualizar el componente de transformación de la entidad del jugador
         _entityManager.SetComponentData(_playerEntity, playerTransform);
+
     }
+
 
     private void Disparar(ref SystemState state)
     {
 
         if (_inputComponent.disparoIniciar)
         {
-            for (int i = 0; i < c_PlayerComponent.NumOfBulletsToSpawn; i++)
+            for (int i = 0; i < _playerComponent.numeroBalasPorDisparo; i++)
             {
-                EntityCommandBuffer ECB = new EntityCommandBuffer(Allocator.Temp);
+                EntityCommandBuffer entityCommandBuffer = new EntityCommandBuffer(Allocator.Temp);
 
-                Entity bulletEntity = _entityManager.Instantiate(c_PlayerComponent.BulletPrefab);
+                Entity bulletEntity = _entityManager.Instantiate(_playerComponent.balaPrefab);
 
-                ECB.AddComponent(bulletEntity, new BulletComponent
+
+                entityCommandBuffer.AddComponent(bulletEntity, new BalasData
                 {
-                    Speed = 25f
+                    velocidadBala = 30f
                 });
 
-                ECB.AddComponent(bulletEntity, new BulletLifeTimeComponent
+                entityCommandBuffer.AddComponent(bulletEntity, new BalasTiempoMono
                 {
-                    RemainingLifetime = 1.5f
+                    balasTiempoDesaparicion = 4.0f
                 });
 
-                LocalToWorld bulletTransform = _entityManager.GetComponentData<LocalToWorld>(bulletEntity);
+                LocalTransform balasTransform = _entityManager.GetComponentData<LocalTransform>(bulletEntity);
+                LocalTransform playerTransform = _entityManager.GetComponentData<LocalTransform>(_playerEntity);
 
-                bulletTransform.Rotation = playerTransform.Rotation;
+                // Obtener la posición y dirección del punto de disparo del jugador
+                LocalTransform puntoDisparoTransform = _entityManager.GetComponentData<LocalTransform>(_playerEntity);
 
-                float randomOffset = UnityEngine.Random.Range(-c_PlayerComponent.BulletSpread, c_PlayerComponent.BulletSpread);
 
-                bulletTransform.Position += playerTransform.Position + (playerTransform.Right() * 1.65f) + (bulletTransform.Up() * randomOffset);
+                // Colocar la bala en la posición del punto de disparo y dirigirla hacia adelante
+                balasTransform.Position = playerTransform.Position;
+                balasTransform.Rotation = playerTransform.Rotation;
 
-                ECB.SetComponent(bulletEntity, bulletTransform);
+                // Agregar un desplazamiento aleatorio en el plano XY
+                float2 randomOffset = UnityEngine.Random.insideUnitCircle * _playerComponent.balasSpread * 0.5f;
+                float3 offset = new(randomOffset.x, randomOffset.y, 0);
 
-                ECB.Playback(_entityManager);
+                // Sumar el desplazamiento al punto de disparo para dispersar las balas
+                balasTransform.Position += math.mul(playerTransform.Rotation, offset);
+
+                entityCommandBuffer.SetComponent(bulletEntity, balasTransform);
+
+                entityCommandBuffer.Playback(_entityManager);
             }
         }
 

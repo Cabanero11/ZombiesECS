@@ -170,14 +170,14 @@ MonoBehaviour:
   CementeryDimesions:
     x: 300
     y: 300
-  NumberOfTombstoneToSpawn: 210
-  TumbaPrefab: {fileID: 8834013075865606041, guid: c26a1b1b4705f984cb476eda5014b88e,
+  NumberOfTombstoneToSpawn: 220
+  TumbaPrefab: {fileID: 919132149155446097, guid: 8f5bdd77a60ee1d4a91c2ee3d630cca3,
     type: 3}
   areaGeneradorRadio: 400
   RandomSeed: 0
   ZombiePrefab: {fileID: 7866586269468863138, guid: d09ebcb8c25e0924f921581698c62b60,
     type: 3}
-  cooldownSpawneoZombies: 2
+  cooldownSpawneoZombies: 1.5
 --- !u!1 &1126685765
 GameObject:
   m_ObjectHideFlags: 0

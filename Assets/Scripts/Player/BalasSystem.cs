@@ -60,15 +60,39 @@ public partial struct BalasSystem : ISystem
                 float3 direccion = float3.zero;
                 float distanciaMaxima = 1f;
 
+                // Ver si chocamos con una pared o un enemigo a la vez
+                uint capasColision = DevolverCapa.ObtenerCapaTrasColision(CapaColisiones.Wall, CapaColisiones.Enemigo);
+
                 physicsWorldSingleton.CapsuleCastAll(punto1, punto2, radio, direccion, distanciaMaxima, ref colliderCastHits, new CollisionFilter {
                     BelongsTo = (uint)CapaColisiones.Default,
-                    CollidesWith = (uint)CapaColisiones.Enemigo,
+                    CollidesWith = capasColision,
                 });
 
                 // SI ha colisionado mas de 1 vez, destruimos la bala
                 if(colliderCastHits.Length > 0f)
                 {
+                    // Iterar por entidades colisionadas y ver si es un Zombie
+                    for(int i = 0; i <  colliderCastHits.Length; i++)
+                    {
+                        Entity entidadColisionada = colliderCastHits[i].Entity;
+                        
+                        if(entityManager.HasComponent<ZombiesOleadasData>(entidadColisionada))
+                        {
+                            ZombiesOleadasData zombiesOleadasData = entityManager.GetComponentData<ZombiesOleadasData>(entidadColisionada);
+
+                            zombiesOleadasData.vidaZombies -= balasData.dañoBala;
+
+                            entityManager.SetComponentData(entidadColisionada, zombiesOleadasData);
+
+                            if(zombiesOleadasData.vidaZombies <= 0f)
+                            {
+                                entityManager.DestroyEntity(entidadColisionada);
+                            }
+                        }
+                    }
+                    
                     entityManager.DestroyEntity(ent);
+
                 }
 
                 colliderCastHits.Dispose();

@@ -13,5 +13,9 @@ namespace Zombies
         public int numeroBalasPorDisparo;
         public float balasSpread;
         public Entity puntoDisparo;
+        public Entity cameraPosition;
+        public Entity cameraHolder;
+        public Entity mainCamera;
+        public Entity orientation;
     }
 }

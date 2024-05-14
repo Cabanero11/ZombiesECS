@@ -89,7 +89,8 @@ public partial struct DisparoSystem : ISystem
 
                 entityCommandBuffer.AddComponent(bulletEntity, new BalasData
                 {
-                    velocidadBala = 30f
+                    velocidadBala = 30f,
+                    dañoBala = 10f
                 });
 
                 entityCommandBuffer.AddComponent(bulletEntity, new BalasTiempoMono

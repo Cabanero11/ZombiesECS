@@ -9,6 +9,9 @@ public struct ZombiesOleadasData : IComponentData, IEnableableComponent
 
     public float velocidadGiroAnimacion;
     public float frecuenciaAnimacion;
+
+    // Vida de los zombies
+    public float vidaZombies;
 }
 
 

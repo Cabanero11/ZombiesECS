@@ -86,6 +86,12 @@ namespace Zombies
                 direccion = direccionZombies 
             });
 
+            // Añadir vida a los zombies de las oleadas
+            entityCommandBuffer.AddComponent(nuevoZombie, new ZombiesOleadasData
+            {
+                vidaZombies = 100f
+            });
+
 
         }
     }

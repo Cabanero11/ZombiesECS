@@ -20,6 +20,10 @@ public partial struct DisparoSystem : ISystem
     private DisparoData _playerComponent;
     private InputMono _inputComponent;
 
+    public float sensibilityX;
+    public float sensibilityY;
+    float xRotation, yRotation;
+
 
     public void OnUpdate(ref SystemState state)
     {
@@ -42,14 +46,29 @@ public partial struct DisparoSystem : ISystem
 
     private void Move(ref SystemState state)
     {
-        // Mover al jugador
+        // Obtener el transform del jugador
         LocalTransform playerTransform = _entityManager.GetComponentData<LocalTransform>(_playerEntity);
 
+        sensibilityX = 550f;
+        sensibilityY = 350f;
+
+        float mouseX = Input.GetAxisRaw("Mouse X") * SystemAPI.Time.DeltaTime * sensibilityX;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * SystemAPI.Time.DeltaTime * sensibilityY;
+
+        yRotation += mouseX;
+        xRotation -= mouseY;
+
+        // Limitar la rotación en el eje Y entre -90 y 90 grados
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+
+        playerTransform.Rotation = Quaternion.Euler(xRotation, yRotation, 0);
+
+        // Obtener la entrada del teclado para movimiento
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         float verticalInput = Input.GetAxisRaw("Vertical");
 
         // Calcular la dirección de movimiento utilizando los ejes Right y Forward del transform del jugador
-        float3 moveDirection = playerTransform.Right() * horizontalInput + playerTransform.Forward() * verticalInput;
+        float3 moveDirection = math.mul(playerTransform.Rotation, new float3(horizontalInput, 0, verticalInput));
 
         // Verificar si la dirección de movimiento es un vector válido
         if (math.lengthsq(moveDirection) > 0f)
@@ -59,12 +78,12 @@ public partial struct DisparoSystem : ISystem
         }
         else
         {
-            // Si la dirección de movimiento es cero, no hacemos ningún movimiento
-            return;
+            // Si la dirección de movimiento es cero, el jugador está quieto, así que aplicamos la rotación del jugador
+            playerTransform.Position += float3.zero; // Esto es solo para asegurarnos de que el jugador no se mueva
         }
 
         // Calcular el desplazamiento basado en la dirección de movimiento y la velocidad
-        float3 movimiento = moveDirection * 5f * Time.deltaTime;
+        float3 movimiento = moveDirection * 5f * SystemAPI.Time.DeltaTime;
 
         // Actualizar la posición del jugador sumando el desplazamiento
         playerTransform.Position += movimiento;
@@ -72,6 +91,14 @@ public partial struct DisparoSystem : ISystem
         // Actualizar el componente de transformación de la entidad del jugador
         _entityManager.SetComponentData(_playerEntity, playerTransform);
 
+        // Actualizar la posición de la cámara solo si el jugador está en movimiento
+        var cameraSingleton = CameraSingleton.Instance;
+        if (cameraSingleton != null)
+        {
+            Vector3 cameraPosition = playerTransform.Position + math.mul(playerTransform.Rotation, new float3(0, cameraSingleton.AlturaSobreJugador, -cameraSingleton.DistanciaDetrasJugador));
+            cameraSingleton.transform.position = cameraPosition;
+            cameraSingleton.transform.rotation = playerTransform.Rotation;
+        }
     }
 
 

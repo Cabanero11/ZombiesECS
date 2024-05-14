@@ -23,7 +23,7 @@ public partial struct DisparoSystem : ISystem
     public float sensibilityX;
     public float sensibilityY;
     float xRotation, yRotation;
-    float velocidadMovimiento, velocidadMovimientoSprint;
+    float velocidadMovimiento;
 
 
     public void OnUpdate(ref SystemState state)

@@ -89,8 +89,12 @@ namespace Zombies
             // Añadir vida a los zombies de las oleadas
             entityCommandBuffer.AddComponent(nuevoZombie, new ZombiesOleadasData
             {
-                vidaZombies = 100f
+                vidaZombies = 100f,
+                velocidadAndando = 10f,
+                velocidadGiroAnimacion = 5f,
+                frecuenciaAnimacion = 1f,
             });
+
 
 
         }

@@ -7,6 +7,7 @@ using UnityEngine;
 using Unity.Burst;
 using Zombies;
 using Unity.Collections;
+using Unity.VisualScripting;
 
 
 namespace Zombies
@@ -34,15 +35,10 @@ namespace Zombies
             if (cameraSingleton == null) 
                 return;
 
-            // Obtiene la posición detrás del jugador
-            var vectorNegativo = new float3(-1f, -1f, -1f);
 
-            float3 forward = math.mul(playerTransform.Rotation, new float3(0, 0, 1));
-            float3 direccionDetrasJugador = -forward * cameraSingleton.DistanciaDetrasJugador;
-            float3 posicionCamara = playerTransform.Position + direccionDetrasJugador + new float3(0, cameraSingleton.AlturaSobreJugador, 0);
-
-            cameraSingleton.transform.position = posicionCamara;
-            cameraSingleton.transform.LookAt(playerTransform.Position, Vector3.up);
+            // Ajustar la posición de la cámara para estar a la altura del jugador
+            Vector3 cameraPosition = playerTransform.Position + new float3(0f, cameraSingleton.AlturaSobreJugador, -cameraSingleton.DistanciaDetrasJugador);
+            cameraSingleton.transform.SetPositionAndRotation(cameraPosition, playerTransform.Rotation);
         }
 
         // Espero que funcione asi xd

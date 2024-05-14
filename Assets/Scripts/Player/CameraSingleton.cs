@@ -8,7 +8,7 @@ namespace Zombies
     {
         public static CameraSingleton Instance;
 
-        [SerializeField] private float distanciaDetrasJugador;
+        [SerializeField] private float distanciaDetrasJugador = 0.5f; 
         [SerializeField] private float alturaSobreJugador;
         [SerializeField] private float velocidadCamara;
 

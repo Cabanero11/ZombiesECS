@@ -23,6 +23,7 @@ public partial struct DisparoSystem : ISystem
     public float sensibilityX;
     public float sensibilityY;
     float xRotation, yRotation;
+    float velocidadMovimiento, velocidadMovimientoSprint;
 
 
     public void OnUpdate(ref SystemState state)
@@ -49,8 +50,8 @@ public partial struct DisparoSystem : ISystem
         // Obtener el transform del jugador
         LocalTransform playerTransform = _entityManager.GetComponentData<LocalTransform>(_playerEntity);
 
-        sensibilityX = 550f;
-        sensibilityY = 350f;
+        sensibilityX = 10f;
+        sensibilityY = 4f;
 
         float mouseX = Input.GetAxisRaw("Mouse X") * SystemAPI.Time.DeltaTime * sensibilityX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * SystemAPI.Time.DeltaTime * sensibilityY;
@@ -58,17 +59,15 @@ public partial struct DisparoSystem : ISystem
         yRotation += mouseX;
         xRotation -= mouseY;
 
-        // Limitar la rotación en el eje Y entre -90 y 90 grados
+        // Limitar la rotación en el eje X entre -90 y 90 grados
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-
-        playerTransform.Rotation = Quaternion.Euler(xRotation, yRotation, 0);
 
         // Obtener la entrada del teclado para movimiento
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         float verticalInput = Input.GetAxisRaw("Vertical");
 
         // Calcular la dirección de movimiento utilizando los ejes Right y Forward del transform del jugador
-        float3 moveDirection = math.mul(playerTransform.Rotation, new float3(horizontalInput, 0, verticalInput));
+        float3 moveDirection = math.mul(quaternion.Euler(0, yRotation, 0), new float3(horizontalInput, 0, verticalInput));
 
         // Verificar si la dirección de movimiento es un vector válido
         if (math.lengthsq(moveDirection) > 0f)
@@ -76,29 +75,37 @@ public partial struct DisparoSystem : ISystem
             // Normalizar la dirección de movimiento para mantener una velocidad constante en todas las direcciones
             moveDirection = math.normalize(moveDirection);
         }
-        else
-        {
-            // Si la dirección de movimiento es cero, el jugador está quieto, así que aplicamos la rotación del jugador
-            playerTransform.Position += float3.zero; // Esto es solo para asegurarnos de que el jugador no se mueva
-        }
 
         // Calcular el desplazamiento basado en la dirección de movimiento y la velocidad
-        float3 movimiento = moveDirection * 5f * SystemAPI.Time.DeltaTime;
+        // Detectar si la tecla LeftShift está siendo presionada
+        bool isSprinting = Input.GetKey(KeyCode.LeftShift);
+
+        // Ajustar la velocidad de movimiento
+        velocidadMovimiento = isSprinting ? 25f : 15f;
+
+
+        float3 movimiento = moveDirection * velocidadMovimiento * SystemAPI.Time.DeltaTime;
 
         // Actualizar la posición del jugador sumando el desplazamiento
         playerTransform.Position += movimiento;
 
+        // Actualizar la rotación del jugador
+        playerTransform.Rotation = quaternion.Euler(0, yRotation, 0);
+
         // Actualizar el componente de transformación de la entidad del jugador
         _entityManager.SetComponentData(_playerEntity, playerTransform);
 
-        // Actualizar la posición de la cámara solo si el jugador está en movimiento
+        // Actualizar la posición y rotación de la cámara
         var cameraSingleton = CameraSingleton.Instance;
         if (cameraSingleton != null)
         {
-            Vector3 cameraPosition = playerTransform.Position + math.mul(playerTransform.Rotation, new float3(0, cameraSingleton.AlturaSobreJugador, -cameraSingleton.DistanciaDetrasJugador));
-            cameraSingleton.transform.position = cameraPosition;
-            cameraSingleton.transform.rotation = playerTransform.Rotation;
+            // La cámara sigue exactamente la posición y rotación del jugador
+            cameraSingleton.transform.position = playerTransform.Position;
+            cameraSingleton.transform.rotation = quaternion.Euler(xRotation, yRotation, 0);
         }
+
+        
+
     }
 
 
@@ -116,8 +123,8 @@ public partial struct DisparoSystem : ISystem
 
                 entityCommandBuffer.AddComponent(bulletEntity, new BalasData
                 {
-                    velocidadBala = 30f,
-                    dañoBala = 10f
+                    velocidadBala = 44f,
+                    dañoBala = 5f
                 });
 
                 entityCommandBuffer.AddComponent(bulletEntity, new BalasTiempoMono
@@ -128,10 +135,7 @@ public partial struct DisparoSystem : ISystem
                 LocalTransform balasTransform = _entityManager.GetComponentData<LocalTransform>(bulletEntity);
                 LocalTransform playerTransform = _entityManager.GetComponentData<LocalTransform>(_playerEntity);
 
-                // Obtener la posición y dirección del punto de disparo del jugador
-                LocalTransform puntoDisparoTransform = _entityManager.GetComponentData<LocalTransform>(_playerEntity);
-
-                float offsetY = 1.2f;
+                float offsetY = 1.3f;
 
                 // Colocar la bala en la posición del punto de disparo y dirigirla hacia adelante
                 balasTransform.Position.x = playerTransform.Position.x;

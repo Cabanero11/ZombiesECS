@@ -80,18 +80,18 @@ public partial struct EnemigoSystem : ISystem
 
                 // TRAS CALCULAR POSICION LE ASIGNAMOS LA POSICION Y SU ROTATION AL JUGADOR
 
-                enemigoTransform.Position = new float3(puntoSpawn.x, 1f, puntoSpawn.z);
+                enemigoTransform.Position = new float3(puntoSpawn.x, 0.65f, puntoSpawn.z);
 
                 enemigoTransform.Rotation = quaternion.RotateY(GetRotationEnemigos(enemigoTransform.Position, playerPosition));
 
-                enemigoTransform.Scale = 1.2f;
+                enemigoTransform.Scale = 1.3f;
 
                 entityCommandBuffer.SetComponent(enemigoEntidad, enemigoTransform);
 
                 entityCommandBuffer.AddComponent(enemigoEntidad, new EnemigosPropiedades
                 {
                     vidaEnemigos = 50f,
-                    velocidadEnemigos = 5f
+                    velocidadEnemigos = 3f
                 });
 
                 // Realizar todos los cambios que hacemos
@@ -101,7 +101,14 @@ public partial struct EnemigoSystem : ISystem
                 entityCommandBuffer.Dispose();
             }
 
+            // Incrementar el nº de enemigos por oleada
+            int numeroDeEnemigosPorOleada = enemigosData.numeroDeEnemigosSpawneadosPorSegundo + enemigosData.incrementoDeNumeroDeEnemigosPorOleada;
 
+            // Spawnean muchos xd, pongo el min
+            int enemigosPorOleada = math.min(numeroDeEnemigosPorOleada, enemigosData.maximoNumeroDeEnemigos);
+
+            // Despues del min, actualizo el valor entre el incrementado o el tope
+            enemigosData.numeroDeEnemigosSpawneadosPorSegundo = enemigosPorOleada;
 
             enemigosData.cooldownActualSpawneo = enemigosData.cooldownSpawneoEnemigos;
         }

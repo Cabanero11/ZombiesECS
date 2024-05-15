@@ -76,15 +76,15 @@ public partial struct BalasSystem : ISystem
                     {
                         Entity entidadColisionada = colliderCastHits[i].Entity;
                         
-                        if(entityManager.HasComponent<ZombiesOleadasData>(entidadColisionada))
+                        if(entityManager.HasComponent<EnemigosPropiedades>(entidadColisionada))
                         {
-                            ZombiesOleadasData zombiesOleadasData = entityManager.GetComponentData<ZombiesOleadasData>(entidadColisionada);
+                            EnemigosPropiedades enemigosPropiedades = entityManager.GetComponentData<EnemigosPropiedades>(entidadColisionada);
 
-                            zombiesOleadasData.vidaZombies -= balasData.dañoBala;
+                            enemigosPropiedades.vidaEnemigos -= balasData.dañoBala;
 
-                            entityManager.SetComponentData(entidadColisionada, zombiesOleadasData);
+                            entityManager.SetComponentData(entidadColisionada, enemigosPropiedades);
 
-                            if(zombiesOleadasData.vidaZombies <= 0f)
+                            if(enemigosPropiedades.vidaEnemigos <= 0f)
                             {
                                 entityManager.DestroyEntity(entidadColisionada);
                             }

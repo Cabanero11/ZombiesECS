@@ -11,7 +11,7 @@ using UnityEngine.EventSystems;
 
 
 [BurstCompile]
-public partial struct DisparoSystem : ISystem
+public partial struct DisparoYMovimientoSystem : ISystem
 {
     private EntityManager _entityManager;
     private Entity _playerEntity;
@@ -135,9 +135,12 @@ public partial struct DisparoSystem : ISystem
                 LocalTransform balasTransform = _entityManager.GetComponentData<LocalTransform>(bulletEntity);
                 LocalTransform playerTransform = _entityManager.GetComponentData<LocalTransform>(_playerEntity);
 
+                float offsetX = 1.3f;
                 float offsetY = 1.3f;
 
+
                 // Colocar la bala en la posición del punto de disparo y dirigirla hacia adelante
+
                 balasTransform.Position.x = playerTransform.Position.x;
                 balasTransform.Position.y = playerTransform.Position.y + offsetY;
                 balasTransform.Position.z = playerTransform.Position.z;

@@ -15,7 +15,7 @@ namespace Zombies
         public int maximoNumeroDeEnemigos = 150; // 5 Oleadas
         public int numeroOleada = 1;
 
-        public float radioSpawneoEnemigos = 40f;
+        public float radioSpawneoEnemigos = 400f;
         public float distanciaMinimaAlJugador = 3f;
 
         public float cooldownSpawneoEnemigos = 1f;

@@ -84,7 +84,7 @@ public partial struct EnemigoSystem : ISystem
 
                 enemigoTransform.Rotation = quaternion.RotateY(GetRotationEnemigos(enemigoTransform.Position, playerPosition));
 
-                enemigoTransform.Scale = 1.5f;
+                enemigoTransform.Scale = 1.2f;
 
                 entityCommandBuffer.SetComponent(enemigoEntidad, enemigoTransform);
 

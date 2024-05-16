@@ -14,8 +14,6 @@ public partial struct EnemigosMoverseSystem : ISystem
     private EntityManager entityManager;
     private Entity playerEntity;
 
-    private EnemigosData enemigosData;
-
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state)

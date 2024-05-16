@@ -23,9 +23,9 @@ namespace Zombies
     {
         public override void Bake(DisparoMono authoring)
         {
-            var disparoEntidad = GetEntity(TransformUsageFlags.Dynamic);
+            var playerEntidad = GetEntity(TransformUsageFlags.Dynamic);
 
-            AddComponent(disparoEntidad, new DisparoData
+            AddComponent(playerEntidad, new DisparoData
             {
                 balaPrefab = GetEntity(authoring.balaPrefab, TransformUsageFlags.Dynamic),
                 numeroBalasPorDisparo = authoring.numeroBalasPorDisparo,
@@ -35,6 +35,12 @@ namespace Zombies
                 mainCamera = GetEntity(authoring.mainCamera, TransformUsageFlags.Dynamic),
                 cameraHolder = GetEntity(authoring.cameraHolder, TransformUsageFlags.Dynamic),
                 orientation = GetEntity(authoring.orientation, TransformUsageFlags.Dynamic)
+            });
+
+            AddComponent(playerEntidad, new PlayerDañoData
+            {
+                dañoAlJugador = 10,
+                vidaJugador = 100
             });
 
         }

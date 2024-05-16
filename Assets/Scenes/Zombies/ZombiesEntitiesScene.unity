@@ -204,8 +204,8 @@ MonoBehaviour:
   incrementoDeNumeroDeEnemigosPorOleada: 20
   maximoNumeroDeEnemigos: 150
   numeroOleada: 1
-  radioSpawneoEnemigos: 400
-  distanciaMinimaAlJugador: 5
+  radioSpawneoEnemigos: 200
+  distanciaMinimaAlJugador: 80
   cooldownSpawneoEnemigos: 10
   cooldownActualSpawneo: 0
 --- !u!1 &206787923
@@ -337,7 +337,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 333746445}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5249996, y: 1.414, z: 1.0177698}
+  m_LocalPosition: {x: 0.035, y: 1.236, z: 2.015}
   m_LocalScale: {x: 0.15349166, y: 0.15349166, z: 0.87605166}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -709,7 +709,7 @@ GameObject:
   - component: {fileID: 1342673611}
   m_Layer: 0
   m_Name: PlayerEntity
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

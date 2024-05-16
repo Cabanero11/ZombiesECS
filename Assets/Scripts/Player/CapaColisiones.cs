@@ -7,6 +7,7 @@ public enum CapaColisiones
     Default = 1 << 0,
     Wall = 1 << 6,
     Enemigo = 1 << 8,
+    Player = 1 << 9
 }
 
 

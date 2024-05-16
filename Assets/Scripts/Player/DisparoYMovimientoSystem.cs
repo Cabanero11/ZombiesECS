@@ -37,9 +37,6 @@ public partial struct DisparoYMovimientoSystem : ISystem
         _playerComponent = _entityManager.GetComponentData<DisparoData>(_playerEntity);
         _inputComponent = _entityManager.GetComponentData<InputMono>(_inputEntity);
 
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
-        float verticalInput = Input.GetAxisRaw("Vertical");
-
 
         Move(ref state);
         Disparar(ref state);
@@ -135,9 +132,7 @@ public partial struct DisparoYMovimientoSystem : ISystem
                 LocalTransform balasTransform = _entityManager.GetComponentData<LocalTransform>(bulletEntity);
                 LocalTransform playerTransform = _entityManager.GetComponentData<LocalTransform>(_playerEntity);
 
-                float offsetX = 1.3f;
                 float offsetY = 1.3f;
-
 
                 // Colocar la bala en la posición del punto de disparo y dirigirla hacia adelante
 

@@ -311,7 +311,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &333746445
 GameObject:
@@ -344,61 +344,6 @@ Transform:
   m_Father: {fileID: 1342673609}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &436075475
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 436075476}
-  - component: {fileID: 436075477}
-  m_Layer: 0
-  m_Name: Cementerio
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &436075476
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 436075475}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &436075477
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 436075475}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21d0a29ad36c9ae44847b16fb4b391a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CementeryDimesions:
-    x: 300
-    y: 300
-  NumberOfTombstoneToSpawn: 300
-  TumbaPrefab: {fileID: 919132149155446097, guid: 8f5bdd77a60ee1d4a91c2ee3d630cca3,
-    type: 3}
-  areaGeneradorRadio: 400
-  RandomSeed: 0
-  ZombiePrefab: {fileID: 7866586269468863138, guid: d09ebcb8c25e0924f921581698c62b60,
-    type: 3}
-  cooldownSpawneoZombies: 1
 --- !u!1001 &534895700
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -693,7 +638,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1106188454
 GameObject:
@@ -762,7 +707,7 @@ Transform:
   - {fileID: 1106188455}
   - {fileID: 123791799}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1342673610
 MonoBehaviour:

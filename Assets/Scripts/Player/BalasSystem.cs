@@ -13,6 +13,7 @@ using Unity.Collections;
 public partial struct BalasSystem : ISystem
 {
 
+    [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         EntityManager entityManager = state.EntityManager;

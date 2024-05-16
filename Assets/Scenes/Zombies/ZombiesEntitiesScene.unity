@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2ec08be80a6a324ab5ee5bcd4f68ba5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemigoPrefab: {fileID: 7866586269468863138, guid: 3d2a3bb5d40cddb4da011a7901b6d001,
+  enemigoPrefab: {fileID: 5092538240435817439, guid: 80bc24958142eb3478cdfbc1f11f8c9e,
     type: 3}
   numeroDeEnemigosSpawneadosPorSegundo: 50
   incrementoDeNumeroDeEnemigosPorOleada: 20

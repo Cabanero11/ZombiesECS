@@ -25,7 +25,7 @@ public partial struct DisparoYMovimientoSystem : ISystem
     float xRotation, yRotation;
     float velocidadMovimiento;
 
-
+    [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         //references
@@ -42,6 +42,7 @@ public partial struct DisparoYMovimientoSystem : ISystem
         Disparar(ref state);
     }
 
+    [BurstCompile]
     private void Move(ref SystemState state)
     {
         // Obtener el transform del jugador
@@ -105,7 +106,7 @@ public partial struct DisparoYMovimientoSystem : ISystem
 
     }
 
-
+    [BurstCompile]
     private void Disparar(ref SystemState state)
     {
 

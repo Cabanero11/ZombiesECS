@@ -42,7 +42,7 @@ public partial struct DisparoYMovimientoSystem : ISystem
         Disparar(ref state);
     }
 
-    [BurstCompile]
+ 
     private void Move(ref SystemState state)
     {
         // Obtener el transform del jugador

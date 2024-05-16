@@ -12,14 +12,19 @@ using Unity.Collections;
 [BurstCompile]
 public partial struct BalasSystem : ISystem
 {
+    private Entity playerEntity;
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         EntityManager entityManager = state.EntityManager;
+        playerEntity = SystemAPI.GetSingletonEntity<DisparoData>();
+
 
         // Coger todas las entidades a la vez
         NativeArray<Entity> entidadesBalas = entityManager.GetAllEntities();
+        // Variable para niveles
+        PlayerDañoData playerDañoData = entityManager.GetComponentData<PlayerDañoData>(playerEntity);
 
         // DETECTAR COLISIONES
         PhysicsWorldSingleton physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
@@ -81,13 +86,31 @@ public partial struct BalasSystem : ISystem
                         {
                             EnemigosPropiedades enemigosPropiedades = entityManager.GetComponentData<EnemigosPropiedades>(entidadColisionada);
 
-                            enemigosPropiedades.vidaEnemigos -= balasData.dañoBala;
+                            enemigosPropiedades.vidaEnemigos -= playerDañoData.dañoBalaJugador;
 
                             entityManager.SetComponentData(entidadColisionada, enemigosPropiedades);
 
+                            // Si la vida del enemigo es menor a 0 lo destruimos 
                             if(enemigosPropiedades.vidaEnemigos <= 0f)
                             {
                                 entityManager.DestroyEntity(entidadColisionada);
+
+                                // NIVELES Y EXPERIENCIA DEL JUGADOR
+                                // PlayerDañoData se inicializa en DisparoMono.cs
+                                // NIVELES Y EXPERIENCIA DEL JUGADOR
+                                playerDañoData.experienciaActualJugador += playerDañoData.experienciaObtenidaPorMatarEnemigo;
+
+                                // Subir de nivel si se alcanza la experiencia necesaria
+                                if (playerDañoData.experienciaActualJugador >= playerDañoData.experienciaParaProximoNivel)
+                                {
+                                    playerDañoData.nivelJugador++;
+                                    playerDañoData.experienciaActualJugador -= playerDañoData.experienciaParaProximoNivel;
+                                    playerDañoData.dañoBalaJugador += 5f;
+                                    playerDañoData.experienciaParaProximoNivel *= 1.5f; // Incrementar el requerimiento de experiencia para el siguiente nivel
+                                }
+
+                                // Me faltaba cambiar los valores creo
+                                entityManager.SetComponentData(playerEntity, playerDañoData);
                             }
                         }
                     }

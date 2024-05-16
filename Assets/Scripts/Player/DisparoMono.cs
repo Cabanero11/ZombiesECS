@@ -37,10 +37,16 @@ namespace Zombies
                 orientation = GetEntity(authoring.orientation, TransformUsageFlags.Dynamic)
             });
 
+            // Ya que DisparoData lo uso como PlayerEntity inicializo aqui el PlayerDañoData
             AddComponent(playerEntidad, new PlayerDañoData
             {
                 dañoAlJugador = 10,
-                vidaJugador = 100
+                dañoBalaJugador = 10f,
+                vidaJugador = 100,
+                nivelJugador = 1,
+                experienciaActualJugador = 0f,
+                experienciaParaProximoNivel = 100f, 
+                experienciaObtenidaPorMatarEnemigo = 10f 
             });
 
         }

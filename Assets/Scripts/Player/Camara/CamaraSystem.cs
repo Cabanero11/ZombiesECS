@@ -9,9 +9,9 @@ using Zombies;
 using Unity.Collections;
 using Unity.VisualScripting;
 
-
 namespace Zombies
 {
+
     public partial class CamaraSystem : SystemBase
     {
         private EntityManager entityManager;
@@ -40,16 +40,7 @@ namespace Zombies
             Vector3 cameraPosition = playerTransform.Position + new float3(0f, cameraSingleton.AlturaSobreJugador, -cameraSingleton.DistanciaDetrasJugador);
             cameraSingleton.transform.SetPositionAndRotation(cameraPosition, playerTransform.Rotation);
         }
-
-        // Espero que funcione asi xd
-        public EntityManager ObtenerEntityManager(ref SystemState state)
-        {
-            entityManager = state.EntityManager;
-
-            return entityManager;
-
-        }
-
     }
 }
+
 

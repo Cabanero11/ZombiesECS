@@ -94,7 +94,7 @@ public partial struct DisparoYMovimientoSystem : ISystem
         _entityManager.SetComponentData(_playerEntity, playerTransform);
 
         // Actualizar la posición y rotación de la cámara
-        var cameraSingleton = CameraSingleton.Instance;
+        CameraSingleton cameraSingleton = CameraSingleton.Instance;
         if (cameraSingleton != null)
         {
             // La cámara sigue exactamente la posición y rotación del jugador

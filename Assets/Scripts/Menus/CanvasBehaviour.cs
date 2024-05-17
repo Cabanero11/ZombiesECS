@@ -34,7 +34,7 @@ public class CanvasBehaviour : MonoBehaviour
     IEnumerator LateStart()
     {
         yield return new WaitForEndOfFrame();
-        GameManager.Instance.LevelManager.canvas = gameObject;
+        //GameManager.Instance.LevelManager.canvas = gameObject;
     }
 
     // Update is called once per frame

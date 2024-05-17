@@ -16,6 +16,8 @@ public class PlayerInterfaz : MonoBehaviour
     private EntityManager entityManager;
     private Entity playerEntity;
 
+    public PauseMenuScript pauseMenuScript;
+
     private void Start()
     {
         StartCoroutine(InitializeAfterDelay());
@@ -61,6 +63,12 @@ public class PlayerInterfaz : MonoBehaviour
         {
             PlayerDañoData playerDamage = entityManager.GetComponentData<PlayerDañoData>(playerEntity);
             nivelTexto.text = "Nivel: " + playerDamage.nivelJugador.ToString();
+        }
+
+        // Verificar si el menú de pausa está presente y habilitar las funciones de pausa/reanudación
+        if (pauseMenuScript != null && Input.GetKeyDown(KeyCode.Escape))
+        {
+            pauseMenuScript.TogglePauseMenu();
         }
     }
 }

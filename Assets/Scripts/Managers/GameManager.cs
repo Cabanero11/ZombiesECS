@@ -14,17 +14,12 @@ namespace Zombies
     {
         public static GameManager Instance;
 
-        public LevelManager LevelManager;
-
         [Header("Estado de juego")]
         public GameState gameState;
 
         [Header("Referencias")]
         public PauseMenuScript pauseMenuScript;
-        public GameObject player;
 
-        [SerializeField] private int currentLevel = 0;
-        public string[] levels;
         [SerializeField] private string sceneName;
         [SerializeField] public bool musicPlayedForCurrentLevel = false; // Para que solo se reproduzca una vez en el nivel actual
 
@@ -85,11 +80,7 @@ namespace Zombies
         //Cambiar de nivel (actualmente simplemente el siguiente en la lista de niveles)
         public void ChangeLevel()
         {
-            DOTween.KillAll();
-
-            currentLevel = (currentLevel + 1) % levels.Length;
             //Debug.Log("vamos al nivel " + currentLevel + " de los [0.."+(levels.Length-1)+"]");
-            SceneManager.LoadScene(levels[currentLevel], LoadSceneMode.Single);
             musicPlayedForCurrentLevel = false; // cambiamos de nivel, y ya puede haber nueva musica
             PlayMusic();
 
@@ -97,12 +88,8 @@ namespace Zombies
 
         public void SetLevel(int level)
         {
-            DOTween.KillAll();
-
-            currentLevel = level;
             //Debug.Log("vamos al nivel " + currentLevel);
             //Debug.Log(levels.Length);
-            SceneManager.LoadScene(levels[currentLevel], LoadSceneMode.Single);
             musicPlayedForCurrentLevel = false;
             PlayMusic();
 
@@ -122,34 +109,14 @@ namespace Zombies
                 //sceneName = SceneManager.GetActiveScene().name;
                 switch (sceneName)
                 {
-                    case "Level1":
+                    case "ZombiesMain":
                         PlayerAudioManager.instance.PlayLevelMusic(1, 0.10f);
                         // Asegurarme de que haya un hijo MusicaAudioSource con un AudioSource (pls)
                         Debug.Log("Musica nivel 1 OK");
                         break;
-                    case "Level2":
-                        PlayerAudioManager.instance.PlayLevelMusic(2, 0.10f);
-                        Debug.Log("Musica nivel 2 OK");
-                        break;
-                    case "Level3":
-                        PlayerAudioManager.instance.PlayLevelMusic(3, 0.10f);
-                        Debug.Log("Musica nivel 3 OK");
-                        break;
-                    case "Movimiento":
-                        PlayerAudioManager.instance.PlayLevelMusic(4, 0.10f);
-                        Debug.Log("Musica movimiento OK");
-                        break;
                     case "Menu":
                         PlayerAudioManager.instance.PlayLevelMusic(5, 0.10f);
                         Debug.Log("Musica menu OK");
-                        break;
-                    case "LevelAntonio":
-                        PlayerAudioManager.instance.PlayLevelMusic(6, 0.10f);
-                        Debug.Log("Musica Antonio OK");
-                        break;
-                    case "NivelPako":
-                        PlayerAudioManager.instance.PlayLevelMusic(7, 0.10f);
-                        Debug.Log("Musica Pako OK");
                         break;
                     default:
                         PlayerAudioManager.instance.PlayLevelMusic(1, 0.10f);

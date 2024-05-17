@@ -14,6 +14,7 @@ public class SelectorDeNivel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        /*
         int i = 0;
         foreach (string str in GameManager.Instance.levels) { 
             //Debug.Log(str);
@@ -25,6 +26,7 @@ public class SelectorDeNivel : MonoBehaviour
             bot.GetComponent<Button>().onClick.AddListener(() => ButtonClicked(index));
             i++;
         }
+        */
     }
 
     // Update is called once per frame

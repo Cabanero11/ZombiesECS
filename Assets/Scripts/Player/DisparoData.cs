@@ -12,5 +12,7 @@ namespace Zombies
         public Entity balaPrefab;
         public int numeroBalasPorDisparo;
         public float balasSpread;
+
+        public float velocidadJugador;
     }
 }

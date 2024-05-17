@@ -88,6 +88,7 @@ public partial struct EnemigoSystem : ISystem
 
                 entityCommandBuffer.SetComponent(enemigoEntidad, enemigoTransform);
 
+                // INICIALIZAR ENEMIGOS PROPIEDADES
                 entityCommandBuffer.AddComponent(enemigoEntidad, new EnemigosPropiedades
                 {
                     vidaEnemigos = 50f,

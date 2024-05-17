@@ -1,6 +1,7 @@
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -11,6 +12,8 @@ namespace Zombies
         public GameObject balaPrefab;
         public int numeroBalasPorDisparo;
         public float balasSpread;
+
+        public float velocidadJugador;
 
     }
 
@@ -26,7 +29,8 @@ namespace Zombies
                 balaPrefab = GetEntity(authoring.balaPrefab, TransformUsageFlags.Dynamic),
                 numeroBalasPorDisparo = authoring.numeroBalasPorDisparo,
                 balasSpread = authoring.balasSpread,
-            });
+                velocidadJugador = authoring.velocidadJugador
+            }); ;
 
             // Ya que DisparoData lo uso como PlayerEntity inicializo aqui el PlayerDañoData
             AddComponent(playerEntidad, new PlayerDañoData

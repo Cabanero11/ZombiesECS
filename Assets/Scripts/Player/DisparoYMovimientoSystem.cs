@@ -23,7 +23,6 @@ public partial struct DisparoYMovimientoSystem : ISystem
     public float sensibilityX;
     public float sensibilityY;
     float xRotation, yRotation;
-    float velocidadMovimiento;
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
@@ -79,10 +78,10 @@ public partial struct DisparoYMovimientoSystem : ISystem
         bool isSprinting = Input.GetKey(KeyCode.LeftShift);
 
         // Ajustar la velocidad de movimiento
-        velocidadMovimiento = isSprinting ? 25f : 15f;
+        _playerComponent.velocidadJugador = isSprinting ? 25f : 15f;
 
 
-        float3 movimiento = moveDirection * velocidadMovimiento * SystemAPI.Time.DeltaTime;
+        float3 movimiento = moveDirection * _playerComponent.velocidadJugador * SystemAPI.Time.DeltaTime;
 
         // Actualizar la posición del jugador sumando el desplazamiento
         playerTransform.Position += movimiento;
@@ -118,16 +117,17 @@ public partial struct DisparoYMovimientoSystem : ISystem
 
                 Entity bulletEntity = _entityManager.Instantiate(_playerComponent.balaPrefab);
 
+                // Inicializar BalasData y BalasTiempoMono
 
                 entityCommandBuffer.AddComponent(bulletEntity, new BalasData
                 {
-                    velocidadBala = 44f,
+                    velocidadBala = 30f,
                     dañoBala = 5f
                 });
 
                 entityCommandBuffer.AddComponent(bulletEntity, new BalasTiempoMono
                 {
-                    balasTiempoDesaparicion = 4.0f
+                    balasTiempoDesaparicion = 2.0f
                 });
 
                 LocalTransform balasTransform = _entityManager.GetComponentData<LocalTransform>(bulletEntity);

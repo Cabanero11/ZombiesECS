@@ -10,7 +10,7 @@ using Unity.Collections;
 
 
 [BurstCompile]
-public partial struct BalasSystem : ISystem
+public partial struct BalasYNivelesSystem : ISystem
 {
     private Entity playerEntity;
 
@@ -25,6 +25,7 @@ public partial struct BalasSystem : ISystem
         NativeArray<Entity> entidadesBalas = entityManager.GetAllEntities();
         // Variable para niveles
         PlayerDañoData playerDañoData = entityManager.GetComponentData<PlayerDañoData>(playerEntity);
+        DisparoData disparoData = entityManager.GetComponentData<DisparoData>(playerEntity);
 
         // DETECTAR COLISIONES
         PhysicsWorldSingleton physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
@@ -97,7 +98,7 @@ public partial struct BalasSystem : ISystem
 
                                 // NIVELES Y EXPERIENCIA DEL JUGADOR
                                 // PlayerDañoData se inicializa en DisparoMono.cs
-                                // NIVELES Y EXPERIENCIA DEL JUGADOR
+
                                 playerDañoData.experienciaActualJugador += playerDañoData.experienciaObtenidaPorMatarEnemigo;
 
                                 // Subir de nivel si se alcanza la experiencia necesaria
@@ -106,11 +107,23 @@ public partial struct BalasSystem : ISystem
                                     playerDañoData.nivelJugador++;
                                     playerDañoData.experienciaActualJugador -= playerDañoData.experienciaParaProximoNivel;
                                     playerDañoData.dañoBalaJugador += 5f;
-                                    playerDañoData.experienciaParaProximoNivel *= 1.5f; // Incrementar el requerimiento de experiencia para el siguiente nivel
+                                    playerDañoData.vidaJugador += 10;
+                                    disparoData.velocidadJugador += 2f;
+
+
+                                    playerDañoData.experienciaParaProximoNivel *= 1.75f;
+
+
+                                    // Cambiar balas propiedades 
+                                    // Las variables de las balas se inicializan en DisparoYMovimientoSystem
+
+                                    disparoData.numeroBalasPorDisparo += 1;
+                                    balasData.velocidadBala += 10f;
                                 }
 
-                                // Me faltaba cambiar los valores creo
+                                // Me faltaba cambiar los valores creo, asi si hacia falta 
                                 entityManager.SetComponentData(playerEntity, playerDañoData);
+                                entityManager.SetComponentData(playerEntity, disparoData);
                             }
                         }
                     }

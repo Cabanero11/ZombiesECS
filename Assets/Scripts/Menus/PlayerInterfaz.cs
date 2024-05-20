@@ -25,6 +25,7 @@ public class PlayerInterfaz : MonoBehaviour
 
     [Header("Barra Vida")]
     public Slider slider;
+    public Slider sliderEXP;
 
     private List<Mejora> mejorasPersonaje;
 
@@ -82,6 +83,15 @@ public class PlayerInterfaz : MonoBehaviour
     {
         slider.value = vidaPersonaje;
     }
+    public void SetBarraExperiencia(float experienciaActual)
+    {
+        sliderEXP.value = experienciaActual;
+    }
+
+    public void SetBarraExperienciaMaxima(float experienciaMaxima)
+    {
+        sliderEXP.maxValue = experienciaMaxima;
+    }
 
     public void SetMaximaBarraVida(float vidaPersonaje)
     {
@@ -133,6 +143,8 @@ public class PlayerInterfaz : MonoBehaviour
 
         // Para que cambie siempre que le baje la vida
         SetBarraVida(playerDamage.vidaJugador);
+        SetBarraExperiencia(playerDamage.experienciaActualJugador);
+        SetBarraExperienciaMaxima(playerDamage.experienciaParaProximoNivel);
     }
 
     public void ShowLevelUpMenu()

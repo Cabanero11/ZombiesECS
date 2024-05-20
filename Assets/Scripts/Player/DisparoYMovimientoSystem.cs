@@ -13,12 +13,12 @@ using UnityEngine.EventSystems;
 [BurstCompile]
 public partial struct DisparoYMovimientoSystem : ISystem
 {
-    private EntityManager _entityManager;
-    private Entity _playerEntity;
-    private Entity _inputEntity;
+    private EntityManager entityManager;
+    private Entity playerEntity;
+    private Entity inputEntity;
 
-    private DisparoData _playerComponent;
-    private InputMono _inputComponent;
+    private DisparoData playerComponent;
+    private InputMono inputComponent;
 
     public float sensibilityX;
     public float sensibilityY;
@@ -28,13 +28,13 @@ public partial struct DisparoYMovimientoSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         //references
-        _entityManager = state.EntityManager;
-        _playerEntity = SystemAPI.GetSingletonEntity<DisparoData>();
-        _inputEntity = SystemAPI.GetSingletonEntity<InputMono>();
+        entityManager = state.EntityManager;
+        playerEntity = SystemAPI.GetSingletonEntity<DisparoData>();
+        inputEntity = SystemAPI.GetSingletonEntity<InputMono>();
 
         //components
-        _playerComponent = _entityManager.GetComponentData<DisparoData>(_playerEntity);
-        _inputComponent = _entityManager.GetComponentData<InputMono>(_inputEntity);
+        playerComponent = entityManager.GetComponentData<DisparoData>(playerEntity);
+        inputComponent = entityManager.GetComponentData<InputMono>(inputEntity);
 
 
         Move(ref state);
@@ -45,7 +45,7 @@ public partial struct DisparoYMovimientoSystem : ISystem
     private void Move(ref SystemState state)
     {
         // Obtener el transform del jugador
-        LocalTransform playerTransform = _entityManager.GetComponentData<LocalTransform>(_playerEntity);
+        LocalTransform playerTransform = entityManager.GetComponentData<LocalTransform>(playerEntity);
 
         sensibilityX = 10f;
         sensibilityY = 4f;
@@ -78,10 +78,12 @@ public partial struct DisparoYMovimientoSystem : ISystem
         bool isSprinting = Input.GetKey(KeyCode.LeftShift);
 
         // Ajustar la velocidad de movimiento
-        _playerComponent.velocidadJugador = isSprinting ? 25f : 15f;
+        float currentSpeed = isSprinting ? playerComponent.velocidadJugador + playerComponent.incrementoVelocidad + 10f : playerComponent.velocidadJugador + playerComponent.incrementoVelocidad;
+        //PlayerDañoData playerDañoData = entityManager.GetComponentData<PlayerDañoData>(playerEntity);
+        //playerDañoData.velocidadJugador = isSprinting ? 25f : 15f;
 
 
-        float3 movimiento = moveDirection * _playerComponent.velocidadJugador * SystemAPI.Time.DeltaTime;
+        float3 movimiento = moveDirection * currentSpeed * SystemAPI.Time.DeltaTime;
 
         // Actualizar la posición del jugador sumando el desplazamiento
         playerTransform.Position += movimiento;
@@ -90,7 +92,9 @@ public partial struct DisparoYMovimientoSystem : ISystem
         playerTransform.Rotation = quaternion.Euler(0, yRotation, 0);
 
         // Actualizar el componente de transformación de la entidad del jugador
-        _entityManager.SetComponentData(_playerEntity, playerTransform);
+        entityManager.SetComponentData(playerEntity, playerTransform);
+        // Me faltaba poner el set DisparoData
+        entityManager.SetComponentData(playerEntity, playerComponent);
 
         // Actualizar la posición y rotación de la cámara
         CameraSingleton cameraSingleton = CameraSingleton.Instance;
@@ -109,13 +113,13 @@ public partial struct DisparoYMovimientoSystem : ISystem
     private void Disparar(ref SystemState state)
     {
 
-        if (_inputComponent.disparoIniciar)
+        if (inputComponent.disparoIniciar)
         {
-            for (int i = 0; i < _playerComponent.numeroBalasPorDisparo; i++)
+            for (int i = 0; i < playerComponent.numeroBalasPorDisparo; i++)
             {
                 EntityCommandBuffer entityCommandBuffer = new EntityCommandBuffer(Allocator.Temp);
 
-                Entity bulletEntity = _entityManager.Instantiate(_playerComponent.balaPrefab);
+                Entity bulletEntity = entityManager.Instantiate(playerComponent.balaPrefab);
 
                 // Inicializar BalasData y BalasTiempoMono
 
@@ -130,8 +134,8 @@ public partial struct DisparoYMovimientoSystem : ISystem
                     balasTiempoDesaparicion = 2.0f
                 });
 
-                LocalTransform balasTransform = _entityManager.GetComponentData<LocalTransform>(bulletEntity);
-                LocalTransform playerTransform = _entityManager.GetComponentData<LocalTransform>(_playerEntity);
+                LocalTransform balasTransform = entityManager.GetComponentData<LocalTransform>(bulletEntity);
+                LocalTransform playerTransform = entityManager.GetComponentData<LocalTransform>(playerEntity);
 
                 float offsetY = 1.3f;
 
@@ -144,7 +148,7 @@ public partial struct DisparoYMovimientoSystem : ISystem
                 balasTransform.Rotation = playerTransform.Rotation;
 
                 // Agregar un desplazamiento aleatorio en el plano XY
-                float2 randomOffset = UnityEngine.Random.insideUnitCircle * _playerComponent.balasSpread;
+                float2 randomOffset = UnityEngine.Random.insideUnitCircle * playerComponent.balasSpread;
                 float3 offset = new(randomOffset.x, randomOffset.y, 0);
 
                 // Sumar el desplazamiento al punto de disparo para dispersar las balas
@@ -152,7 +156,7 @@ public partial struct DisparoYMovimientoSystem : ISystem
 
                 entityCommandBuffer.SetComponent(bulletEntity, balasTransform);
 
-                entityCommandBuffer.Playback(_entityManager);
+                entityCommandBuffer.Playback(entityManager);
             }
         }
 

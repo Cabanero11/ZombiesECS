@@ -92,7 +92,7 @@ public partial struct BalasYNivelesSystem : ISystem
                             entityManager.SetComponentData(entidadColisionada, enemigosPropiedades);
 
                             // Si la vida del enemigo es menor a 0 lo destruimos 
-                            if(enemigosPropiedades.vidaEnemigos <= 0f)
+                            if (enemigosPropiedades.vidaEnemigos <= 0f)
                             {
                                 entityManager.DestroyEntity(entidadColisionada);
 
@@ -106,19 +106,13 @@ public partial struct BalasYNivelesSystem : ISystem
                                 {
                                     playerDañoData.nivelJugador++;
                                     playerDañoData.experienciaActualJugador -= playerDañoData.experienciaParaProximoNivel;
-                                    playerDañoData.dañoBalaJugador += 5f;
-                                    playerDañoData.vidaJugador += 10;
-                                    disparoData.velocidadJugador += 2f;
+                                    //playerDañoData.dañoBalaJugador += 5f;
+                                    //disparoData.velocidadJugador += 2f;
 
+                                    // Para pruebas 1.2 o asi, oficial = 2.3f
+                                    playerDañoData.experienciaParaProximoNivel *= 1.2f;
+                                    
 
-                                    playerDañoData.experienciaParaProximoNivel *= 1.75f;
-
-
-                                    // Cambiar balas propiedades 
-                                    // Las variables de las balas se inicializan en DisparoYMovimientoSystem
-
-                                    disparoData.numeroBalasPorDisparo += 1;
-                                    balasData.velocidadBala += 10f;
                                 }
 
                                 // Me faltaba cambiar los valores creo, asi si hacia falta 

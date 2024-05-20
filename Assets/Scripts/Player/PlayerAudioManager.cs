@@ -34,7 +34,6 @@ public class PlayerAudioManager : MonoBehaviour
     public float velocidadNormal = 1.0f;
     public float velocidadAcelerada = 1.07f;
     public float velocidadMaxima = 1.14f;
-    private float tiempoAceleracionProgresiva = 0.25f; // Ajusta según sea necesario
 
 
 

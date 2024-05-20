@@ -14,7 +14,7 @@ namespace Zombies
         public float balasSpread;
 
         public float velocidadJugador;
-
+        public float incrementoVelocidad;
     }
 
     // Añado los valores de DisparoData a la entidad de PlayerEntity con el Baker
@@ -29,8 +29,9 @@ namespace Zombies
                 balaPrefab = GetEntity(authoring.balaPrefab, TransformUsageFlags.Dynamic),
                 numeroBalasPorDisparo = authoring.numeroBalasPorDisparo,
                 balasSpread = authoring.balasSpread,
-                velocidadJugador = authoring.velocidadJugador
-            }); ;
+                velocidadJugador = 8f,
+                incrementoVelocidad = 0f
+            });
 
             // Ya que DisparoData lo uso como PlayerEntity inicializo aqui el PlayerDañoData
             AddComponent(playerEntidad, new PlayerDañoData
@@ -39,9 +40,10 @@ namespace Zombies
                 dañoBalaJugador = 10f,
                 vidaJugador = 100,
                 nivelJugador = 1,
+                nivelSiguiente = 2,
                 experienciaActualJugador = 0f,
-                experienciaParaProximoNivel = 100f, 
-                experienciaObtenidaPorMatarEnemigo = 10f 
+                experienciaParaProximoNivel = 100f,
+                experienciaObtenidaPorMatarEnemigo = 10f
             });
 
         }

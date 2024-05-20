@@ -1795,7 +1795,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _SceneAsset: {fileID: 102900000, guid: 1c626e0bd8b2bd84aa698085f03959c6, type: 3}
-  _HierarchyColor: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
+  _HierarchyColor: {r: 0.48621845, g: 1, b: 0, a: 1}
   AutoLoadScene: 1
   _SceneGUID:
     Value:
@@ -2461,8 +2461,8 @@ Terrain:
   m_TreeBillboardDistance: 100
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 50
-  m_DetailObjectDistance: 226
-  m_DetailObjectDensity: 1
+  m_DetailObjectDistance: 141
+  m_DetailObjectDensity: 0.198
   m_HeightmapPixelError: 15
   m_SplatMapDistance: 21
   m_HeightmapMaximumLOD: 0

@@ -61,7 +61,7 @@ public class PlayerInterfaz : MonoBehaviour
 
         if (entityManager == null || playerEntity == Entity.Null)
         {
-            Debug.LogError("EntityManager or playerEntity is null.");
+            //Debug.LogError("EntityManager or playerEntity is null.");
             return;
         }
 

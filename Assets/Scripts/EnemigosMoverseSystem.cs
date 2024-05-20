@@ -40,8 +40,10 @@ public partial struct EnemigosMoverseSystem : ISystem
                 float3 direccionAlJugador = math.normalize(playerTransform.Position - enemigosTransform.Position);
 
                 enemigosTransform.Position.x += enemigosPropiedades.velocidadEnemigos * SystemAPI.Time.DeltaTime * direccionAlJugador.x;
-                enemigosTransform.Position.y = 0.65f;  // Sino se quedan debajo del suelo xd
+                enemigosTransform.Position.y = 0.80f;  // Sino se quedan debajo del suelo xd
                 enemigosTransform.Position.z += enemigosPropiedades.velocidadEnemigos * SystemAPI.Time.DeltaTime * direccionAlJugador.z;
+
+                //enemigosTransform.Scale = 0.7f;
 
                 //enemigosTransform.Rotation = quaternion.RotateY(GetRotationEnemigos(enemigosTransform.Position, playerTransform.Position));
 

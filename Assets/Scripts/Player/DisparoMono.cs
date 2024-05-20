@@ -36,8 +36,8 @@ namespace Zombies
             // Ya que DisparoData lo uso como PlayerEntity inicializo aqui el PlayerDañoData
             AddComponent(playerEntidad, new PlayerDañoData
             {
-                dañoAlJugador = 10,
-                dañoBalaJugador = 10f,
+                dañoAlJugador = 12.5f,
+                dañoBalaJugador = 5f,
                 vidaJugador = 100,
                 nivelJugador = 1,
                 nivelSiguiente = 2,

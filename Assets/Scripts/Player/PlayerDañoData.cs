@@ -2,9 +2,9 @@ using Unity.Entities;
 
 public struct PlayerDañoData : IComponentData
 {
-    public int dañoAlJugador;
+    public float dañoAlJugador;
     public float dañoBalaJugador;
-    public int vidaJugador;
+    public float vidaJugador;
 
     public int nivelJugador;
     public int nivelSiguiente;

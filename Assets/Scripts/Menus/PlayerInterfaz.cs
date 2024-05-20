@@ -5,6 +5,8 @@ using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
 using Zombies;
+using System.Collections.Generic;
+using System.Linq;
 
 public class PlayerInterfaz : MonoBehaviour
 {
@@ -17,10 +19,29 @@ public class PlayerInterfaz : MonoBehaviour
     private EntityManager entityManager;
     private Entity playerEntity;
 
+
+
     public PauseMenuScript pauseMenuScript;
+
+    [Header("Barra Vida")]
+    public Slider slider;
+
+    private List<Mejora> mejorasPersonaje;
 
     private void Start()
     {
+        // Definimos las mejoras del personaje
+        mejorasPersonaje = new List<Mejora>
+        {
+            new Mejora(1, "Velocidad", 0.25f),        // 25%
+            new Mejora(2, "Daño", 0.30f),             // 30%
+            new Mejora(3, "Vida", 0.20f),             // 25%
+            new Mejora(4, "Area de Balas", 0.10f),           // 15%
+            new Mejora(5, "Número de Balas", 0.05f),  // 5%
+            new Mejora(7, "Reducir daño recibido", 0.10f)     // 10%
+        };
+
+
         StartCoroutine(InitializeAfterDelay());
     }
 
@@ -51,6 +72,21 @@ public class PlayerInterfaz : MonoBehaviour
             Debug.LogError("Player entity is null.");
             yield break;
         }
+
+        PlayerDañoData playerDamage = entityManager.GetComponentData<PlayerDañoData>(playerEntity);
+
+        SetMaximaBarraVida(playerDamage.vidaJugador);
+    }
+
+    public void SetBarraVida(float vidaPersonaje)
+    {
+        slider.value = vidaPersonaje;
+    }
+
+    public void SetMaximaBarraVida(float vidaPersonaje)
+    {
+        slider.maxValue = vidaPersonaje;
+        //slider.value = vidaPersonaje;
     }
 
 
@@ -94,6 +130,9 @@ public class PlayerInterfaz : MonoBehaviour
             playerDamage.nivelSiguiente++;
             entityManager.SetComponentData(playerEntity, playerDamage); // No olvides actualizar el componente en el EntityManager
         }
+
+        // Para que cambie siempre que le baje la vida
+        SetBarraVida(playerDamage.vidaJugador);
     }
 
     public void ShowLevelUpMenu()
@@ -119,13 +158,64 @@ public class PlayerInterfaz : MonoBehaviour
 
     private void UpdateLevelUpOptions()
     {
-        // Aquí puedes implementar la lógica para elegir las opciones de mejora
-        // según las probabilidades que has mencionado.
-        // Por ejemplo:
+        // Seleccionar mejoras aleatoriamente
+        List<Mejora> opcionesSeleccionadas = SeleccionarMejorasAleatoriamente(3);
 
-        option1Button.GetComponentInChildren<TextMeshProUGUI>().text = "Mejora de Velocidad";
-        option2Button.GetComponentInChildren<TextMeshProUGUI>().text = "Mejora de Daño";
-        option3Button.GetComponentInChildren<TextMeshProUGUI>().text = "Mejora de Vida";
+        option1Button.GetComponentInChildren<TextMeshProUGUI>().text = opcionesSeleccionadas[0].nombre;
+        option1Button.onClick.RemoveAllListeners();
+        option1Button.onClick.AddListener(() => SelectUpgrade(opcionesSeleccionadas[0].id));
+
+        option2Button.GetComponentInChildren<TextMeshProUGUI>().text = opcionesSeleccionadas[1].nombre;
+        option2Button.onClick.RemoveAllListeners();
+        option2Button.onClick.AddListener(() => SelectUpgrade(opcionesSeleccionadas[1].id));
+
+        option3Button.GetComponentInChildren<TextMeshProUGUI>().text = opcionesSeleccionadas[2].nombre;
+        option3Button.onClick.RemoveAllListeners();
+        option3Button.onClick.AddListener(() => SelectUpgrade(opcionesSeleccionadas[2].id));
+    }
+
+    // Para seleccionar las mejoras del Jugador de forma aleatoria y que usen la probabilidad que tienen
+    private List<Mejora> SeleccionarMejorasAleatoriamente(int cantidad)
+    {
+        List<Mejora> seleccionadas = new List<Mejora>();
+        float totalProbabilidad = mejorasPersonaje.Sum(m => m.probabilidad);
+
+        for (int i = 0; i < cantidad; i++)
+        {
+            float randomPoint = Random.value * totalProbabilidad;
+            float acumulado = 0;
+
+            foreach (Mejora mejora in mejorasPersonaje)
+            {
+                acumulado += mejora.probabilidad;
+                if (acumulado >= randomPoint)
+                {
+                    if(!seleccionadas.Contains(mejora))
+                    {
+                        seleccionadas.Add(mejora);
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        return seleccionadas;
+    }
+
+    public void SelectUpgradeOption1()
+    {
+        SelectUpgrade(1);
+    }
+
+    public void SelectUpgradeOption2()
+    {
+        SelectUpgrade(2);
+    }
+
+    public void SelectUpgradeOption3()
+    {
+        SelectUpgrade(3);
     }
 
     private void SelectUpgrade(int option)
@@ -149,20 +239,49 @@ public class PlayerInterfaz : MonoBehaviour
 
             switch (option)
             {
+                // Se inicializa el valor en DisparoMono
                 case 1:
-                    // Se inicializa el valor en DisparoMono
-                    disparoData.incrementoVelocidad += 2f;
+                    // Empieza con 8
+                    disparoData.incrementoVelocidad += 1f;
                     HideLevelUpMenu();
                     break;
                 case 2:
+                    // Empieza con 10
                     playerDamage.dañoBalaJugador += 5f;
                     HideLevelUpMenu();
                     break;
                 case 3:
+                    // Empieza en 100
+                    float vidaMaxima = playerDamage.vidaJugador + 10;
                     playerDamage.vidaJugador += 10;
+                    SetMaximaBarraVida(vidaMaxima);
                     HideLevelUpMenu();
                     break;
-                    // Añadir más casos según las mejoras que quieras implementar
+                case 4:
+                    // Empieza en 0.2f
+                    disparoData.balasSpread += 0.1f;
+                    HideLevelUpMenu();
+                    break;
+                case 5:
+                    // Empieza en 1
+                    disparoData.numeroBalasPorDisparo += 1;
+                    HideLevelUpMenu();
+                    break;
+                case 7:
+                    // Poder reducir el daño al jugador, 
+                    // Empieza en 12,5 , -2.5 -> 5 mejoras
+                    if(playerDamage.dañoAlJugador <= 0) 
+                    {
+                        playerDamage.dañoAlJugador = 2.5f;
+                    } 
+                    else if(playerDamage.dañoAlJugador > 0)
+                    {
+                        playerDamage.dañoAlJugador -= 2.5f;
+                    }
+                    
+                    HideLevelUpMenu();
+                    break;
+
             }
 
             // Actualizar los datos del jugador en EntityManager
@@ -173,18 +292,21 @@ public class PlayerInterfaz : MonoBehaviour
         
     }
 
-    public void SelectUpgradeOption1()
-    {
-        SelectUpgrade(1);
-    }
 
-    public void SelectUpgradeOption2()
-    {
-        SelectUpgrade(2);
-    }
 
-    public void SelectUpgradeOption3()
+   
+}
+
+public class Mejora
+{
+    public int id;
+    public string nombre;
+    public float probabilidad;
+
+    public Mejora(int id, string nombre, float probabilidad)
     {
-        SelectUpgrade(3);
+        this.id = id;
+        this.nombre = nombre;
+        this.probabilidad = probabilidad;
     }
 }

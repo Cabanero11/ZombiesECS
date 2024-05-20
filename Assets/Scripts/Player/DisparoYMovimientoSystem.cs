@@ -131,7 +131,7 @@ public partial struct DisparoYMovimientoSystem : ISystem
 
                 entityCommandBuffer.AddComponent(bulletEntity, new BalasTiempoMono
                 {
-                    balasTiempoDesaparicion = 2.0f
+                    balasTiempoDesaparicion = 1.8f
                 });
 
                 LocalTransform balasTransform = entityManager.GetComponentData<LocalTransform>(bulletEntity);

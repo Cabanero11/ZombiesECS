@@ -25,6 +25,9 @@ public partial struct EnemigosMoverseSystem : ISystem
 
         LocalTransform playerTransform = entityManager.GetComponentData<LocalTransform>(playerEntity);
 
+        PlayerDañoData playerDamage = entityManager.GetComponentData<PlayerDañoData>(playerEntity);
+
+
         // Forma xd de hacerlo pero weno, itero sobre cada entidad, y miro cuales son Enemigos
         NativeArray<Entity> entidades = entityManager.GetAllEntities();
 
@@ -38,6 +41,12 @@ public partial struct EnemigosMoverseSystem : ISystem
 
                 // Mover enemigos hacia el jugador 
                 float3 direccionAlJugador = math.normalize(playerTransform.Position - enemigosTransform.Position);
+
+                // Subio de nivel el jugador, los enemigos son mas rapidos
+                if (playerDamage.nivelJugador == playerDamage.nivelSiguiente)
+                {
+                    enemigosPropiedades.velocidadEnemigos += 1f;
+                }
 
                 enemigosTransform.Position.x += enemigosPropiedades.velocidadEnemigos * SystemAPI.Time.DeltaTime * direccionAlJugador.x;
                 enemigosTransform.Position.y = 0.80f;  // Sino se quedan debajo del suelo xd

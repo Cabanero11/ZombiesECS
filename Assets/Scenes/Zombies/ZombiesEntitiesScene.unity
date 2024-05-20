@@ -362,7 +362,7 @@ MonoBehaviour:
   balaPrefab: {fileID: 9064304155125412667, guid: 51b1f8842fd014c499f75a537064ef1a,
     type: 3}
   numeroBalasPorDisparo: 1
-  balasSpread: 0.5
+  balasSpread: 0.2
   velocidadJugador: 0
   incrementoVelocidad: 0
 --- !u!136 &1342673611

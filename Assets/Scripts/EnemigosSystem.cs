@@ -43,11 +43,13 @@ public partial struct EnemigoSystem : ISystem
 
     }
 
+    // 5 OLEADAS MAXIMO, la ultima sera de "maximoNumeroDeEnemigos"
     [BurstCompile]
     public void SpawnearOleadaEnemigos(ref SystemState state)
     {
         enemigosData.cooldownActualSpawneo -= SystemAPI.Time.DeltaTime;
 
+        
         // Si acabo el cooldown, spawneamos enemigos
         if(enemigosData.cooldownActualSpawneo <= 0)
         {
@@ -92,7 +94,7 @@ public partial struct EnemigoSystem : ISystem
                 entityCommandBuffer.AddComponent(enemigoEntidad, new EnemigosPropiedades
                 {
                     vidaEnemigos = 50f,
-                    velocidadEnemigos = 3f
+                    velocidadEnemigos = 3.5f
                 });
 
                 // Realizar todos los cambios que hacemos

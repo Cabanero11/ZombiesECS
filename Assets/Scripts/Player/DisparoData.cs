@@ -15,5 +15,8 @@ namespace Zombies
 
         public float velocidadJugador;
         public float incrementoVelocidad;
+
+        public float cooldownDisparo;
+        public float temporizadorDisparo;
     }
 }

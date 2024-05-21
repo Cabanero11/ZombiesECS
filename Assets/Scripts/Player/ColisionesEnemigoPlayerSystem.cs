@@ -9,6 +9,8 @@ using Zombies;
 [BurstCompile]
 public partial struct ColisionesEnemigoPlayerSystem : ISystem
 {
+
+
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
@@ -19,6 +21,8 @@ public partial struct ColisionesEnemigoPlayerSystem : ISystem
         LocalTransform playerTransform = entityManager.GetComponentData<LocalTransform>(playerEntity);
         PlayerDañoData playerDamage = entityManager.GetComponentData<PlayerDañoData>(playerEntity);
 
+        float distanciaDeColision = 1.2f;
+
         // Obtener todos los enemigos
         NativeArray<Entity> enemigos = entityManager.GetAllEntities(Allocator.Temp);
         foreach (var enemigoEntity in enemigos)
@@ -28,7 +32,7 @@ public partial struct ColisionesEnemigoPlayerSystem : ISystem
                 LocalTransform enemigoTransform = entityManager.GetComponentData<LocalTransform>(enemigoEntity);
 
                 // Comprobar colisión simple (puedes mejorar esto con una detección de colisión más precisa)
-                if (math.distance(enemigoTransform.Position, playerTransform.Position) < 1.0f) // Ajusta el rango de colisión según sea necesario
+                if (math.distance(enemigoTransform.Position, playerTransform.Position) < distanciaDeColision)
                 {
 
                     // Aplica daño al jugador

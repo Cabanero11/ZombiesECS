@@ -128,8 +128,11 @@ public partial struct DisparoYMovimientoSystem : ISystem
     [BurstCompile]
     private void Disparar(ref SystemState state)
     {
+        // Actualizar el temporizador de disparo
+        playerComponent.temporizadorDisparo -= SystemAPI.Time.DeltaTime;
 
-        if (inputComponent.disparoIniciar)
+        // Verificar si es tiempo de disparar
+        if (inputComponent.disparoIniciar && playerComponent.temporizadorDisparo <= 0f)
         {
             for (int i = 0; i < playerComponent.numeroBalasPorDisparo; i++)
             {
@@ -138,7 +141,6 @@ public partial struct DisparoYMovimientoSystem : ISystem
                 Entity bulletEntity = entityManager.Instantiate(playerComponent.balaPrefab);
 
                 // Inicializar BalasData y BalasTiempoMono
-
                 entityCommandBuffer.AddComponent(bulletEntity, new BalasData
                 {
                     velocidadBala = 30f,
@@ -156,11 +158,9 @@ public partial struct DisparoYMovimientoSystem : ISystem
                 float offsetY = 1.3f;
 
                 // Colocar la bala en la posición del punto de disparo y dirigirla hacia adelante
-
                 balasTransform.Position.x = playerTransform.Position.x;
                 balasTransform.Position.y = playerTransform.Position.y + offsetY;
                 balasTransform.Position.z = playerTransform.Position.z;
-
                 balasTransform.Rotation = playerTransform.Rotation;
 
                 // Agregar un desplazamiento aleatorio en el plano XY
@@ -174,11 +174,18 @@ public partial struct DisparoYMovimientoSystem : ISystem
 
                 entityCommandBuffer.Playback(entityManager);
             }
+
+            // Reiniciar el temporizador de disparo
+            playerComponent.temporizadorDisparo = playerComponent.cooldownDisparo;
         }
+
+        // Guardar los cambios en el componente
+        entityManager.SetComponentData(playerEntity, playerComponent);
     }
 
-    // Comprueba los limites del mapa en un Cuadrado (lo que quiero)
-    private float3 ComprobarLimitesMapa(float3 posicion)
+
+// Comprueba los limites del mapa en un Cuadrado (lo que quiero)
+private readonly float3 ComprobarLimitesMapa(float3 posicion)
     {
         // Limitar la posición del jugador a los límites del mapa
         posicion.x = math.clamp(posicion.x, limiteMin.x, limiteMax.x);

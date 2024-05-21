@@ -36,12 +36,13 @@ public class PlayerInterfaz : MonoBehaviour
         // Definimos las mejoras del personaje
         mejorasPersonaje = new List<Mejora>
         {
-            new Mejora(1, "Velocidad", 0.25f),        // 25%
-            new Mejora(2, "Daño", 0.30f),             // 30%
-            new Mejora(3, "Vida", 0.20f),             // 25%
-            new Mejora(4, "Area de Balas", 0.10f),           // 15%
-            new Mejora(5, "Número de Balas", 0.05f),  // 5%
-            new Mejora(7, "Reducir daño recibido", 0.10f)     // 10%
+            new Mejora(1, "Velocidad", 0.20f),                  // 20%
+            new Mejora(2, "Daño", 0.20f),                       // 20%
+            new Mejora(3, "Vida", 0.20f),                       // 20%
+            new Mejora(4, "Area de Balas", 0.10f),              // 10%
+            new Mejora(5, "Número de Balas", 0.10f),            // 10%
+            new Mejora(7, "Reducir daño recibido", 0.10f),      // 10%
+            new Mejora(8, "Cadencia Disparo", 0.10f)            // 10%
         };
 
 
@@ -267,8 +268,8 @@ public class PlayerInterfaz : MonoBehaviour
                     HideLevelUpMenu();
                     break;
                 case 2:
-                    // Empieza con 10
-                    playerDamage.dañoBalaJugador += 2f;
+                    // Dispara 10 balas al empezar 10*2 = 20 daño
+                    playerDamage.dañoBalaJugador += 1f;
                     HideLevelUpMenu();
                     break;
                 case 3:
@@ -285,7 +286,7 @@ public class PlayerInterfaz : MonoBehaviour
                     break;
                 case 5:
                     // Empieza en 1
-                    disparoData.numeroBalasPorDisparo += 1;
+                    disparoData.numeroBalasPorDisparo += 2;
                     HideLevelUpMenu();
                     break;
                 case 7:
@@ -300,6 +301,20 @@ public class PlayerInterfaz : MonoBehaviour
                         playerDamage.dañoAlJugador -= 2.5f;
                     }
                     
+                    HideLevelUpMenu();
+                    break;
+                case 8:
+                    // Tiempo de disparo empieza en 0.2f
+                    if (disparoData.temporizadorDisparo <= 0.05f)
+                    {
+                        disparoData.cooldownDisparo = 0.05f;
+                        disparoData.temporizadorDisparo = 0.05f;
+                    }
+                    else if (disparoData.temporizadorDisparo > 0f)
+                    {
+                        disparoData.cooldownDisparo -= 0.03f;
+                        disparoData.temporizadorDisparo -= 0.03f;
+                    }
                     HideLevelUpMenu();
                     break;
 

@@ -11,4 +11,7 @@ public struct PlayerDañoData : IComponentData
     public float experienciaActualJugador;
     public float experienciaParaProximoNivel;
     public float experienciaObtenidaPorMatarEnemigo;
+
+    public bool jugadorMuerto;
+    public int puntuacion;
 }

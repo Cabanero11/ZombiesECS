@@ -49,7 +49,9 @@ namespace Zombies
                 nivelSiguiente = 2,
                 experienciaActualJugador = 0f,
                 experienciaParaProximoNivel = 100f,
-                experienciaObtenidaPorMatarEnemigo = 10f
+                experienciaObtenidaPorMatarEnemigo = 10f,
+                jugadorMuerto = false,
+                puntuacion = 0
             });
 
         }

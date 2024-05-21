@@ -21,7 +21,7 @@ public partial struct ColisionesEnemigoPlayerSystem : ISystem
         LocalTransform playerTransform = entityManager.GetComponentData<LocalTransform>(playerEntity);
         PlayerDañoData playerDamage = entityManager.GetComponentData<PlayerDañoData>(playerEntity);
 
-        float distanciaDeColision = 1.2f;
+        float distanciaDeColision = 0.9f;
 
         // Obtener todos los enemigos
         NativeArray<Entity> enemigos = entityManager.GetAllEntities(Allocator.Temp);
@@ -42,7 +42,8 @@ public partial struct ColisionesEnemigoPlayerSystem : ISystem
                     // Si la vida es menor que 0 se muere el jugador :(
                     if(playerDamage.vidaJugador <= 0)
                     {
-                        entityManager.DestroyEntity(playerEntity);
+                        //entityManager.DestroyEntity(playerEntity);
+                        playerDamage.jugadorMuerto = true;
                     }
 
                     // NO SE SI DESTRUIR ESE ZOMBIE

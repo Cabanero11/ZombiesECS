@@ -1,4 +1,4 @@
-using System.Collections;
+ using System.Collections;
 using TMPro;
 using Unity.Collections;
 using Unity.Entities;
@@ -7,11 +7,16 @@ using UnityEngine.UI;
 using Zombies;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.SceneManagement;
+using Unity.Scenes;
 
 public class PlayerInterfaz : MonoBehaviour
 {
+    [Header("Menus")]
     public TextMeshProUGUI nivelTexto;
-    public GameObject levelUpMenu; // Referencia al submenú de elección de mejora
+    public TextMeshProUGUI puntuacionTexto;
+    public GameObject levelUpMenu;      // Referencia al submenú de elección de mejora
+    public GameObject gameOverMenu;     // Referencia al submenú de GameOver
     public Button option1Button;
     public Button option2Button;
     public Button option3Button;
@@ -155,7 +160,34 @@ public class PlayerInterfaz : MonoBehaviour
         SetBarraVida(playerDamage.vidaJugador);
         SetBarraExperiencia(playerDamage.experienciaActualJugador);
         SetBarraExperienciaMaxima(playerDamage.experienciaParaProximoNivel);
+
+        if(playerDamage.vidaJugador <= 0)
+        {
+            Debug.Log(playerDamage.jugadorMuerto);
+            GameOverScreen();
+        }
     }
+
+    // Activar el menu de GameOver, pausar el juego y poner valor de puntuacion :D
+    public void GameOverScreen()
+    {
+        gameOverMenu.SetActive(true);
+        levelUpMenu.SetActive(false);
+        Time.timeScale = 0f;
+        PlayerDañoData playerDamage = entityManager.GetComponentData<PlayerDañoData>(playerEntity);
+        puntuacionTexto.text = "Puntuación: " + playerDamage.puntuacion.ToString();
+    }
+
+    public void ReiniciarJuego()
+    {
+        SceneManager.LoadScene("ZombiesMain");
+    }
+
+    public void VolverAlMenu()
+    {
+        SceneManager.LoadScene("Menu");
+    }
+
 
     public void ShowLevelUpMenu()
     {

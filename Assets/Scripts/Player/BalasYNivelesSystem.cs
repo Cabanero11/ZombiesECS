@@ -97,6 +97,7 @@ public partial struct BalasYNivelesSystem : ISystem
                             if (enemigosPropiedades.vidaEnemigos <= 0f)
                             {
                                 entityManager.DestroyEntity(entidadColisionada);
+                                playerDañoData.puntuacion += 10;
 
                                 // NIVELES Y EXPERIENCIA DEL JUGADOR
                                 // PlayerDañoData se inicializa en DisparoMono.cs

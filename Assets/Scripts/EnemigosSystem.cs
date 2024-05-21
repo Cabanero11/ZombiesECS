@@ -94,7 +94,9 @@ public partial struct EnemigoSystem : ISystem
                 entityCommandBuffer.AddComponent(enemigoEntidad, new EnemigosPropiedades
                 {
                     vidaEnemigos = 50f,
-                    velocidadEnemigos = 3.5f
+                    velocidadEnemigos = 3.5f,
+                    radioReducirVelocidad = 6f,
+                    factorReduccionVelocidad = 0.5f
                 });
 
                 // Realizar todos los cambios que hacemos

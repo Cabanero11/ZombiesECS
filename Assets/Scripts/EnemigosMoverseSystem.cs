@@ -14,7 +14,6 @@ public partial struct EnemigosMoverseSystem : ISystem
     private EntityManager entityManager;
     private Entity playerEntity;
 
-
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
@@ -46,6 +45,14 @@ public partial struct EnemigosMoverseSystem : ISystem
                 if (playerDamage.nivelJugador == playerDamage.nivelSiguiente)
                 {
                     enemigosPropiedades.velocidadEnemigos += 1f;
+                }
+
+                // Reducir velocidad si el enemigo está demasiado cerca del jugador (Asi hacer mas facil esquivarlos cerca del jugador) :D
+                float distanciaAlJugador = math.distance(playerTransform.Position, enemigosTransform.Position);
+
+                if (distanciaAlJugador < enemigosPropiedades.radioReducirVelocidad)
+                {
+                    enemigosPropiedades.velocidadEnemigos *= enemigosPropiedades.factorReduccionVelocidad;
                 }
 
                 enemigosTransform.Position.x += enemigosPropiedades.velocidadEnemigos * SystemAPI.Time.DeltaTime * direccionAlJugador.x;

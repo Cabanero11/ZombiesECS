@@ -24,6 +24,18 @@ public partial struct DisparoYMovimientoSystem : ISystem
     public float sensibilityY;
     float xRotation, yRotation;
 
+    // Limites del mapa
+    private float3 limiteMin;
+    private float3 limiteMax;
+
+    [BurstCompile]
+    public void OnCreate(ref SystemState state)
+    {
+        // Inicializar los límites del mapa
+        limiteMin = new float3(-75f, 0f, -75f); 
+        limiteMax = new float3(75f, 0f, 75f);    
+    }
+
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
@@ -83,10 +95,14 @@ public partial struct DisparoYMovimientoSystem : ISystem
         //playerDañoData.velocidadJugador = isSprinting ? 25f : 15f;
 
 
-        float3 movimiento = moveDirection * currentSpeed * SystemAPI.Time.DeltaTime;
+        float3 nuevoMovimiento = moveDirection * currentSpeed * SystemAPI.Time.DeltaTime;
+        float3 nuevaPosicion = playerTransform.Position + nuevoMovimiento;
+
+        // Comprobar límites del mapa
+        nuevaPosicion = ComprobarLimitesMapa(nuevaPosicion);
 
         // Actualizar la posición del jugador sumando el desplazamiento
-        playerTransform.Position += movimiento;
+        playerTransform.Position = nuevaPosicion;
 
         // Actualizar la rotación del jugador
         playerTransform.Rotation = quaternion.Euler(0, yRotation, 0);
@@ -159,6 +175,15 @@ public partial struct DisparoYMovimientoSystem : ISystem
                 entityCommandBuffer.Playback(entityManager);
             }
         }
+    }
 
+    // Comprueba los limites del mapa en un Cuadrado (lo que quiero)
+    private float3 ComprobarLimitesMapa(float3 posicion)
+    {
+        // Limitar la posición del jugador a los límites del mapa
+        posicion.x = math.clamp(posicion.x, limiteMin.x, limiteMax.x);
+        posicion.y = math.clamp(posicion.y, limiteMin.y, limiteMax.y);
+        posicion.z = math.clamp(posicion.z, limiteMin.z, limiteMax.z);
+        return posicion;
     }
 }

@@ -268,7 +268,7 @@ public class PlayerInterfaz : MonoBehaviour
                     break;
                 case 2:
                     // Empieza con 10
-                    playerDamage.dañoBalaJugador += 5f;
+                    playerDamage.dañoBalaJugador += 2f;
                     HideLevelUpMenu();
                     break;
                 case 3:

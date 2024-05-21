@@ -75,6 +75,8 @@ public partial struct BalasYNivelesSystem : ISystem
                     CollidesWith = capasColision,
                 });
 
+
+
                 // SI ha colisionado mas de 1 vez, destruimos la bala
                 if(colliderCastHits.Length > 0f)
                 {

@@ -23,8 +23,10 @@ public class PlayerInterfaz : MonoBehaviour
 
     public PauseMenuScript pauseMenuScript;
 
-    [Header("Barra Vida")]
+    [Header("Barra Vida y EXP")]
     public Slider slider;
+    public Gradient colorBarraVida;
+    public Image fill;
     public Slider sliderEXP;
 
     private List<Mejora> mejorasPersonaje;
@@ -82,6 +84,18 @@ public class PlayerInterfaz : MonoBehaviour
     public void SetBarraVida(float vidaPersonaje)
     {
         slider.value = vidaPersonaje;
+
+        // Para coger el valor del slider, y segun este cambiar su color
+        fill.color = colorBarraVida.Evaluate(slider.normalizedValue);
+    }
+
+
+    public void SetMaximaBarraVida(float vidaPersonaje)
+    {
+        slider.maxValue = vidaPersonaje;
+        //slider.value = vidaPersonaje;
+
+        fill.color = colorBarraVida.Evaluate(1f);
     }
     public void SetBarraExperiencia(float experienciaActual)
     {
@@ -93,11 +107,6 @@ public class PlayerInterfaz : MonoBehaviour
         sliderEXP.maxValue = experienciaMaxima;
     }
 
-    public void SetMaximaBarraVida(float vidaPersonaje)
-    {
-        slider.maxValue = vidaPersonaje;
-        //slider.value = vidaPersonaje;
-    }
 
 
 

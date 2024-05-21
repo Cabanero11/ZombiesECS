@@ -704,82 +704,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 225643189}
   m_CullTransparentMesh: 1
---- !u!1 &264015172
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 264015173}
-  - component: {fileID: 264015175}
-  - component: {fileID: 264015174}
-  m_Layer: 5
-  m_Name: Corazon
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &264015173
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 264015172}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.969645, y: 0.64643, z: 0.64643}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 895769119}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 4, y: 0}
-  m_SizeDelta: {x: 91.1013, y: 129.66}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &264015174
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 264015172}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c3c26ff226452dd419e0b3bf09730f18, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &264015175
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 264015172}
-  m_CullTransparentMesh: 1
 --- !u!1001 &352896623
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1612,7 +1536,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -384, y: 274}
+  m_AnchoredPosition: {x: -370, y: 278.54}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &547637804
@@ -2577,14 +2501,13 @@ RectTransform:
   m_Children:
   - {fileID: 381038889}
   - {fileID: 836069571}
-  - {fileID: 264015173}
   m_Father: {fileID: 1610304278}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 170, y: -101}
-  m_SizeDelta: {x: 264.4554, y: 91.029785}
+  m_AnchoredPosition: {x: 170, y: -89}
+  m_SizeDelta: {x: 264.45544, y: 91.029785}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &895769120
 MonoBehaviour:
@@ -3118,10 +3041,10 @@ RectTransform:
   m_Father: {fileID: 1610304278}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 170, y: -187}
-  m_SizeDelta: {x: 264.4554, y: 91.029785}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -370, y: 129}
+  m_SizeDelta: {x: 264.45544, y: 91.029785}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1437823151
 MonoBehaviour:
@@ -3290,7 +3213,7 @@ GameObject:
   - component: {fileID: 1610304280}
   - component: {fileID: 1610304279}
   m_Layer: 5
-  m_Name: PanelTextoYCrosshair
+  m_Name: PanelTextoBarrasCrosshair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3759,6 +3682,37 @@ MonoBehaviour:
   option3Button: {fileID: 1658446152}
   pauseMenuScript: {fileID: 1947515197}
   slider: {fileID: 1437823151}
+  colorBarraVida:
+    serializedVersion: 2
+    key0: {r: 0.9339623, g: 0.05639012, b: 0.05639012, a: 1}
+    key1: {r: 0.9811321, g: 0.92947525, b: 0.0037023122, a: 1}
+    key2: {r: 0.29321012, g: 0.9622642, b: 0.13980061, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 19661
+    ctime1: 39321
+    ctime2: 65535
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 1
+    m_ColorSpace: -1
+    m_NumColorKeys: 3
+    m_NumAlphaKeys: 2
+  fill: {fileID: 1118930661}
   sliderEXP: {fileID: 895769120}
 --- !u!114 &1947515197
 MonoBehaviour:

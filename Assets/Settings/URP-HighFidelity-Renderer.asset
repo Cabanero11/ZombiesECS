@@ -53,7 +53,7 @@ MonoBehaviour:
     hdrDebugViewPS: {fileID: 4800000, guid: 573620ae32aec764abd4d728906d2587, type: 3}
   m_RendererFeatures:
   - {fileID: -1878332245247344467}
-  - {fileID: 3177577271104956739}
+  - {fileID: 0}
   m_RendererFeatureMap: adc0de57c6d2eee543e9904ab105192c
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -107,8 +107,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7afc38c2d1fc5794db8af8261ba5f3b1, type: 3}
   m_Name: Custom Pass
   m_EditorClassIdentifier: 
-  m_Active: 1
-  mask:
-    serializedVersion: 2
-    m_Bits: 1
-  Event: 250

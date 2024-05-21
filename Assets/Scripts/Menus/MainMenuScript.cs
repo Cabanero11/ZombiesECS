@@ -17,7 +17,7 @@ public class MainMenuScript : MonoBehaviour
         //GameManager.Instance.musicPlayedForCurrentLevel = false; // cambiamos de nivel, y ya puede haber nueva musica
 
 
-        SceneManager.LoadScene("Animatica");
+        SceneManager.LoadScene("ZombiesMain");
     }
 
     public void QuitGame()

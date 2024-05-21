@@ -172,6 +172,10 @@ public class PlayerInterfaz : MonoBehaviour
     {
         gameOverMenu.SetActive(true);
         levelUpMenu.SetActive(false);
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         Time.timeScale = 0f;
         PlayerDañoData playerDamage = entityManager.GetComponentData<PlayerDañoData>(playerEntity);
         puntuacionTexto.text = "Puntuación: " + playerDamage.puntuacion.ToString();
@@ -181,6 +185,7 @@ public class PlayerInterfaz : MonoBehaviour
     {
         // Cargar una escena igual a esta y ir alternando para que asi se vuelvan a cargar todos los sistemas 
         // En mi mente tenia sentido
+        Time.timeScale = 1f;
         GameManager.Instance.AlternarEntre2Escenas();
     }
 

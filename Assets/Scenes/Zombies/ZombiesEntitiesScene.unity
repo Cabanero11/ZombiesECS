@@ -258,7 +258,7 @@ MonoBehaviour:
     type: 3}
   numeroBalasPorDisparo: 10
   balasSpread: 0.2
-  velocidadJugador: 7
+  velocidadJugador: 6.5
   incrementoVelocidad: 0
   cooldownDisparo: 0.2
   temporizadorDisparo: 0.2

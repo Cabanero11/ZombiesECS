@@ -95,8 +95,8 @@ public partial struct EnemigoSystem : ISystem
                 {
                     vidaEnemigos = 50f,
                     velocidadEnemigos = 3.5f,
-                    radioReducirVelocidad = 6f,
-                    factorReduccionVelocidad = 0.5f
+                    radioReducirVelocidad = 5f,
+                    factorReduccionVelocidad = 0.35f
                 });
 
                 // Realizar todos los cambios que hacemos

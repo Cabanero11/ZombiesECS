@@ -90,7 +90,7 @@ public partial struct DisparoYMovimientoSystem : ISystem
         bool isSprinting = Input.GetKey(KeyCode.LeftShift);
 
         // Ajustar la velocidad de movimiento
-        float currentSpeed = isSprinting ? playerComponent.velocidadJugador + playerComponent.incrementoVelocidad + 10f : playerComponent.velocidadJugador + playerComponent.incrementoVelocidad;
+        float currentSpeed = isSprinting ? playerComponent.velocidadJugador + playerComponent.incrementoVelocidad + 7f : playerComponent.velocidadJugador + playerComponent.incrementoVelocidad;
         //PlayerDañoData playerDañoData = entityManager.GetComponentData<PlayerDañoData>(playerEntity);
         //playerDañoData.velocidadJugador = isSprinting ? 25f : 15f;
 

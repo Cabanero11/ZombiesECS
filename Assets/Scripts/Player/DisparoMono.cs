@@ -43,7 +43,7 @@ namespace Zombies
             AddComponent(playerEntidad, new PlayerDañoData
             {
                 dañoAlJugador = 12.5f,
-                dañoBalaJugador = 2f,
+                dañoBalaJugador = 1f,
                 vidaJugador = 100,
                 nivelJugador = 1,
                 nivelSiguiente = 2,

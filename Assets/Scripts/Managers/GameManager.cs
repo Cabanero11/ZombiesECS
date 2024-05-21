@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Loading;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -13,6 +14,8 @@ namespace Zombies
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance;
+
+        public int numeroEscena;
 
         [Header("Estado de juego")]
         public GameState gameState;
@@ -30,7 +33,6 @@ namespace Zombies
             menu,
             PauseMenu,
             level,
-            cinematic
         }
 
         private void Awake()
@@ -41,6 +43,9 @@ namespace Zombies
                 Destroy(this);
 
             DontDestroyOnLoad(Instance);
+
+            pauseMenuScript = GameObject.FindGameObjectWithTag("Canvas").GetComponent<PauseMenuScript>();
+
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
@@ -71,7 +76,6 @@ namespace Zombies
         {
             if (win)
             {
-                //Aquí haremos algo pues el jugador se ha pasado el nivel satisfactoriamente
                 PlayerAudioManager.instance.PlayWinLevel();
             }
 
@@ -82,8 +86,6 @@ namespace Zombies
         {
             //Debug.Log("vamos al nivel " + currentLevel + " de los [0.."+(levels.Length-1)+"]");
             musicPlayedForCurrentLevel = false; // cambiamos de nivel, y ya puede haber nueva musica
-            PlayMusic();
-
         }
 
         public void SetLevel(int level)
@@ -91,7 +93,6 @@ namespace Zombies
             //Debug.Log("vamos al nivel " + currentLevel);
             //Debug.Log(levels.Length);
             musicPlayedForCurrentLevel = false;
-            PlayMusic();
 
         }
 
@@ -101,32 +102,6 @@ namespace Zombies
             ChangeLevel();
         }
 
-        // Gestionar la musica segun el nivel en el que se esta
-        public void PlayMusic()
-        {
-            if (!musicPlayedForCurrentLevel)
-            {
-                //sceneName = SceneManager.GetActiveScene().name;
-                switch (sceneName)
-                {
-                    case "ZombiesMain":
-                        PlayerAudioManager.instance.PlayLevelMusic(1, 0.10f);
-                        // Asegurarme de que haya un hijo MusicaAudioSource con un AudioSource (pls)
-                        Debug.Log("Musica nivel 1 OK");
-                        break;
-                    case "Menu":
-                        PlayerAudioManager.instance.PlayLevelMusic(5, 0.10f);
-                        Debug.Log("Musica menu OK");
-                        break;
-                    default:
-                        PlayerAudioManager.instance.PlayLevelMusic(1, 0.10f);
-                        Debug.Log("Musica NIVEL NO OFICIAL OK");
-                        break;
-                }
-
-                musicPlayedForCurrentLevel = true;
-            }
-        }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
@@ -135,7 +110,26 @@ namespace Zombies
             Debug.Log(sceneName);
 
             musicPlayedForCurrentLevel = false;
-            PlayMusic();
+        }
+
+        public void AlternarEntre2Escenas()
+        {
+            // Para que cambie entre una o la otra ajaj
+            if(numeroEscena % 2 == 0)
+            {
+                SceneManager.LoadScene("ZombiesMain2");
+                numeroEscena++;
+            } 
+            else if(numeroEscena % 2 == 1)
+            {
+                SceneManager.LoadScene("ZombiesMain");
+                numeroEscena++;
+            }
+        }
+
+        public void SonidosDelJugador()
+        {
+
         }
 
     }

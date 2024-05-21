@@ -163,7 +163,6 @@ public class PlayerInterfaz : MonoBehaviour
 
         if(playerDamage.vidaJugador <= 0)
         {
-            Debug.Log(playerDamage.jugadorMuerto);
             GameOverScreen();
         }
     }
@@ -180,7 +179,9 @@ public class PlayerInterfaz : MonoBehaviour
 
     public void ReiniciarJuego()
     {
-        SceneManager.LoadScene("ZombiesMain");
+        // Cargar una escena igual a esta y ir alternando para que asi se vuelvan a cargar todos los sistemas 
+        // En mi mente tenia sentido
+        GameManager.Instance.AlternarEntre2Escenas();
     }
 
     public void VolverAlMenu()
@@ -339,12 +340,12 @@ public class PlayerInterfaz : MonoBehaviour
                     // Tiempo de disparo empieza en 0.2f
                     if (disparoData.temporizadorDisparo <= 0.05f)
                     {
-                        disparoData.cooldownDisparo = 0.05f;
+                        //disparoData.cooldownDisparo = 0.05f;
                         disparoData.temporizadorDisparo = 0.05f;
                     }
                     else if (disparoData.temporizadorDisparo > 0f)
                     {
-                        disparoData.cooldownDisparo -= 0.03f;
+                        //disparoData.cooldownDisparo -= 0.03f;
                         disparoData.temporizadorDisparo -= 0.03f;
                     }
                     HideLevelUpMenu();

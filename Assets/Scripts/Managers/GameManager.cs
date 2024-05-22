@@ -34,6 +34,8 @@ namespace Zombies
         public AudioClip disparoSonido;
         public AudioClip levelUpSonido;
         public AudioClip recibirDañoJugador;
+        public AudioClip recuperarVida;
+
 
         [Header("Musica del videojuego")]
         public AudioClip musicaMenu;
@@ -165,6 +167,11 @@ namespace Zombies
         public void PlayRecibiDañoJugador()
         {
             PlaySoundPitcheado(recibirDañoJugador, 0.25f, 0.6f, 1.4f);
+        }
+
+        public void PlayRecuperarVida()
+        {
+            PlaySoundPitcheado(recuperarVida, 0.25f, 0.8f, 1.2f);
         }
 
         // Playear un sonido, que se le pasa, y tocar su volumen

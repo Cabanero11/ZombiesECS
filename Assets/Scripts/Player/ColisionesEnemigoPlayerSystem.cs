@@ -21,12 +21,18 @@ public partial struct ColisionesEnemigoPlayerSystem : ISystem
         LocalTransform playerTransform = entityManager.GetComponentData<LocalTransform>(playerEntity);
         PlayerDañoData playerDamage = entityManager.GetComponentData<PlayerDañoData>(playerEntity);
 
-        float distanciaDeColision = 0.9f;
+        Entity dropSpawnerEntity = SystemAPI.GetSingletonEntity<DropVidaData>();
+        DropVidaPropiedades dropVidaPropiedades = entityManager.GetComponentData<DropVidaPropiedades>(dropSpawnerEntity);
+
+        float distanciaDeColision = 1.0f;
 
         // Obtener todos los enemigos
         NativeArray<Entity> enemigos = entityManager.GetAllEntities(Allocator.Temp);
+        NativeArray<Entity> dropsVida = entityManager.GetAllEntities(Allocator.Temp);
+
         foreach (var enemigoEntity in enemigos)
         {
+            // Colisiones de enemigos con el Jugador
             if (entityManager.HasComponent<EnemigosPropiedades>(enemigoEntity))
             {
                 LocalTransform enemigoTransform = entityManager.GetComponentData<LocalTransform>(enemigoEntity);
@@ -34,7 +40,6 @@ public partial struct ColisionesEnemigoPlayerSystem : ISystem
                 // Comprobar colisión simple (puedes mejorar esto con una detección de colisión más precisa)
                 if (math.distance(enemigoTransform.Position, playerTransform.Position) < distanciaDeColision)
                 {
-
                     // Aplica daño al jugador
                     playerDamage.vidaJugador -= playerDamage.dañoAlJugador;
                     entityManager.SetComponentData(playerEntity, playerDamage);
@@ -43,7 +48,7 @@ public partial struct ColisionesEnemigoPlayerSystem : ISystem
                     GameManager.Instance.PlayRecibiDañoJugador();
 
                     // Si la vida es menor que 0 se muere el jugador :(
-                    if(playerDamage.vidaJugador <= 0)
+                    if (playerDamage.vidaJugador <= 0)
                     {
                         //entityManager.DestroyEntity(playerEntity);
                         playerDamage.jugadorMuerto = true;
@@ -54,8 +59,30 @@ public partial struct ColisionesEnemigoPlayerSystem : ISystem
                     entityManager.DestroyEntity(enemigoEntity);
                 }
             }
+            // Para el drop de Vida colisiones
+            else if (entityManager.HasComponent<DropVidaPropiedades>(enemigoEntity))
+            {
+                LocalTransform dropVidaTransform = entityManager.GetComponentData<LocalTransform>(enemigoEntity);
+
+                // Comprobar colisión simple (puedes mejorar esto con una detección de colisión más precisa)
+                if (math.distance(dropVidaTransform.Position, playerTransform.Position) < distanciaDeColision)
+                {
+
+                    // Aplica daño al jugador
+                    playerDamage.vidaJugador += dropVidaPropiedades.vidaRecuperada;
+                    entityManager.SetComponentData(playerEntity, playerDamage);
+
+                    // Sonido de recibirDaño
+                    GameManager.Instance.PlayRecibiDañoJugador();
+
+                    // Si el jugador toca la de vida se cura y se destruye la + de vida
+                    entityManager.DestroyEntity(enemigoEntity);
+                }
+
+            }
         }
 
+        // Borramos todos los demas, ya colisionamos :D
         enemigos.Dispose();
     }
 }

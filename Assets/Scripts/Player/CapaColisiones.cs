@@ -8,7 +8,7 @@ public enum CapaColisiones
     Wall = 1 << 6,
     Enemigo = 1 << 8,
     Player = 1 << 9,
-    Borde = 1 << 10,
+    DropVida = 1 << 10,
 }
 
 

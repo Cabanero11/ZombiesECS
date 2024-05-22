@@ -3172,13 +3172,13 @@ PrefabInstance:
     - target: {fileID: 4211159816953407329, guid: 9dd6551d1ee7ca44db99135b64a98ceb,
         type: 3}
       propertyPath: m_Volume
-      value: 0.5
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 4211159816953407329, guid: 9dd6551d1ee7ca44db99135b64a98ceb,
         type: 3}
       propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: 76d46c0accf7d1a448d9866c1f070d58, type: 3}
+      objectReference: {fileID: 8300000, guid: 14e13b283a241604181877fba31d3c6c, type: 3}
     - target: {fileID: 4710611458778976035, guid: 9dd6551d1ee7ca44db99135b64a98ceb,
         type: 3}
       propertyPath: levelUpSonido

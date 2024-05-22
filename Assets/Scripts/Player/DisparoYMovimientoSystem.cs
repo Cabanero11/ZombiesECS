@@ -120,8 +120,8 @@ public partial struct DisparoYMovimientoSystem : ISystem
             cameraSingleton.transform.position = playerTransform.Position;
             cameraSingleton.transform.rotation = quaternion.Euler(xRotation, yRotation, 0);
         }
+            
 
-        
 
     }
 
@@ -175,6 +175,9 @@ public partial struct DisparoYMovimientoSystem : ISystem
                 entityCommandBuffer.Playback(entityManager);
             }
 
+            // Sonido de Disaparo
+            GameManager.Instance.PlayDisparoSonido();
+
             // Reiniciar el temporizador de disparo
             playerComponent.temporizadorDisparo = playerComponent.cooldownDisparo;
         }
@@ -184,8 +187,8 @@ public partial struct DisparoYMovimientoSystem : ISystem
     }
 
 
-// Comprueba los limites del mapa en un Cuadrado (lo que quiero)
-private readonly float3 ComprobarLimitesMapa(float3 posicion)
+    // Comprueba los limites del mapa en un Cuadrado (lo que quiero)
+    private readonly float3 ComprobarLimitesMapa(float3 posicion)
     {
         // Limitar la posición del jugador a los límites del mapa
         posicion.x = math.clamp(posicion.x, limiteMin.x, limiteMax.x);

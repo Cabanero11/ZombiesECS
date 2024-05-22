@@ -2,9 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Zombies;
 
 public class MainMenuScript : MonoBehaviour
 {
+    private void Awake()
+    {
+
+        GameManager.Instance.gameState = GameManager.GameState.menu;
+    }
 
     // Se cambia el Index en File -> BuildSettings -> Se arrasta escena
     public void PlayGame()

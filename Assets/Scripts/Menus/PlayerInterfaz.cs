@@ -151,6 +151,8 @@ public class PlayerInterfaz : MonoBehaviour
         // Si nivel jugador 1 aumenta a 2 sera nivelSiguiente ==, entonces mostramos menu de Subir nivel + incrementar nivelSiguiente
         if (playerDamage.nivelJugador == playerDamage.nivelSiguiente)
         {
+            // Mostrar menu de SubirNivel y Sonid
+            GameManager.Instance.PlayLevelUpSonido();
             ShowLevelUpMenu();
             playerDamage.nivelSiguiente++;
             entityManager.SetComponentData(playerEntity, playerDamage); // No olvides actualizar el componente en el EntityManager

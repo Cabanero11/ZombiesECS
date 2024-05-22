@@ -52,11 +52,10 @@ public partial struct EnemigoSystem : ISystem
     {
         enemigosData.cooldownActualSpawneo -= SystemAPI.Time.DeltaTime;
 
-        
         // Si acabo el cooldown, spawneamos enemigos
-        if(enemigosData.cooldownActualSpawneo <= 0)
+        if (enemigosData.cooldownActualSpawneo <= 0)
         {
-            for(int i = 0; i < enemigosData.numeroDeEnemigosSpawneadosPorSegundo; i++)
+            for (int i = 0; i < enemigosData.numeroDeEnemigosSpawneadosPorSegundo; i++)
             {
                 EntityCommandBuffer entityCommandBuffer = new EntityCommandBuffer(Allocator.Temp);
 
@@ -78,17 +77,14 @@ public partial struct EnemigoSystem : ISystem
 
                 float distanciaAlCuadradro = math.lengthsq(puntoSpawn - playerPosition);
 
-                if(distanciaAlCuadradro < distanciaMinimaAlCuadradro)
+                if (distanciaAlCuadradro < distanciaMinimaAlCuadradro)
                 {
                     puntoSpawn = playerPosition + math.normalize(randomOffset) * math.sqrt(distanciaAlCuadradro);
                 }
 
                 // TRAS CALCULAR POSICION LE ASIGNAMOS LA POSICION Y SU ROTATION AL JUGADOR
-
                 enemigoTransform.Position = new float3(puntoSpawn.x, 0.65f, puntoSpawn.z);
-
                 enemigoTransform.Rotation = quaternion.RotateY(GetRotationEnemigos(enemigoTransform.Position, playerPosition));
-
                 enemigoTransform.Scale = 1.3f;
 
                 entityCommandBuffer.SetComponent(enemigoEntidad, enemigoTransform);
@@ -102,8 +98,8 @@ public partial struct EnemigoSystem : ISystem
                     factorReduccionVelocidad = 0.35f
                 });
 
-                // El ultimo enemigo
-                if (i == enemigosData.numeroDeEnemigosSpawneadosPorSegundo / 2)
+                // SPAWNEAR UN DROP DE VIDA POR OLEADA, a la mitad de esta
+                if (i == enemigosData.numeroDeEnemigosSpawneadosPorSegundo - 40)
                 {
                     // Creamos Drop
                     Entity dropEntidad = entityManager.Instantiate(dropVidaData.dropVida);
@@ -111,11 +107,13 @@ public partial struct EnemigoSystem : ISystem
                     Debug.Log("Spawneo drop :D");
                     LocalTransform dropTransform = entityManager.GetComponentData<LocalTransform>(dropEntidad);
 
-                    dropTransform.Position = new float3(puntoSpawn.x, 0.65f, puntoSpawn.z);
+                    // Asignar la posición, rotación y escala del dropTransform
+                    dropTransform.Position = new float3(enemigoTransform.Position.x, 1.5f, enemigoTransform.Position.z);
+                    dropTransform.Rotation = quaternion.RotateY(GetRotationEnemigos(dropTransform.Position, playerPosition));
+                    dropTransform.Scale = 1.3f;
 
-                    //dropTransform.Rotation = quaternion.RotateY(10f);
-
-                    dropTransform.Scale = 1.0f;
+                    // Aplicar los cambios al entityCommandBuffer
+                    entityCommandBuffer.SetComponent(dropEntidad, dropTransform);
 
                     entityCommandBuffer.AddComponent(dropEntidad, new DropVidaPropiedades
                     {
@@ -123,10 +121,9 @@ public partial struct EnemigoSystem : ISystem
                     });
                 }
 
-
                 // Realizar todos los cambios que hacemos
                 entityCommandBuffer.Playback(entityManager);
-                
+
                 // Vaciar el entityCommandBuffer manualmente
                 entityCommandBuffer.Dispose();
             }
@@ -155,8 +152,4 @@ public partial struct EnemigoSystem : ISystem
 
         return math.atan2(x, y) + math.PI;
     }
-
-
-
-
 }

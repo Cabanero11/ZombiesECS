@@ -10,8 +10,6 @@ namespace Zombies
     public class DropVidaMono : MonoBehaviour
     {
         public GameObject dropVida;
-        public float vidaRecuperada;
-
     }
 
     // Añado los valores de DisparoData a la entidad de PlayerEntity con el Baker

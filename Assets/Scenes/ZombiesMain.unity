@@ -3229,6 +3229,11 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 319748ac566aede459a8bad1c65a683c, type: 3}
     - target: {fileID: 4710611458778976035, guid: 9dd6551d1ee7ca44db99135b64a98ceb,
         type: 3}
+      propertyPath: recuperarVida
+      value: 
+      objectReference: {fileID: 8300000, guid: 2297d22b28d77e1459b95485d13b5c4b, type: 3}
+    - target: {fileID: 4710611458778976035, guid: 9dd6551d1ee7ca44db99135b64a98ceb,
+        type: 3}
       propertyPath: pauseMenuScript
       value: 
       objectReference: {fileID: 1947515197}

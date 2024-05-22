@@ -61,7 +61,7 @@ public partial struct EnemigosMoverseSystem : ISystem
 
                 //enemigosTransform.Scale = 0.7f;
 
-                //enemigosTransform.Rotation = quaternion.RotateY(GetRotationEnemigos(enemigosTransform.Position, playerTransform.Position));
+                enemigosTransform.Rotation = quaternion.RotateY(GetRotationEnemigos(enemigosTransform.Position, playerTransform.Position));
 
                 float direccion = GetRotationEnemigos(enemigosTransform.Position, playerTransform.Position);
 

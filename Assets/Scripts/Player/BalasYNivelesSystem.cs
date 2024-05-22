@@ -68,13 +68,12 @@ public partial struct BalasYNivelesSystem : ISystem
                 float distanciaMaxima = 1f;
 
                 // Ver si chocamos con una pared o un enemigo a la vez
-                uint capasColision = DevolverCapa.ObtenerCapaTrasColision(CapaColisiones.Wall, CapaColisiones.Enemigo);
+                uint capasColision = DevolverCapa.ObtenerCapaTrasColision(CapaColisiones.DropVida, CapaColisiones.Enemigo);
 
                 physicsWorldSingleton.CapsuleCastAll(punto1, punto2, radio, direccion, distanciaMaxima, ref colliderCastHits, new CollisionFilter {
                     BelongsTo = (uint)CapaColisiones.Default,
                     CollidesWith = capasColision,
                 });
-
 
 
                 // SI ha colisionado mas de 1 vez, destruimos la bala

@@ -256,12 +256,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   balaPrefab: {fileID: 9064304155125412667, guid: 51b1f8842fd014c499f75a537064ef1a,
     type: 3}
-  numeroBalasPorDisparo: 10
+  numeroBalasPorDisparo: 2
   balasSpread: 0.2
   velocidadJugador: 6.5
   incrementoVelocidad: 0
-  cooldownDisparo: 0.2
-  temporizadorDisparo: 0.2
+  cooldownDisparo: 0.25
+  temporizadorDisparo: 0.25
 --- !u!136 &1342673611
 CapsuleCollider:
   m_ObjectHideFlags: 0

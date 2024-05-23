@@ -8,7 +8,6 @@ using Unity.Burst;
 using Zombies;
 using Unity.Collections;
 
-
 [BurstCompile]
 public partial struct BalasYNivelesSystem : ISystem
 {
@@ -20,87 +19,73 @@ public partial struct BalasYNivelesSystem : ISystem
         EntityManager entityManager = state.EntityManager;
         playerEntity = SystemAPI.GetSingletonEntity<DisparoData>();
 
-
-        // Coger todas las entidades a la vez
+        // Obtener todas las entidades de balas
         NativeArray<Entity> entidadesBalas = entityManager.GetAllEntities();
-        // Variable para niveles
         PlayerDañoData playerDañoData = entityManager.GetComponentData<PlayerDañoData>(playerEntity);
         DisparoData disparoData = entityManager.GetComponentData<DisparoData>(playerEntity);
 
-        // DETECTAR COLISIONES
+        // Singleton para el mundo de física
         PhysicsWorldSingleton physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
 
-        foreach(Entity ent in entidadesBalas)
+        foreach (Entity bala in entidadesBalas)
         {
-            // Filtrar a entidades de tipo BalasData y BalasTiempoMono
-            if (entityManager.HasComponent<BalasData>(ent) && entityManager.HasComponent<BalasTiempoMono>(ent))
+            if (entityManager.HasComponent<BalasData>(bala) && entityManager.HasComponent<BalasTiempoMono>(bala))
             {
-                // Coger Transform y balasData de la entidad
-                LocalTransform balasTransform = entityManager.GetComponentData<LocalTransform>(ent);
-                BalasData balasData = entityManager.GetComponentData<BalasData>(ent);
+                LocalTransform balaTransform = entityManager.GetComponentData<LocalTransform>(bala);
+                BalasData balaData = entityManager.GetComponentData<BalasData>(bala);
 
-                // Mover las balas en direccion hacia delante
-                balasTransform.Position += balasData.velocidadBala * SystemAPI.Time.DeltaTime * balasTransform.Forward();
+                // Mover la bala hacia adelante
+                balaTransform.Position += balaData.velocidadBala * SystemAPI.Time.DeltaTime * balaTransform.Forward();
+                entityManager.SetComponentData(bala, balaTransform);
 
-                entityManager.SetComponentData(ent, balasTransform);
-
-                BalasTiempoMono balasTiempo = entityManager.GetComponentData<BalasTiempoMono>(ent);
-
+                BalasTiempoMono balasTiempo = entityManager.GetComponentData<BalasTiempoMono>(bala);
                 balasTiempo.balasTiempoDesaparicion -= SystemAPI.Time.DeltaTime;
 
-                // Si es 0 su tiempo se detruye, ya que no queremos balas infinitas
                 if (balasTiempo.balasTiempoDesaparicion <= 0f)
                 {
-                    entityManager.DestroyEntity(ent);
+                    entityManager.DestroyEntity(bala);
                     continue;
                 }
 
-                entityManager.SetComponentData(ent, balasTiempo);
+                entityManager.SetComponentData(bala, balasTiempo);
 
-
-                // Detectar layers
+                // Detectar colisiones
                 NativeList<ColliderCastHit> colliderCastHits = new NativeList<ColliderCastHit>(Allocator.Temp);
 
-                float3 punto1 = new float3(balasTransform.Position - balasTransform.Right() * 0.15f);
-                float3 punto2 = new float3(balasTransform.Position + balasTransform.Right() * 0.15f);
-                float radio = balasData.tamañoBala / 2;
+                float3 punto1 = new float3(balaTransform.Position - balaTransform.Right() * 0.15f);
+                float3 punto2 = new float3(balaTransform.Position + balaTransform.Right() * 0.15f);
+                float radio = balaData.tamañoBala / 2;
                 float3 direccion = float3.zero;
                 float distanciaMaxima = 1f;
 
-                // Ver si chocamos con una pared o un enemigo a la vez
                 uint capasColision = DevolverCapa.ObtenerCapaTrasColision(CapaColisiones.Wall, CapaColisiones.Enemigo);
-
-                physicsWorldSingleton.CapsuleCastAll(punto1, punto2, radio, direccion, distanciaMaxima, ref colliderCastHits, new CollisionFilter {
+                physicsWorldSingleton.CapsuleCastAll(punto1, punto2, radio, direccion, distanciaMaxima, ref colliderCastHits, new CollisionFilter
+                {
                     BelongsTo = (uint)CapaColisiones.Default,
                     CollidesWith = capasColision,
                 });
 
-
-                // SI ha colisionado mas de 1 vez, destruimos la bala
-                if(colliderCastHits.Length > 0f)
+                if (colliderCastHits.Length > 0)
                 {
-                    // Iterar por entidades colisionadas y ver si es un Zombie
-                    for(int i = 0; i <  colliderCastHits.Length; i++)
+                    for (int i = 0; i < colliderCastHits.Length; i++)
                     {
                         Entity entidadColisionada = colliderCastHits[i].Entity;
-                        
-                        if(entityManager.HasComponent<EnemigosPropiedades>(entidadColisionada))
+
+                        if (entityManager.HasComponent<EnemigosPropiedades>(entidadColisionada))
                         {
                             EnemigosPropiedades enemigosPropiedades = entityManager.GetComponentData<EnemigosPropiedades>(entidadColisionada);
+                            float dañoRestante = playerDañoData.dañoBalaJugador;
 
-                            enemigosPropiedades.vidaEnemigos -= playerDañoData.dañoBalaJugador;
-
-                            entityManager.SetComponentData(entidadColisionada, enemigosPropiedades);
-
-                            // Si la vida del enemigo es menor a 0 lo destruimos 
-                            if (enemigosPropiedades.vidaEnemigos <= 0f)
+                            // NIVELES Y EXPERIENCIA DEL JUGADOR
+                            // PlayerDañoData se inicializa en DisparoMono.cs
+                            // Si 
+                            if (enemigosPropiedades.vidaEnemigos <= dañoRestante)
                             {
+                                dañoRestante -= enemigosPropiedades.vidaEnemigos;
+                                enemigosPropiedades.vidaEnemigos = 0;
+
                                 entityManager.DestroyEntity(entidadColisionada);
                                 playerDañoData.puntuacion += 10;
-
-                                // NIVELES Y EXPERIENCIA DEL JUGADOR
-                                // PlayerDañoData se inicializa en DisparoMono.cs
-
                                 playerDañoData.experienciaActualJugador += playerDañoData.experienciaObtenidaPorMatarEnemigo;
 
                                 // Subir de nivel si se alcanza la experiencia necesaria
@@ -108,30 +93,34 @@ public partial struct BalasYNivelesSystem : ISystem
                                 {
                                     playerDañoData.nivelJugador++;
                                     playerDañoData.experienciaActualJugador -= playerDañoData.experienciaParaProximoNivel;
-                                    //playerDañoData.dañoBalaJugador += 5f;
-                                    //disparoData.velocidadJugador += 2f;
-
-                                    // Para pruebas 1.2 o asi, oficial = 2.3f
                                     playerDañoData.experienciaParaProximoNivel *= 1.2f;
-                                    
-
                                 }
 
-                                // Me faltaba cambiar los valores creo, asi si hacia falta 
+                                // Me faltaba cambiar los valores creo, si, si hacia falta 
                                 entityManager.SetComponentData(playerEntity, playerDañoData);
                                 entityManager.SetComponentData(playerEntity, disparoData);
+
+                                // Destruir la bala actual
+                                entityManager.DestroyEntity(bala);
+                                break;
+                            }
+                            // Recibir daño de forma normal
+                            else
+                            {
+                                enemigosPropiedades.vidaEnemigos -= dañoRestante;
+                                entityManager.SetComponentData(entidadColisionada, enemigosPropiedades);
+
+                                // La bala continúa, no la destruimos
+                                break;
                             }
                         }
                     }
-                    
-                    entityManager.DestroyEntity(ent);
-
                 }
 
                 colliderCastHits.Dispose();
             }
         }
-    }
 
-    
+        entidadesBalas.Dispose();
+    }
 }

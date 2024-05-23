@@ -37,10 +37,12 @@ public partial struct EnemigosMoverseSystem : ISystem
                 // Mover enemigos hacia el jugador 
                 float3 direccionAlJugador = math.normalize(playerTransform.Position - enemigosTransform.Position);
 
-                // Subio de nivel el jugador, los enemigos son mas rapidos
+                // Subio de nivel el jugador, los enemigos son mas rapidos y tienen mas vida
                 if (playerDamage.nivelJugador == playerDamage.nivelSiguiente)
                 {
-                    enemigosPropiedades.velocidadEnemigos += 1f;
+                    enemigosPropiedades.velocidadEnemigos += 0.33f;
+                    enemigosPropiedades.vidaEnemigos += 5f;
+                    entityManager.SetComponentData(ent, enemigosPropiedades);
                 }
 
                 // Reducir velocidad si el enemigo está demasiado cerca del jugador (Asi hacer mas facil esquivarlos cerca del jugador) :D
@@ -64,6 +66,7 @@ public partial struct EnemigosMoverseSystem : ISystem
                 enemigosTransform.Rotation = quaternion.Euler(0, direccion, anguloAndar);
 
                 entityManager.SetComponentData(ent, enemigosTransform);
+                // Faltaba esto para lo de mas velocidad
             }
         }
         entidades.Dispose();

@@ -312,24 +312,24 @@ public class PlayerInterfaz : MonoBehaviour
                 // Se inicializa el valor en DisparoMono
                 case 1:
                     // Empieza con 8
-                    disparoData.incrementoVelocidad += 1f;
+                    disparoData.incrementoVelocidad += 1.5f;
                     HideLevelUpMenu();
                     break;
                 case 2:
                     // Dispara 10 balas al empezar 10*2 = 20 daño
-                    playerDamage.dañoBalaJugador += 1f;
+                    playerDamage.dañoBalaJugador += 2f;
                     HideLevelUpMenu();
                     break;
                 case 3:
                     // Empieza en 100
-                    float vidaMaxima = playerDamage.vidaJugador + 10;
-                    playerDamage.vidaJugador += 10;
+                    float vidaMaxima = playerDamage.vidaJugador + 20;
+                    playerDamage.vidaJugador += 20;
                     SetMaximaBarraVida(vidaMaxima);
                     HideLevelUpMenu();
                     break;
                 case 4:
                     // Empieza en 0.2f
-                    disparoData.balasSpread += 0.1f;
+                    disparoData.balasSpread += 0.15f;
                     HideLevelUpMenu();
                     break;
                 case 5:

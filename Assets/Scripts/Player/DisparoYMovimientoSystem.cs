@@ -151,7 +151,7 @@ public partial struct DisparoYMovimientoSystem : ISystem
                 entityManager.AddComponentData(bulletEntity, new BalasData
                 {
                     velocidadBala = 30f,
-                    dañoBala = 5f
+                    dañoBala = 2f
                 });
 
                 entityManager.AddComponentData(bulletEntity, new BalasTiempoMono

@@ -27,11 +27,6 @@ public partial struct DisparoYMovimientoSystem : ISystem
     private float3 limiteMin;
     private float3 limiteMax;
 
-    // Variables para dar efecto de Bob / Weapon Bobbing al arma del jugador
-    private float bobFrecuencia; 
-    private float bobAmplitud; 
-    private float bobbingTiempo;  
-
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
@@ -63,10 +58,6 @@ public partial struct DisparoYMovimientoSystem : ISystem
 
         sensibilityX = 10f;
         sensibilityY = 4f;
-
-        bobFrecuencia = 10f;
-        bobAmplitud = 2f;
-        bobbingTiempo += SystemAPI.Time.DeltaTime;
 
         float mouseX = Input.GetAxisRaw("Mouse X") * SystemAPI.Time.DeltaTime * sensibilityX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * SystemAPI.Time.DeltaTime * sensibilityY;
@@ -146,20 +137,22 @@ public partial struct DisparoYMovimientoSystem : ISystem
         // Verificar si es tiempo de disparar
         if (inputComponent.disparoIniciar && playerComponent.temporizadorDisparo <= 0f)
         {
+            // Crear un NativeArray para las balas
+            var balasEntities = new NativeArray<Entity>(playerComponent.numeroBalasPorDisparo, Allocator.Temp);
+            entityManager.Instantiate(playerComponent.balaPrefab, balasEntities);
+
             for (int i = 0; i < playerComponent.numeroBalasPorDisparo; i++)
             {
-                EntityCommandBuffer entityCommandBuffer = new EntityCommandBuffer(Allocator.Temp);
-
-                Entity bulletEntity = entityManager.Instantiate(playerComponent.balaPrefab);
+                Entity bulletEntity = balasEntities[i];
 
                 // Inicializar BalasData y BalasTiempoMono
-                entityCommandBuffer.AddComponent(bulletEntity, new BalasData
+                entityManager.AddComponentData(bulletEntity, new BalasData
                 {
                     velocidadBala = 30f,
                     dañoBala = 5f
                 });
 
-                entityCommandBuffer.AddComponent(bulletEntity, new BalasTiempoMono
+                entityManager.AddComponentData(bulletEntity, new BalasTiempoMono
                 {
                     balasTiempoDesaparicion = 1.8f
                 });
@@ -182,10 +175,11 @@ public partial struct DisparoYMovimientoSystem : ISystem
                 // Sumar el desplazamiento al punto de disparo para dispersar las balas
                 balasTransform.Position += math.mul(playerTransform.Rotation, offset);
 
-                entityCommandBuffer.SetComponent(bulletEntity, balasTransform);
-
-                entityCommandBuffer.Playback(entityManager);
+                entityManager.SetComponentData(bulletEntity, balasTransform);
             }
+
+            // Liberar el NativeArray
+            balasEntities.Dispose();
 
             // Sonido de Disaparo
             GameManager.Instance.PlayDisparoSonido();

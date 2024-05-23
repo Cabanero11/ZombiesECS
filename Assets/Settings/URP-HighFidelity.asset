@@ -17,7 +17,7 @@ MonoBehaviour:
   m_RendererType: 1
   m_RendererData: {fileID: 0}
   m_RendererDataList:
-  - {fileID: 11400000, guid: c40be3174f62c4acf8c1216858c64956, type: 2}
+  - {fileID: 11400000, guid: 18fb9d36340517b41bd8e4fb8ee0d277, type: 2}
   m_DefaultRendererIndex: 0
   m_RequireDepthTexture: 0
   m_RequireOpaqueTexture: 0
@@ -95,11 +95,11 @@ MonoBehaviour:
   m_PrefilterSSAOSourceDepthLow: 1
   m_PrefilterSSAOSourceDepthMedium: 1
   m_PrefilterSSAOSourceDepthHigh: 1
-  m_PrefilterSSAOInterleaved: 0
-  m_PrefilterSSAOBlueNoise: 1
+  m_PrefilterSSAOInterleaved: 1
+  m_PrefilterSSAOBlueNoise: 0
   m_PrefilterSSAOSampleCountLow: 1
-  m_PrefilterSSAOSampleCountMedium: 1
-  m_PrefilterSSAOSampleCountHigh: 0
+  m_PrefilterSSAOSampleCountMedium: 0
+  m_PrefilterSSAOSampleCountHigh: 1
   m_PrefilterDBufferMRT1: 1
   m_PrefilterDBufferMRT2: 1
   m_PrefilterDBufferMRT3: 1

@@ -9,7 +9,6 @@ using Zombies;
 using Unity.Collections;
 using UnityEngine.EventSystems;
 
-
 [BurstCompile]
 public partial struct DisparoYMovimientoSystem : ISystem
 {
@@ -28,32 +27,35 @@ public partial struct DisparoYMovimientoSystem : ISystem
     private float3 limiteMin;
     private float3 limiteMax;
 
+    // Variables para dar efecto de Bob / Weapon Bobbing al arma del jugador
+    private float bobFrecuencia; 
+    private float bobAmplitud; 
+    private float bobbingTiempo;  
+
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
         // Inicializar los límites del mapa
-        limiteMin = new float3(-75f, 0f, -75f); 
-        limiteMax = new float3(75f, 0f, 75f);    
+        limiteMin = new float3(-75f, 0f, -75f);
+        limiteMax = new float3(75f, 0f, 75f);
     }
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        //references
+        // Referencias
         entityManager = state.EntityManager;
         playerEntity = SystemAPI.GetSingletonEntity<DisparoData>();
         inputEntity = SystemAPI.GetSingletonEntity<InputMono>();
 
-        //components
+        // Componentes
         playerComponent = entityManager.GetComponentData<DisparoData>(playerEntity);
         inputComponent = entityManager.GetComponentData<InputMono>(inputEntity);
-
 
         Move(ref state);
         Disparar(ref state);
     }
 
- 
     private void Move(ref SystemState state)
     {
         // Obtener el transform del jugador
@@ -61,6 +63,10 @@ public partial struct DisparoYMovimientoSystem : ISystem
 
         sensibilityX = 10f;
         sensibilityY = 4f;
+
+        bobFrecuencia = 10f;
+        bobAmplitud = 2f;
+        bobbingTiempo += SystemAPI.Time.DeltaTime;
 
         float mouseX = Input.GetAxisRaw("Mouse X") * SystemAPI.Time.DeltaTime * sensibilityX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * SystemAPI.Time.DeltaTime * sensibilityY;
@@ -74,9 +80,20 @@ public partial struct DisparoYMovimientoSystem : ISystem
         // Obtener la entrada del teclado para movimiento
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         float verticalInput = Input.GetAxisRaw("Vertical");
+        float strafeInput = 0f;
+
+        // Detectar input para strafe (movimiento lateral)
+        if (Input.GetKey(KeyCode.Q))
+        {
+            strafeInput = -1f;
+        }
+        else if (Input.GetKey(KeyCode.E))
+        {
+            strafeInput = 1f;
+        }
 
         // Calcular la dirección de movimiento utilizando los ejes Right y Forward del transform del jugador
-        float3 moveDirection = math.mul(quaternion.Euler(0, yRotation, 0), new float3(horizontalInput, 0, verticalInput));
+        float3 moveDirection = math.mul(quaternion.Euler(0, yRotation, 0), new float3(horizontalInput + strafeInput, 0, verticalInput));
 
         // Verificar si la dirección de movimiento es un vector válido
         if (math.lengthsq(moveDirection) > 0f)
@@ -85,16 +102,13 @@ public partial struct DisparoYMovimientoSystem : ISystem
             moveDirection = math.normalize(moveDirection);
         }
 
-        // Calcular el desplazamiento basado en la dirección de movimiento y la velocidad
         // Detectar si la tecla LeftShift está siendo presionada
         bool isSprinting = Input.GetKey(KeyCode.LeftShift);
 
         // Ajustar la velocidad de movimiento
         float currentSpeed = isSprinting ? playerComponent.velocidadJugador + playerComponent.incrementoVelocidad + 7f : playerComponent.velocidadJugador + playerComponent.incrementoVelocidad;
-        //PlayerDañoData playerDañoData = entityManager.GetComponentData<PlayerDañoData>(playerEntity);
-        //playerDañoData.velocidadJugador = isSprinting ? 25f : 15f;
 
-
+        // Calcular el desplazamiento basado en la dirección de movimiento y la velocidad
         float3 nuevoMovimiento = moveDirection * currentSpeed * SystemAPI.Time.DeltaTime;
         float3 nuevaPosicion = playerTransform.Position + nuevoMovimiento;
 
@@ -114,15 +128,13 @@ public partial struct DisparoYMovimientoSystem : ISystem
 
         // Actualizar la posición y rotación de la cámara
         CameraSingleton cameraSingleton = CameraSingleton.Instance;
+
         if (cameraSingleton != null)
         {
-            // La cámara sigue exactamente la posición y rotación del jugador
+            // La cámara sigue la posición y rotación del jugador, añadiendo el efecto de bobbing
             cameraSingleton.transform.position = playerTransform.Position;
             cameraSingleton.transform.rotation = quaternion.Euler(xRotation, yRotation, 0);
         }
-            
-
-
     }
 
     [BurstCompile]
@@ -185,7 +197,6 @@ public partial struct DisparoYMovimientoSystem : ISystem
         // Guardar los cambios en el componente
         entityManager.SetComponentData(playerEntity, playerComponent);
     }
-
 
     // Comprueba los limites del mapa en un Cuadrado (lo que quiero)
     private readonly float3 ComprobarLimitesMapa(float3 posicion)

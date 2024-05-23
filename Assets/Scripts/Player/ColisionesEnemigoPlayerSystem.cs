@@ -38,8 +38,6 @@ public partial struct ColisionesEnemigoPlayerSystem : ISystem
                     playerDamage.vidaJugador -= playerDamage.dañoAlJugador;
                     entityManager.SetComponentData(playerEntity, playerDamage);
 
-                    // Sonido de recibirDaño
-                    GameManager.Instance.PlayRecibiDañoJugador();
 
                     // Si la vida es menor que 0 se muere el jugador :(
                     if (playerDamage.vidaJugador <= 0)

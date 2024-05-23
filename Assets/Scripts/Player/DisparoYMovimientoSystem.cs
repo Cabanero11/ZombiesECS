@@ -117,6 +117,7 @@ public partial struct DisparoYMovimientoSystem : ISystem
         // Me faltaba poner el set DisparoData
         entityManager.SetComponentData(playerEntity, playerComponent);
 
+        /**
         // Actualizar la posición y rotación de la cámara
         CameraSingleton cameraSingleton = CameraSingleton.Instance;
 
@@ -126,6 +127,7 @@ public partial struct DisparoYMovimientoSystem : ISystem
             cameraSingleton.transform.position = playerTransform.Position;
             cameraSingleton.transform.rotation = quaternion.Euler(xRotation, yRotation, 0);
         }
+        */
     }
 
     [BurstCompile]

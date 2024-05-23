@@ -167,6 +167,14 @@ public class PlayerInterfaz : MonoBehaviour
         {
             GameOverScreen();
         }
+
+        float vidaAnterior = playerDamage.vidaJugador;
+
+        // Si su vida actual es menor que la anterior, es que recibio daño
+        if(playerDamage.vidaJugador < vidaAnterior)
+        {
+            GameManager.Instance.PlayRecibiDañoJugador();
+        }
     }
 
     // Activar el menu de GameOver, pausar el juego y poner valor de puntuacion :D

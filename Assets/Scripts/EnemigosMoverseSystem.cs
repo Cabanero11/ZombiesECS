@@ -22,11 +22,6 @@ public partial struct EnemigosMoverseSystem : ISystem
 
         LocalTransform playerTransform = entityManager.GetComponentData<LocalTransform>(playerEntity);
 
-        // Obtener todos los drops de vida
-        var dropsVidaQuery = entityManager.CreateEntityQuery(ComponentType.ReadOnly<DropVidaPropiedades>(), ComponentType.ReadWrite<LocalTransform>());
-        NativeArray<Entity> dropsVida = dropsVidaQuery.ToEntityArray(Allocator.Temp);
-        NativeArray<LocalTransform> dropsVidaTransforms = dropsVidaQuery.ToComponentDataArray<LocalTransform>(Allocator.Temp);
-
         PlayerDañoData playerDamage = entityManager.GetComponentData<PlayerDañoData>(playerEntity);
 
         // Forma xd de hacerlo pero weno, itero sobre cada entidad, y miro cuales son Enemigos
@@ -71,22 +66,6 @@ public partial struct EnemigosMoverseSystem : ISystem
                 entityManager.SetComponentData(ent, enemigosTransform);
             }
         }
-
-        // Rotar todos los DropsDeVida
-        for (int i = 0; i < dropsVida.Length; i++)
-        {
-            LocalTransform dropVidaTransform = dropsVidaTransforms[i];
-
-            // Actualizar la rotación de forma acumulativa
-            dropVidaTransform.Rotation = math.mul(dropVidaTransform.Rotation, quaternion.RotateY(1f * SystemAPI.Time.DeltaTime));
-
-            // Aplicar el cambio al EntityManager
-            entityManager.SetComponentData(dropsVida[i], dropVidaTransform);
-        }
-
-        // Borramos los NativeArrays para liberar memoria
-        dropsVida.Dispose();
-        dropsVidaTransforms.Dispose();
         entidades.Dispose();
     }
 

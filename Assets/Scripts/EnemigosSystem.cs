@@ -14,10 +14,8 @@ public partial struct EnemigoSystem : ISystem
     private EntityManager entityManager;
     private Entity playerEntity;
     private Entity enemigoSpawner;
-    private Entity dropVidaEntidad;
 
     private EnemigosData enemigosData;
-    private DropVidaData dropVidaData;
 
     // Variable Random
     private Unity.Mathematics.Random numeroRandom;
@@ -36,9 +34,6 @@ public partial struct EnemigoSystem : ISystem
         entityManager = state.EntityManager;
         enemigoSpawner = SystemAPI.GetSingletonEntity<EnemigosData>();
         enemigosData = entityManager.GetComponentData<EnemigosData>(enemigoSpawner);
-
-        dropVidaEntidad = SystemAPI.GetSingletonEntity<DropVidaData>();
-        dropVidaData = entityManager.GetComponentData<DropVidaData>(dropVidaEntidad);
 
         playerEntity = SystemAPI.GetSingletonEntity<DisparoData>();
 
@@ -98,28 +93,6 @@ public partial struct EnemigoSystem : ISystem
                     factorReduccionVelocidad = 0.35f
                 });
 
-                // SPAWNEAR UN DROP DE VIDA POR OLEADA, a la mitad de esta
-                if (i == enemigosData.numeroDeEnemigosSpawneadosPorSegundo - 40)
-                {
-                    // Creamos Drop
-                    Entity dropEntidad = entityManager.Instantiate(dropVidaData.dropVida);
-
-                    Debug.Log("Spawneo drop :D");
-                    LocalTransform dropTransform = entityManager.GetComponentData<LocalTransform>(dropEntidad);
-
-                    // Asignar la posición, rotación y escala del dropTransform
-                    dropTransform.Position = new float3(enemigoTransform.Position.x, 1.5f, enemigoTransform.Position.z);
-                    dropTransform.Rotation = quaternion.RotateY(GetRotationEnemigos(dropTransform.Position, playerPosition));
-                    dropTransform.Scale = 1.3f;
-
-                    // Aplicar los cambios al entityCommandBuffer
-                    entityCommandBuffer.SetComponent(dropEntidad, dropTransform);
-
-                    entityCommandBuffer.AddComponent(dropEntidad, new DropVidaPropiedades
-                    {
-                        vidaRecuperada = 25f
-                    });
-                }
 
                 // Realizar todos los cambios que hacemos
                 entityCommandBuffer.Playback(entityManager);
@@ -141,7 +114,6 @@ public partial struct EnemigoSystem : ISystem
         }
 
         entityManager.SetComponentData(enemigoSpawner, enemigosData);
-        entityManager.SetComponentData(dropVidaEntidad, dropVidaData);
     }
 
     // Obtener la rotacion para el Zombie que apunte al jugador

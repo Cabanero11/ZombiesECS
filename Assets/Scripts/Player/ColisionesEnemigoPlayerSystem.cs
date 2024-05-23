@@ -1,4 +1,4 @@
-using Unity.Burst;
+ï»¿using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Transforms;
@@ -17,76 +17,50 @@ public partial struct ColisionesEnemigoPlayerSystem : ISystem
         // Obtener el jugador
         Entity playerEntity = SystemAPI.GetSingletonEntity<DisparoData>();
         LocalTransform playerTransform = entityManager.GetComponentData<LocalTransform>(playerEntity);
-        PlayerDañoData playerDamage = entityManager.GetComponentData<PlayerDañoData>(playerEntity);
+        PlayerDaÃ±oData playerDamage = entityManager.GetComponentData<PlayerDaÃ±oData>(playerEntity);
 
         float distanciaDeColision = 1.0f;
-        float distanciaDeColisionDropVida = 2.0f;
 
         // Obtener todos los enemigos
-        var enemigosQuery = entityManager.CreateEntityQuery(ComponentType.ReadOnly<EnemigosPropiedades>(), ComponentType.ReadOnly<LocalTransform>());
-        NativeArray<Entity> enemigos = enemigosQuery.ToEntityArray(Allocator.Temp);
-        NativeArray<LocalTransform> enemigosTransforms = enemigosQuery.ToComponentDataArray<LocalTransform>(Allocator.Temp);
+        NativeArray<Entity> enemigos = entityManager.GetAllEntities(Allocator.Temp);
 
-        // Obtener todos los drops de vida
-        var dropsVidaQuery = entityManager.CreateEntityQuery(ComponentType.ReadOnly<DropVidaPropiedades>(), ComponentType.ReadOnly<LocalTransform>());
-        NativeArray<Entity> dropsVida = dropsVidaQuery.ToEntityArray(Allocator.Temp);
-        NativeArray<LocalTransform> dropsVidaTransforms = dropsVidaQuery.ToComponentDataArray<LocalTransform>(Allocator.Temp);
-        NativeArray<DropVidaPropiedades> dropsVidaPropiedadesArray = dropsVidaQuery.ToComponentDataArray<DropVidaPropiedades>(Allocator.Temp);
-
-        // Detectar colisiones con enemigos
-        for (int i = 0; i < enemigos.Length; i++)
+        foreach (var enemigoEntity in enemigos)
         {
-            LocalTransform enemigoTransform = enemigosTransforms[i];
-
-            // Comprobar colisión simple (puedes mejorar esto con una detección de colisión más precisa)
-            if (math.distance(enemigoTransform.Position, playerTransform.Position) < distanciaDeColision)
+            // Colisiones de enemigos con el Jugador
+            if (entityManager.HasComponent<EnemigosPropiedades>(enemigoEntity))
             {
-                // Aplica daño al jugador
-                playerDamage.vidaJugador -= playerDamage.dañoAlJugador;
-                entityManager.SetComponentData(playerEntity, playerDamage);
+                LocalTransform enemigoTransform = entityManager.GetComponentData<LocalTransform>(enemigoEntity);
 
-                // Sonido de recibirDaño
-                GameManager.Instance.PlayRecibiDañoJugador();
-
-                // Si la vida es menor que 0 se muere el jugador :(
-                if (playerDamage.vidaJugador <= 0)
+                // Comprobar colisiÃ³n simple (puedes mejorar esto con una detecciï¿½n de colisiÃ³n mÃ¡s precisa)
+                if (math.distance(enemigoTransform.Position, playerTransform.Position) < distanciaDeColision)
                 {
-                    playerDamage.jugadorMuerto = true;
+                    // Aplica daï¿½o al jugador
+                    playerDamage.vidaJugador -= playerDamage.daÃ±oAlJugador;
+                    entityManager.SetComponentData(playerEntity, playerDamage);
+
+                    // Sonido de recibirDaÃ±o
+                    GameManager.Instance.PlayRecibiDaÃ±oJugador();
+
+                    // Si la vida es menor que 0 se muere el jugador :(
+                    if (playerDamage.vidaJugador <= 0)
+                    {
+                        //entityManager.DestroyEntity(playerEntity);
+                        playerDamage.jugadorMuerto = true;
+                    }
+
+                    // NO SE SI DESTRUIR ESE ZOMBIE
+                    // SI HAY MUCHOS Y SE COMPLICA ESTARIA BIEN JHUM
+                    entityManager.DestroyEntity(enemigoEntity);
+
+                    // Actualizar datos del jugador
+                    entityManager.SetComponentData(playerEntity, playerDamage);
                 }
-
-                // Destruir el enemigo
-                entityManager.DestroyEntity(enemigos[i]);
             }
+            
         }
-
-        // Detectar colisiones con drops de vida
-        for (int i = 0; i < dropsVida.Length; i++)
-        {
-            LocalTransform dropVidaTransform = dropsVidaTransforms[i];
-
-            // Comprobar colisión simple (puedes mejorar esto con una detección de colisión más precisa)
-            if (math.distance(dropVidaTransform.Position, playerTransform.Position) < distanciaDeColisionDropVida)
-            {
-                // Recuperar vida del jugador
-                playerDamage.vidaJugador += dropsVidaPropiedadesArray[i].vidaRecuperada;
-                entityManager.SetComponentData(playerEntity, playerDamage);
-
-                // Sonido de recibir vida
-                GameManager.Instance.PlayRecuperarVida();
-
-                // Destruir el drop de vida
-                entityManager.DestroyEntity(dropsVida[i]);
-            }
-        }
-
-        // Actualizar datos del jugador
-        entityManager.SetComponentData(playerEntity, playerDamage);
+        
 
         // Liberar arrays nativos
         enemigos.Dispose();
-        enemigosTransforms.Dispose();
-        dropsVida.Dispose();
-        dropsVidaTransforms.Dispose();
-        dropsVidaPropiedadesArray.Dispose();
     }
 }

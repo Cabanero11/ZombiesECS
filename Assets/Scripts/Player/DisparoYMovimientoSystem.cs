@@ -179,6 +179,7 @@ public partial struct DisparoYMovimientoSystem : ISystem
             }
 
             // Liberar el NativeArray
+            // Liberar el NativeArray
             balasEntities.Dispose();
 
             // Sonido de Disaparo

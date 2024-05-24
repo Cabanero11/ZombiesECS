@@ -9,12 +9,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.SceneManagement;
 using Unity.Scenes;
+using Unity.Physics;
 
 public class PlayerInterfaz : MonoBehaviour
 {
     [Header("Menus")]
     public TextMeshProUGUI nivelTexto;
     public TextMeshProUGUI puntuacionTexto;
+    public TextMeshProUGUI FPStexto;
+    private float deltaTime;
     public GameObject levelUpMenu;      // Referencia al submenú de elección de mejora
     public GameObject gameOverMenu;     // Referencia al submenú de GameOver
     public Button option1Button;
@@ -101,6 +104,15 @@ public class PlayerInterfaz : MonoBehaviour
 
     private void Update()
     {
+        // Calcular el tiempo entre frames para mostrar los FPS luego
+        deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f;
+
+        float fps = (1.0f / deltaTime);
+
+        // Muestra los FPS en el componente Text
+        FPStexto.text = string.Format("FPS: {0:0.} ", Mathf.Ceil(fps));
+        //FPStexto.text = Mathf.Ceil(fps).ToString()
+
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
         if (entityManager == null || playerEntity == Entity.Null)

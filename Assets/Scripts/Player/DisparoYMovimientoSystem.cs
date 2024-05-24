@@ -185,7 +185,7 @@ public partial struct DisparoYMovimientoSystem : ISystem
             balasEntities.Dispose();
 
             // Sonido de Disaparo
-            GameManager.Instance.PlayDisparoSonido();
+            //GameManager.Instance.PlayDisparoSonido();
 
             // Reiniciar el temporizador de disparo
             playerComponent.temporizadorDisparo = playerComponent.cooldownDisparo;

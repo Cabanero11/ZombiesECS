@@ -20,6 +20,7 @@ public class PlayerInterfaz : MonoBehaviour
     public Button option1Button;
     public Button option2Button;
     public Button option3Button;
+    private bool estaEnUnMenu = false;
 
     private EntityManager entityManager;
     private Entity playerEntity;
@@ -36,6 +37,17 @@ public class PlayerInterfaz : MonoBehaviour
 
     private List<Mejora> mejorasPersonaje;
 
+    // Los usare aqui por usar GameManager.Instance.PlaySonido(), es llamar a una funcion
+    // estatica en Burst y eso no es correcto
+    [Header("Sonidos")]
+    public AudioClip disparoSonido;
+    public AudioSource audioSource;
+    private AudioSource currentSoundSource; // Almacena la referencia al audioSource del sonido actualmente en reproducción
+    private float temporizadorDisparo = 0f;
+
+
+
+
     private void Start()
     {
         // Definimos las mejoras del personaje
@@ -49,7 +61,6 @@ public class PlayerInterfaz : MonoBehaviour
             new Mejora(7, "Reducir daño recibido", 0.10f),      // 10%
             new Mejora(8, "Cadencia Disparo", 0.10f)            // 10%
         };
-
 
         StartCoroutine(InitializeAfterDelay());
     }
@@ -87,34 +98,6 @@ public class PlayerInterfaz : MonoBehaviour
         SetMaximaBarraVida(playerDamage.vidaJugador);
     }
 
-    public void SetBarraVida(float vidaPersonaje)
-    {
-        slider.value = vidaPersonaje;
-
-        // Para coger el valor del slider, y segun este cambiar su color
-        fill.color = colorBarraVida.Evaluate(slider.normalizedValue);
-    }
-
-
-    public void SetMaximaBarraVida(float vidaPersonaje)
-    {
-        slider.maxValue = vidaPersonaje;
-        //slider.value = vidaPersonaje;
-
-        fill.color = colorBarraVida.Evaluate(1f);
-    }
-    public void SetBarraExperiencia(float experienciaActual)
-    {
-        sliderEXP.value = experienciaActual;
-    }
-
-    public void SetBarraExperienciaMaxima(float experienciaMaxima)
-    {
-        sliderEXP.maxValue = experienciaMaxima;
-    }
-
-
-
 
     private void Update()
     {
@@ -133,6 +116,9 @@ public class PlayerInterfaz : MonoBehaviour
         }
 
         PlayerDañoData playerDamage = entityManager.GetComponentData<PlayerDañoData>(playerEntity);
+        DisparoData disparoData = entityManager.GetComponentData<DisparoData>(playerEntity);
+
+
 
         if (playerDamage.Equals(default(PlayerDañoData)))
         {
@@ -163,7 +149,7 @@ public class PlayerInterfaz : MonoBehaviour
         SetBarraExperiencia(playerDamage.experienciaActualJugador);
         SetBarraExperienciaMaxima(playerDamage.experienciaParaProximoNivel);
 
-        if(playerDamage.vidaJugador <= 0)
+        if (playerDamage.vidaJugador <= 0)
         {
             GameOverScreen();
         }
@@ -171,15 +157,69 @@ public class PlayerInterfaz : MonoBehaviour
         float vidaAnterior = playerDamage.vidaJugador;
 
         // Si su vida actual es menor que la anterior, es que recibio daño
-        if(playerDamage.vidaJugador < vidaAnterior)
+        if (playerDamage.vidaJugador < vidaAnterior)
         {
             GameManager.Instance.PlayRecibiDañoJugador();
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            // Menu de pausa
+            estaEnUnMenu = true;
+        }
+
+
+        temporizadorDisparo -= Time.deltaTime;
+
+        if (Input.GetMouseButton(0) && !estaEnUnMenu)
+        {
+            if (temporizadorDisparo <= 0f)
+            {
+                PlayDisparoSonido();
+                temporizadorDisparo = disparoData.temporizadorDisparo;
+            }
+        }
+        else
+        {
+            temporizadorDisparo = 0f; // Reiniciar el temporizador cuando se suelta el botón o está en un menú
+        }
     }
 
+
+    public void SetBarraVida(float vidaPersonaje)
+    {
+        slider.value = vidaPersonaje;
+
+        // Para coger el valor del slider, y segun este cambiar su color
+        fill.color = colorBarraVida.Evaluate(slider.normalizedValue);
+    }
+
+
+    public void SetMaximaBarraVida(float vidaPersonaje)
+    {
+        slider.maxValue = vidaPersonaje;
+        //slider.value = vidaPersonaje;
+
+        fill.color = colorBarraVida.Evaluate(1f);
+    }
+    public void SetBarraExperiencia(float experienciaActual)
+    {
+        sliderEXP.value = experienciaActual;
+    }
+
+    public void SetBarraExperienciaMaxima(float experienciaMaxima)
+    {
+        sliderEXP.maxValue = experienciaMaxima;
+    }
+
+
+
+
+    
     // Activar el menu de GameOver, pausar el juego y poner valor de puntuacion :D
     public void GameOverScreen()
     {
+        estaEnUnMenu = true;
         gameOverMenu.SetActive(true);
         levelUpMenu.SetActive(false);
 
@@ -196,17 +236,19 @@ public class PlayerInterfaz : MonoBehaviour
         // Cargar una escena igual a esta y ir alternando para que asi se vuelvan a cargar todos los sistemas 
         // En mi mente tenia sentido
         Time.timeScale = 1f;
-        GameManager.Instance.AlternarEntre2Escenas();
+        SceneManager.LoadScene("ZombiesMain");
     }
 
     public void VolverAlMenu()
     {
+        estaEnUnMenu = false;
         SceneManager.LoadScene("Menu");
     }
 
 
     public void ShowLevelUpMenu()
     {
+        estaEnUnMenu = true;
         levelUpMenu.SetActive(true);
         Time.timeScale = 0f; // Pausar el juego
         Cursor.lockState = CursorLockMode.None;
@@ -219,6 +261,7 @@ public class PlayerInterfaz : MonoBehaviour
 
     public void HideLevelUpMenu()
     {
+        estaEnUnMenu = false;
         levelUpMenu.SetActive(false);
         Debug.Log("HideLevel");
         Time.timeScale = 1f; // Reanudar el juego
@@ -376,9 +419,42 @@ public class PlayerInterfaz : MonoBehaviour
         
     }
 
+    public void PlayDisparoSonido()
+    {
+        PlaySoundPitcheado(disparoSonido, 0.1f, 0.4f, 1.2f);
+    }
+
+    // Parar un sonido de PlaySound() o PlaySoundPitcheado()
+    public void StopCurrentSoundClip()
+    {
+        if (currentSoundSource != null)
+        {
+            currentSoundSource.Stop();
+            currentSoundSource = null; // Limpia la referencia al AudioSource del sonido actual
+        }
+    }
+
+    // Playear un sonido, con un pitch entre un rango, para variar el sonido cada vez :O
+    // tipo -> PlaySoundPitcheado(deathSound, 1f, 0.8f, 1.2f);
+    public void PlaySoundPitcheado(AudioClip sound, float volume, float pitchMin, float pitchMax)
+    {
+        if (sound != null)
+        {
+            StopCurrentSoundClip(); // Detiene el sonido actual antes de reproducir uno nuevo
+
+            audioSource.clip = sound;
+
+            float pitch = Random.Range(pitchMin, pitchMax);
+            audioSource.pitch = pitch;
+            audioSource.volume = volume;
+
+            audioSource.Play();
+
+            currentSoundSource = audioSource; // Almacena la referencia al AudioSource del sonido actual
+        }
+    }
 
 
-   
 }
 
 public class Mejora

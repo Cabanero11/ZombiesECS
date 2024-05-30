@@ -1,83 +1,86 @@
-using Unity.Transforms;
-using Unity.Mathematics;
-using UnityEngine;
 using Unity.Burst;
-using Zombies;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
+using Unity.Transforms;
+using Zombies;
 
-[BurstCompile]
-public partial struct EnemigosMoverseSystem : ISystem
+public partial class EnemigosMoverseSystem : SystemBase
 {
-    private EntityManager entityManager;
-    private Entity playerEntity;
+    private EntityQuery playerQuery;
 
-    [BurstCompile]
-    public void OnUpdate(ref SystemState state)
+    protected override void OnCreate()
     {
-        // Referencias
-        entityManager = state.EntityManager;
-
-        playerEntity = SystemAPI.GetSingletonEntity<DisparoData>();
-
-        LocalTransform playerTransform = entityManager.GetComponentData<LocalTransform>(playerEntity);
-
-        PlayerDañoData playerDamage = entityManager.GetComponentData<PlayerDañoData>(playerEntity);
-
-        // Forma xd de hacerlo pero weno, itero sobre cada entidad, y miro cuales son Enemigos
-        NativeArray<Entity> entidades = entityManager.GetAllEntities(Allocator.Temp);
-
-        foreach (Entity ent in entidades)
-        {
-            if (entityManager.HasComponent<EnemigosPropiedades>(ent))
-            {
-                LocalTransform enemigosTransform = entityManager.GetComponentData<LocalTransform>(ent);
-                EnemigosPropiedades enemigosPropiedades = entityManager.GetComponentData<EnemigosPropiedades>(ent);
-
-                // Mover enemigos hacia el jugador 
-                float3 direccionAlJugador = math.normalize(playerTransform.Position - enemigosTransform.Position);
-
-                // Subio de nivel el jugador, los enemigos son mas rapidos y tienen mas vida
-                if (playerDamage.nivelJugador == playerDamage.nivelSiguiente)
-                {
-                    enemigosPropiedades.velocidadEnemigos += 0.33f;
-                    enemigosPropiedades.vidaEnemigos += 5f;
-                    entityManager.SetComponentData(ent, enemigosPropiedades);
-                }
-
-                // Reducir velocidad si el enemigo está demasiado cerca del jugador (Asi hacer mas facil esquivarlos cerca del jugador) :D
-                float distanciaAlJugador = math.distance(playerTransform.Position, enemigosTransform.Position);
-
-                if (distanciaAlJugador < enemigosPropiedades.radioReducirVelocidad)
-                {
-                    enemigosPropiedades.velocidadEnemigos *= enemigosPropiedades.factorReduccionVelocidad;
-                }
-
-                enemigosTransform.Position.x += enemigosPropiedades.velocidadEnemigos * SystemAPI.Time.DeltaTime * direccionAlJugador.x;
-                enemigosTransform.Position.y = 0.80f;  // Sino se quedan debajo del suelo xd
-                enemigosTransform.Position.z += enemigosPropiedades.velocidadEnemigos * SystemAPI.Time.DeltaTime * direccionAlJugador.z;
-
-                float direccion = GetRotationEnemigos(enemigosTransform.Position, playerTransform.Position);
-
-                // Animación de lado a lado
-                float tiempoActual = (float)SystemAPI.Time.ElapsedTime;
-                float anguloAndar = 0.1f * math.sin(5f * tiempoActual);
-
-                enemigosTransform.Rotation = quaternion.Euler(0, direccion, anguloAndar);
-
-                entityManager.SetComponentData(ent, enemigosTransform);
-                // Faltaba esto para lo de mas velocidad
-            }
-        }
-        entidades.Dispose();
+        playerQuery = GetEntityQuery(ComponentType.ReadOnly<DisparoData>());
     }
 
-    // Obtener la rotacion para el Zombie que apunte al jugador
-    public static float GetRotationEnemigos(float3 enemigoPosition, float3 jugadorPosition)
+    [BurstCompile]
+    protected override void OnUpdate()
     {
-        var x = enemigoPosition.x - jugadorPosition.x;
-        var y = enemigoPosition.z - jugadorPosition.z;
+        // Obtener el jugador
+        var playerEntity = playerQuery.GetSingletonEntity();
+        var playerTransform = SystemAPI.GetComponent<LocalTransform>(playerEntity);
+        var playerDamage = SystemAPI.GetComponent<PlayerDañoData>(playerEntity);
 
-        return math.atan2(x, y) + math.PI;
+        // Configuración del job
+        var job = new MoverEnemigosJob
+        {
+            DeltaTime = SystemAPI.Time.DeltaTime,
+            ElapsedTime = (float)SystemAPI.Time.ElapsedTime,
+            PlayerPosition = playerTransform.Position,
+            NivelJugador = playerDamage.nivelJugador,
+            NivelSiguiente = playerDamage.nivelSiguiente
+        };
+
+        Dependency = job.ScheduleParallel(Dependency);
+    }
+
+    [BurstCompile]
+    public partial struct MoverEnemigosJob : IJobEntity
+    {
+        public float DeltaTime;
+        public float ElapsedTime;
+        public float3 PlayerPosition;
+        public int NivelJugador;
+        public int NivelSiguiente;
+
+        private void Execute(ref LocalTransform enemigoTransform, ref EnemigosPropiedades enemigoPropiedades)
+        {
+            // Mover enemigos hacia el jugador 
+            float3 direccionAlJugador = math.normalize(PlayerPosition - enemigoTransform.Position);
+
+            // Subió de nivel el jugador, los enemigos son más rápidos y tienen más vida
+            if (NivelJugador == NivelSiguiente)
+            {
+                enemigoPropiedades.velocidadEnemigos += 0.33f;
+                enemigoPropiedades.vidaEnemigos += 5f;
+            }
+
+            // Reducir velocidad si el enemigo está demasiado cerca del jugador
+            float distanciaAlJugador = math.distance(PlayerPosition, enemigoTransform.Position);
+
+            if (distanciaAlJugador < enemigoPropiedades.radioReducirVelocidad)
+            {
+                // Reducir su velocidad, y asegurarse que no sea menor a 1.25f, bug antes de que era 0 uh?¿?
+                enemigoPropiedades.velocidadEnemigos = math.max(enemigoPropiedades.velocidadEnemigos * enemigoPropiedades.factorReduccionVelocidad, 1.5f);
+            }
+
+            enemigoTransform.Position += enemigoPropiedades.velocidadEnemigos * DeltaTime * direccionAlJugador;
+            enemigoTransform.Position.y = 0.80f;  // Sino se quedan debajo del suelo
+
+            float direccion = GetRotationEnemigos(enemigoTransform.Position, PlayerPosition);
+
+            // Animación de lado a lado
+            float anguloAndar = 0.1f * math.sin(5f * ElapsedTime);
+
+            enemigoTransform.Rotation = quaternion.Euler(0, direccion, anguloAndar);
+        }
+
+        public static float GetRotationEnemigos(float3 enemigoPosition, float3 jugadorPosition)
+        {
+            var x = enemigoPosition.x - jugadorPosition.x;
+            var y = enemigoPosition.z - jugadorPosition.z;
+            return math.atan2(x, y) + math.PI;
+        }
     }
 }

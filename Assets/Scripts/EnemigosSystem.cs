@@ -20,11 +20,19 @@ public partial struct EnemigoSystem : ISystem
     // Variable Random
     private Unity.Mathematics.Random numeroRandom;
 
+    // Límites del mapa
+    private float3 limiteMin;
+    private float3 limiteMax;
+
 
     public void OnCreate(ref SystemState state)
     {
         // Obtener numero random a partir del hash del enemigo
         numeroRandom = Unity.Mathematics.Random.CreateFromIndex((uint) enemigosData.GetHashCode());
+
+        // Inicializar los límites del mapa
+        limiteMin = new float3(-75f, 0f, -75f);
+        limiteMax = new float3(75f, 0f, 75f);
     }
 
     [BurstCompile]
@@ -89,11 +97,19 @@ public partial struct EnemigoSystem : ISystem
 
                 float3 puntoSpawn = playerPosition + randomOffset;
 
+                // Limitar puntoSpawn a los límites del mapa
+                puntoSpawn = math.clamp(puntoSpawn, limiteMin, limiteMax);
+
                 float distanciaAlCuadradro = math.lengthsq(puntoSpawn - playerPosition);
 
                 if (distanciaAlCuadradro < distanciaMinimaAlCuadradro)
                 {
-                    puntoSpawn = playerPosition + math.normalize(randomOffset) * math.sqrt(distanciaAlCuadradro);
+                    // Recalcular el punto de spawn para que no esté dentro del área mínima
+                    randomOffset = math.normalize(randomOffset) * enemigosData.distanciaMinimaAlJugador;
+                    puntoSpawn = playerPosition + randomOffset;
+
+                    // Limitar puntoSpawn a los límites del mapa nuevamente
+                    puntoSpawn = math.clamp(puntoSpawn, limiteMin, limiteMax);
                 }
 
                 // TRAS CALCULAR POSICION LE ASIGNAMOS LA POSICION Y SU ROTATION AL JUGADOR

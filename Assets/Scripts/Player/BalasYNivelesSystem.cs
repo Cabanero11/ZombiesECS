@@ -50,7 +50,7 @@ public partial struct BalasYNivelesSystem : ISystem
                 entityManager.SetComponentData(bala, balasTiempo);
 
                 // Detectar colisiones
-                NativeList<ColliderCastHit> colliderCastHits = new NativeList<ColliderCastHit>(Allocator.Temp);
+                NativeList<ColliderCastHit> colliderCastHits = new NativeList<ColliderCastHit>(Allocator.TempJob);
 
                 float3 punto1 = new float3(balaTransform.Position - balaTransform.Right() * 0.15f);
                 float3 punto2 = new float3(balaTransform.Position + balaTransform.Right() * 0.15f);

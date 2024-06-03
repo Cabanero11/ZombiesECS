@@ -140,7 +140,7 @@ public partial struct DisparoYMovimientoSystem : ISystem
         if (inputComponent.disparoIniciar && playerComponent.temporizadorDisparo <= 0f)
         {
             // Crear un NativeArray para las balas
-            var balasEntities = new NativeArray<Entity>(playerComponent.numeroBalasPorDisparo, Allocator.Temp);
+            var balasEntities = new NativeArray<Entity>(playerComponent.numeroBalasPorDisparo, Allocator.TempJob);
             entityManager.Instantiate(playerComponent.balaPrefab, balasEntities);
 
             for (int i = 0; i < playerComponent.numeroBalasPorDisparo; i++)

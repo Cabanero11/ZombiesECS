@@ -88,31 +88,19 @@ public partial struct EnemigoSystem : ISystem
 
                 LocalTransform playerTransform = entityManager.GetComponentData<LocalTransform>(playerEntity);
 
-                // CALCULAR POSICION DONDE PONER A LOS ENEMIGOS EN UN CIRCULO ALREDEDOR DEL JUGADOR
-                float distanciaMinimaAlCuadradro = enemigosData.distanciaMinimaAlJugador * enemigosData.distanciaMinimaAlJugador;
-
+                // Calcular posición de spawn
                 float3 randomOffset = numeroRandom.NextFloat3Direction() * numeroRandom.NextFloat(enemigosData.distanciaMinimaAlJugador, enemigosData.radioSpawneoEnemigos);
+                float3 playerPosition = new float3(playerTransform.Position.x, 0f, playerTransform.Position.z);
+                float3 puntoSpawn = math.clamp(playerPosition + randomOffset, limiteMin, limiteMax);
 
-                float3 playerPosition = new float3(playerTransform.Position.x, playerTransform.Position.y, playerTransform.Position.z);
-
-                float3 puntoSpawn = playerPosition + randomOffset;
-
-                // Limitar puntoSpawn a los límites del mapa
-                puntoSpawn = math.clamp(puntoSpawn, limiteMin, limiteMax);
-
-                float distanciaAlCuadradro = math.lengthsq(puntoSpawn - playerPosition);
-
-                if (distanciaAlCuadradro < distanciaMinimaAlCuadradro)
+                // Asegurar que el punto de spawn no está demasiado cerca del jugador
+                if (math.lengthsq(puntoSpawn - playerPosition) < enemigosData.distanciaMinimaAlJugador * enemigosData.distanciaMinimaAlJugador)
                 {
-                    // Recalcular el punto de spawn para que no esté dentro del área mínima
                     randomOffset = math.normalize(randomOffset) * enemigosData.distanciaMinimaAlJugador;
-                    puntoSpawn = playerPosition + randomOffset;
-
-                    // Limitar puntoSpawn a los límites del mapa nuevamente
-                    puntoSpawn = math.clamp(puntoSpawn, limiteMin, limiteMax);
+                    puntoSpawn = math.clamp(playerPosition + randomOffset, limiteMin, limiteMax);
                 }
 
-                // TRAS CALCULAR POSICION LE ASIGNAMOS LA POSICION Y SU ROTATION AL JUGADOR
+                // TRAS CALCULAR POSICION LE ASIGNAMOS LA POSICION Y SU ROTATION AL JUGADOR, mantenemos la Y estatica y evitamos calculos de mas
                 enemigoTransform.Position = new float3(puntoSpawn.x, 0.65f, puntoSpawn.z);
                 enemigoTransform.Rotation = quaternion.RotateY(GetRotationEnemigos(enemigoTransform.Position, playerPosition));
                 enemigoTransform.Scale = 1.3f;

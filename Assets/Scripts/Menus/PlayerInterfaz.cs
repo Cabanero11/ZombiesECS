@@ -28,8 +28,6 @@ public class PlayerInterfaz : MonoBehaviour
     private EntityManager entityManager;
     private Entity playerEntity;
 
-
-
     public PauseMenuScript pauseMenuScript;
 
     [Header("Barra Vida y EXP")]

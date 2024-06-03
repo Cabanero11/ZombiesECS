@@ -169,7 +169,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemigoPrefab: {fileID: 984703618767070962, guid: 50523516db35db944b24fdad35e4cb97,
     type: 3}
-  numeroDeEnemigosSpawneadosPorSegundo: 50
+  enemigoFuertePrefab: {fileID: 984703618767070962, guid: 68bb3e97c69ae714a846d36941389e44,
+    type: 3}
+  enemigoRapidoPrefab: {fileID: 984703618767070962, guid: 217d384ac41471546aa1b68bc9d6764d,
+    type: 3}
+  numeroDeEnemigosSpawneadosPorSegundo: 30
   incrementoDeNumeroDeEnemigosPorOleada: 20
   maximoNumeroDeEnemigos: 150
   numeroOleada: 1

@@ -4,6 +4,8 @@ using UnityEngine;
 public struct EnemigosData : IComponentData
 {
     public Entity enemigoPrefab;
+    public Entity enemigoFuertePrefab;
+    public Entity enemigoRapidoPrefab;
 
     public int numeroDeEnemigosSpawneadosPorSegundo;
     public int incrementoDeNumeroDeEnemigosPorOleada;

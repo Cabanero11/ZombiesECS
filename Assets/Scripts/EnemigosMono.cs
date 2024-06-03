@@ -9,6 +9,8 @@ namespace Zombies
     public class EnemigosMono : MonoBehaviour
     {
         public GameObject enemigoPrefab;
+        public GameObject enemigoFuertePrefab;
+        public GameObject enemigoRapidoPrefab;
 
         public int numeroDeEnemigosSpawneadosPorSegundo = 50;
         public int incrementoDeNumeroDeEnemigosPorOleada = 20;
@@ -32,6 +34,8 @@ namespace Zombies
             AddComponent(enemigoSpawner, new EnemigosData
             {
                 enemigoPrefab = GetEntity(authoring.enemigoPrefab, TransformUsageFlags.Dynamic),
+                enemigoFuertePrefab = GetEntity(authoring.enemigoFuertePrefab, TransformUsageFlags.Dynamic),
+                enemigoRapidoPrefab = GetEntity(authoring.enemigoRapidoPrefab, TransformUsageFlags.Dynamic),
                 numeroDeEnemigosSpawneadosPorSegundo = authoring.numeroDeEnemigosSpawneadosPorSegundo,
                 incrementoDeNumeroDeEnemigosPorOleada = authoring.incrementoDeNumeroDeEnemigosPorOleada,
                 maximoNumeroDeEnemigos = authoring.maximoNumeroDeEnemigos,

@@ -54,8 +54,27 @@ public partial struct EnemigoSystem : ISystem
             {
                 EntityCommandBuffer entityCommandBuffer = new EntityCommandBuffer(Allocator.Temp);
 
+                // Para tener 3 tipos de enemigos
+                Entity enemigoPrefab;
+
+                // Enemigo prefab
+                if (enemigosData.numeroOleada % 3 == 1)
+                {
+                    enemigoPrefab = enemigosData.enemigoPrefab; 
+                }
+                // Enemigo Fuerte
+                else if (enemigosData.numeroOleada % 3 == 0)
+                {
+                    enemigoPrefab = enemigosData.enemigoFuertePrefab; 
+                }
+                // Enemigo Rapido
+                else
+                {
+                    enemigoPrefab = enemigosData.enemigoRapidoPrefab;
+                }
+
                 // Creamos enemigo
-                Entity enemigoEntidad = entityManager.Instantiate(enemigosData.enemigoPrefab);
+                Entity enemigoEntidad = entityManager.Instantiate(enemigoPrefab);
 
                 LocalTransform enemigoTransform = entityManager.GetComponentData<LocalTransform>(enemigoEntidad);
 
@@ -84,15 +103,43 @@ public partial struct EnemigoSystem : ISystem
 
                 entityCommandBuffer.SetComponent(enemigoEntidad, enemigoTransform);
 
-                // INICIALIZAR ENEMIGOS PROPIEDADES
-                entityCommandBuffer.AddComponent(enemigoEntidad, new EnemigosPropiedades
-                {
-                    vidaEnemigos = 50f,
-                    velocidadEnemigos = 3.5f,
-                    radioReducirVelocidad = 5f,
-                    factorReduccionVelocidad = 0.35f
-                });
 
+                // INICIALIZAR ENEMIGOS PROPIEDADES segun el tipo de enemigo
+                // Enemigo Prefab
+                if (enemigosData.numeroOleada % 3 == 1)
+                {
+                    entityCommandBuffer.AddComponent(enemigoEntidad, new EnemigosPropiedades
+                    {
+                        vidaEnemigos = 50f,
+                        velocidadEnemigos = 3.5f,
+                        radioReducirVelocidad = 5f,
+                        factorReduccionVelocidad = 0.35f
+                    });
+                }   
+                // Enemigo Fuerte
+                else if (enemigosData.numeroOleada % 3 == 0)
+                {
+                    entityCommandBuffer.AddComponent(enemigoEntidad, new EnemigosPropiedades
+                    {
+                        // Doble de vida de uno normal
+                        vidaEnemigos = 100f,
+                        velocidadEnemigos = 2.0f,
+                        radioReducirVelocidad = 5f,
+                        factorReduccionVelocidad = 0.35f
+                    });
+                }
+                // Enemigo Rapido
+                else
+                {
+                    entityCommandBuffer.AddComponent(enemigoEntidad, new EnemigosPropiedades
+                    {
+                        vidaEnemigos = 40f,
+                        velocidadEnemigos = 5.5f,
+                        radioReducirVelocidad = 4f,
+                        factorReduccionVelocidad = 0.35f
+                    });
+                }
+                
 
                 // Realizar todos los cambios que hacemos
                 entityCommandBuffer.Playback(entityManager);
@@ -111,6 +158,9 @@ public partial struct EnemigoSystem : ISystem
             enemigosData.numeroDeEnemigosSpawneadosPorSegundo = enemigosPorOleada;
 
             enemigosData.cooldownActualSpawneo = enemigosData.cooldownSpawneoEnemigos;
+
+            // Incremento el nº de oleada tras hacer todo de la oleada
+            enemigosData.numeroOleada++;
         }
 
         entityManager.SetComponentData(enemigoSpawner, enemigosData);

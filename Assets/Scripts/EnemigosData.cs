@@ -17,4 +17,13 @@ public struct EnemigosData : IComponentData
 
     public float cooldownSpawneoEnemigos;
     public float cooldownActualSpawneo;
+
+
+    // Añadir las nuevas variables para las estadísticas de dificultad
+    public float velocidadNormal;
+    public float vidaNormal;
+    public float velocidadFuerte;
+    public float vidaFuerte;
+    public float velocidadRapido;
+    public float vidaRapido;
 }

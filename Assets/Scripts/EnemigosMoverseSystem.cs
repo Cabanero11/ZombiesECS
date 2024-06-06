@@ -8,10 +8,13 @@ using Zombies;
 public partial class EnemigosMoverseSystem : SystemBase
 {
     private EntityQuery playerQuery;
+    private EntityManager entityManager;
+
 
     protected override void OnCreate()
     {
         playerQuery = GetEntityQuery(ComponentType.ReadOnly<DisparoData>());
+        entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
     }
 
     [BurstCompile]
@@ -20,7 +23,6 @@ public partial class EnemigosMoverseSystem : SystemBase
         // Obtener el jugador
         var playerEntity = playerQuery.GetSingletonEntity();
         var playerTransform = SystemAPI.GetComponent<LocalTransform>(playerEntity);
-        var playerDamage = SystemAPI.GetComponent<PlayerDañoData>(playerEntity);
 
         // Configuración del job
         var job = new MoverEnemigosJob
@@ -28,8 +30,6 @@ public partial class EnemigosMoverseSystem : SystemBase
             DeltaTime = SystemAPI.Time.DeltaTime,
             ElapsedTime = (float)SystemAPI.Time.ElapsedTime,
             PlayerPosition = playerTransform.Position,
-            NivelJugador = playerDamage.nivelJugador,
-            NivelSiguiente = playerDamage.nivelSiguiente
         };
 
         Dependency = job.ScheduleParallel(Dependency);
@@ -41,20 +41,11 @@ public partial class EnemigosMoverseSystem : SystemBase
         public float DeltaTime;
         public float ElapsedTime;
         public float3 PlayerPosition;
-        public int NivelJugador;
-        public int NivelSiguiente;
 
         private void Execute(ref LocalTransform enemigoTransform, ref EnemigosPropiedades enemigoPropiedades)
         {
             // Mover enemigos hacia el jugador 
             float3 direccionAlJugador = math.normalize(PlayerPosition - enemigoTransform.Position);
-
-            // Subió de nivel el jugador, los enemigos son más rápidos y tienen más vida
-            if (NivelJugador == NivelSiguiente)
-            {
-                enemigoPropiedades.velocidadEnemigos += 0.33f;
-                enemigoPropiedades.vidaEnemigos += 5f;
-            }
 
             // Reducir velocidad si el enemigo está demasiado cerca del jugador
             float distanciaAlJugador = math.distance(PlayerPosition, enemigoTransform.Position);

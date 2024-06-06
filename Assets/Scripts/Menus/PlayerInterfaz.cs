@@ -264,7 +264,7 @@ public class PlayerInterfaz : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        Debug.Log("ShowMenu");
+        //Debug.Log("ShowMenu");
         // Aquí podemos actualizar las opciones del menú según las probabilidades
         UpdateLevelUpOptions();
     }
@@ -273,7 +273,7 @@ public class PlayerInterfaz : MonoBehaviour
     {
         estaEnUnMenu = false;
         levelUpMenu.SetActive(false);
-        Debug.Log("HideLevel");
+        //Debug.Log("HideLevel");
         Time.timeScale = 1f; // Reanudar el juego
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -345,7 +345,7 @@ public class PlayerInterfaz : MonoBehaviour
     {
         if (playerEntity == Entity.Null)
         {
-            Debug.LogError("Player entity is null.");
+            //Debug.LogError("Player entity is null.");
             // Si es null la vuelvo a buscar
             EntityQuery playerQuery = entityManager.CreateEntityQuery(typeof(PlayerDañoData));
             playerEntity = playerQuery.GetSingletonEntity();

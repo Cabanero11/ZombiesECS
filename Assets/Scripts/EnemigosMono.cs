@@ -22,6 +22,13 @@ namespace Zombies
 
         public float cooldownSpawneoEnemigos = 1f;
         public float cooldownActualSpawneo;
+
+        public float velocidadNormal;
+        public float vidaNormal;
+        public float velocidadFuerte;
+        public float vidaFuerte;
+        public float velocidadRapido;
+        public float vidaRapido;
     }
 
     // Añado los valores de DisparoData a la entidad de PlayerEntity con el Baker
@@ -43,7 +50,14 @@ namespace Zombies
                 radioSpawneoEnemigos = authoring.radioSpawneoEnemigos,
                 distanciaMinimaAlJugador = authoring.distanciaMinimaAlJugador,
                 cooldownSpawneoEnemigos = authoring.cooldownSpawneoEnemigos,
-                cooldownActualSpawneo = authoring.cooldownActualSpawneo
+                cooldownActualSpawneo = authoring.cooldownActualSpawneo,
+
+                velocidadNormal = authoring.velocidadNormal, 
+                vidaNormal = authoring.vidaNormal,
+                velocidadFuerte = authoring.velocidadFuerte,
+                vidaFuerte = authoring.vidaFuerte,
+                velocidadRapido = authoring.velocidadRapido,
+                vidaRapido = authoring.vidaRapido
             });
 
         }

@@ -181,6 +181,12 @@ MonoBehaviour:
   distanciaMinimaAlJugador: 70
   cooldownSpawneoEnemigos: 15
   cooldownActualSpawneo: 0
+  velocidadNormal: 3.5
+  vidaNormal: 50
+  velocidadFuerte: 2
+  vidaFuerte: 100
+  velocidadRapido: 5
+  vidaRapido: 35
 --- !u!1 &1030366651
 GameObject:
   m_ObjectHideFlags: 0

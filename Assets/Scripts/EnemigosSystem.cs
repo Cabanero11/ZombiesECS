@@ -6,6 +6,7 @@ using Zombies;
 using Unity.Collections;
 using UnityEngine.EventSystems;
 using Unity.Entities;
+using System.Runtime.CompilerServices;
 
 
 [BurstCompile]
@@ -24,6 +25,8 @@ public partial struct EnemigoSystem : ISystem
     private float3 limiteMin;
     private float3 limiteMax;
 
+    // Valor para ir controlando la oleadaSiguiente
+    private int oleadaSiguiente;
 
     public void OnCreate(ref SystemState state)
     {
@@ -33,6 +36,8 @@ public partial struct EnemigoSystem : ISystem
         // Inicializar los límites del mapa
         limiteMin = new float3(-75f, 0f, -75f);
         limiteMax = new float3(75f, 0f, 75f);
+
+        oleadaSiguiente = 2;
     }
 
     [BurstCompile]
@@ -108,14 +113,36 @@ public partial struct EnemigoSystem : ISystem
                 entityCommandBuffer.SetComponent(enemigoEntidad, enemigoTransform);
 
 
+               
+                
+                PlayerDañoData playerDamage = entityManager.GetComponentData<PlayerDañoData>(playerEntity);
+
+                // Si el jugaador sube de nivel, entonces incrementamos la dificultad, entonces los enemigos nuevos que spawneen serán mas dificiles
+                if(enemigosData.numeroOleada == oleadaSiguiente)
+                {
+
+                    //Debug.Log("Subi de oleada");
+                    enemigosData.velocidadNormal += 0.33f;
+                    enemigosData.vidaNormal += 5f;
+
+                    enemigosData.velocidadFuerte += 0.20f;
+                    enemigosData.vidaFuerte += 10f;
+
+                    enemigosData.velocidadRapido += 0.5f;
+                    enemigosData.vidaRapido += 3f;
+
+                    oleadaSiguiente++;
+                }
+
+
                 // INICIALIZAR ENEMIGOS PROPIEDADES segun el tipo de enemigo
                 // Enemigo Prefab
                 if (enemigosData.numeroOleada % 3 == 1)
                 {
                     entityCommandBuffer.AddComponent(enemigoEntidad, new EnemigosPropiedades
                     {
-                        vidaEnemigos = 50f,
-                        velocidadEnemigos = 3.5f,
+                        vidaEnemigos = enemigosData.vidaNormal,
+                        velocidadEnemigos = enemigosData.velocidadNormal,
                         radioReducirVelocidad = 5f,
                         factorReduccionVelocidad = 0.35f
                     });
@@ -126,8 +153,8 @@ public partial struct EnemigoSystem : ISystem
                     entityCommandBuffer.AddComponent(enemigoEntidad, new EnemigosPropiedades
                     {
                         // Doble de vida de uno normal
-                        vidaEnemigos = 100f,
-                        velocidadEnemigos = 2.0f,
+                        vidaEnemigos = enemigosData.vidaFuerte,
+                        velocidadEnemigos = enemigosData.velocidadFuerte,
                         radioReducirVelocidad = 5f,
                         factorReduccionVelocidad = 0.35f
                     });
@@ -137,9 +164,9 @@ public partial struct EnemigoSystem : ISystem
                 {
                     entityCommandBuffer.AddComponent(enemigoEntidad, new EnemigosPropiedades
                     {
-                        vidaEnemigos = 40f,
-                        velocidadEnemigos = 5.5f,
-                        radioReducirVelocidad = 4f,
+                        vidaEnemigos = enemigosData.vidaRapido,
+                        velocidadEnemigos = enemigosData.velocidadRapido,
+                        radioReducirVelocidad = 5f,
                         factorReduccionVelocidad = 0.35f
                     });
                 }

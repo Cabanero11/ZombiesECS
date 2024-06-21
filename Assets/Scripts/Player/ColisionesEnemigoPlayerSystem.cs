@@ -9,6 +9,15 @@ using Zombies;
 [BurstCompile]
 public partial struct ColisionesEnemigoPlayerSystem : ISystem
 {
+
+    [BurstCompile]
+    public void OnCreate(ref SystemState state)
+    { 
+        // Aseguramos que exista el enemigo UOHHHHH :(
+        state.RequireForUpdate<DisparoData>();
+    }
+
+
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {

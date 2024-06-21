@@ -37,6 +37,10 @@ public partial struct EnemigoSystem : ISystem
         limiteMin = new float3(-75f, 0f, -75f);
         limiteMax = new float3(75f, 0f, 75f);
 
+        // Para que debe primero debe esperar a que el EnemigosData, exista, asi no crashea
+        state.RequireForUpdate<EnemigosData>();
+
+
         oleadaSiguiente = 2;
     }
 

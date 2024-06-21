@@ -370,7 +370,7 @@ public class PlayerInterfaz : MonoBehaviour
                     break;
                 case 2:
                     // Dispara 10 balas al empezar 10*2 = 20 daño
-                    playerDamage.dañoBalaJugador += 2f;
+                    playerDamage.dañoBalaJugador += 2.5f;
                     HideLevelUpMenu();
                     break;
                 case 3:

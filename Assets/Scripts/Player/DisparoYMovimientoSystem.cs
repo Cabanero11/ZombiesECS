@@ -33,6 +33,8 @@ public partial struct DisparoYMovimientoSystem : ISystem
         // Inicializar los límites del mapa
         limiteMin = new float3(-75f, 0f, -75f);
         limiteMax = new float3(75f, 0f, 75f);
+
+        state.RequireForUpdate<DisparoData>();
     }
 
     [BurstCompile]

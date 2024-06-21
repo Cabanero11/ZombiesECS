@@ -13,6 +13,13 @@ public partial struct BalasYNivelesSystem : ISystem
 {
     private Entity playerEntity;
 
+
+    [BurstCompile]
+    public void OnCreate(ref SystemState state)
+    {
+        state.RequireForUpdate<DisparoData>();
+    }
+
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
@@ -52,8 +59,8 @@ public partial struct BalasYNivelesSystem : ISystem
                 // Detectar colisiones
                 NativeList<ColliderCastHit> colliderCastHits = new NativeList<ColliderCastHit>(Allocator.TempJob);
 
-                float3 punto1 = new float3(balaTransform.Position - balaTransform.Right() * 0.15f);
-                float3 punto2 = new float3(balaTransform.Position + balaTransform.Right() * 0.15f);
+                float3 punto1 = balaTransform.Position - balaTransform.Right() * 0.15f;
+                float3 punto2 = balaTransform.Position + balaTransform.Right() * 0.15f;
                 float radio = balaData.tamañoBala / 2;
                 float3 direccion = float3.zero;
                 float distanciaMaxima = 1f;
@@ -67,6 +74,8 @@ public partial struct BalasYNivelesSystem : ISystem
 
                 if (colliderCastHits.Length > 0)
                 {
+                    bool balaDestruida = false; // Flag para verificar si la bala ya fue destruida
+
                     for (int i = 0; i < colliderCastHits.Length; i++)
                     {
                         Entity entidadColisionada = colliderCastHits[i].Entity;
@@ -78,7 +87,6 @@ public partial struct BalasYNivelesSystem : ISystem
 
                             // NIVELES Y EXPERIENCIA DEL JUGADOR
                             // PlayerDañoData se inicializa en DisparoMono.cs
-                            // Si 
                             if (enemigosPropiedades.vidaEnemigos <= dañoRestante)
                             {
                                 dañoRestante -= enemigosPropiedades.vidaEnemigos;
@@ -96,24 +104,31 @@ public partial struct BalasYNivelesSystem : ISystem
                                     playerDañoData.experienciaParaProximoNivel *= 1.2f;
                                 }
 
-                                // Me faltaba cambiar los valores creo, si, si hacia falta 
+                                // Me faltaba cambiar los valores creo, si, si hacía falta 
                                 entityManager.SetComponentData(playerEntity, playerDañoData);
                                 entityManager.SetComponentData(playerEntity, disparoData);
 
                                 // Destruir la bala actual
                                 entityManager.DestroyEntity(bala);
+                                balaDestruida = true; // Marca la bala como destruida
                                 break;
                             }
-                            // Recibir daño de forma normal
                             else
                             {
                                 enemigosPropiedades.vidaEnemigos -= dañoRestante;
                                 entityManager.SetComponentData(entidadColisionada, enemigosPropiedades);
 
-                                // La bala continúa, no la destruimos
+                                // La bala se destruye después de causar daño
+                                entityManager.DestroyEntity(bala);
+                                balaDestruida = true; // Marca la bala como destruida
                                 break;
                             }
                         }
+                    }
+
+                    if (balaDestruida)
+                    {
+                        break; // Salir del bucle si la bala fue destruida
                     }
                 }
 
